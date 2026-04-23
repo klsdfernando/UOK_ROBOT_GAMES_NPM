@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* ==========================================
+   UOK Robot Games — Design System Tokens
+   ========================================== */
+
+@theme inline {
+  /* === Typography === */
+  --font-space-grotesk: var(--font-space-grotesk-var);
+
+  /* === Custom Colors === */
+  --color-on-tertiary-fixed-variant: #244779;
+  --color-surface-tint: #c6c6c6;
+  --color-error: #ffb4ab;
+  --color-surface-dim: #131313;
+  --color-on-tertiary-container: #5676ab;
+  --color-on-tertiary: #043061;
+  --color-on-surface: #e5e2e1;
+  --color-primary-container: #000000;
+  --color-on-secondary-fixed-variant: #004491;
+  --color-secondary: #acc7ff;
+  --color-tertiary-container: #000000;
+  --color-secondary-fixed-dim: #acc7ff;
+  --color-error-container: #93000a;
+  --color-background: #131313;
+  --color-tertiary-fixed-dim: #a9c7ff;
+  --color-surface-container: #20201f;
+  --color-on-secondary-container: #bcd1ff;
+  --color-secondary-fixed: #d7e2ff;
+  --color-on-error: #690005;
+  --color-inverse-primary: #5e5e5e;
+  --color-outline: #988e90;
+  --color-outline-variant: #4c4546;
+  --color-on-surface-variant: #cfc4c5;
+  --color-inverse-surface: #e5e2e1;
+  --color-on-primary: #303030;
+  --color-surface-container-highest: #353535;
+  --color-tertiary: #a9c7ff;
+  --color-surface-variant: #353535;
+  --color-secondary-container: #0257b4;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-on-error-container: #ffdad6;
+  --color-on-primary-fixed: #1b1b1b;
+  --color-inverse-on-surface: #313030;
+  --color-primary-fixed-dim: #c6c6c6;
+  --color-surface-container-low: #1c1b1b;
+  --color-primary-fixed: #e2e2e2;
+  --color-surface-bright: #393939;
+  --color-on-secondary: #002f67;
+  --color-on-background: #e5e2e1;
+  --color-on-tertiary-fixed: #001b3d;
+  --color-surface-container-high: #2a2a2a;
+  --color-tertiary-fixed: #d6e3ff;
+  --color-on-primary-container: #757575;
+  --color-primary: #c6c6c6;
+  --color-surface: #131313;
+  --color-on-primary-fixed-variant: #474747;
+  --color-on-secondary-fixed: #001a40;
+
+  /* === Brand accent colors === */
+  --color-brand-blue: #004491;
+  --color-brand-cyan: #00d2ff;
+  --color-brand-deep-blue: #0055cc;
+  --color-brand-glow: #1a8bff;
+}
+
+/* === Material Icons === */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* === Base === */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000000;
+  color: #e5e2e1;
+  font-family: var(--font-space-grotesk-var, 'Space Grotesk', sans-serif);
+}
+
+/* === Carousel crossfade === */
+.carousel-slide {
+  transition: opacity 1s ease-in-out;
+}
+
+/* === Gallery Collage Grid === */
+.collage-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 2vw;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .collage-grid {
+    grid-auto-rows: 1.5vw;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1152px) {
+  .collage-grid {
+    grid-auto-rows: 24px;
+    gap: 16px;
+  }
+}
+
+.img-1 { grid-column: 2 / 5; grid-row: 4 / 20; }
+.img-2 { grid-column: 1 / 5; grid-row: 21 / 26; }
+.img-3 { grid-column: 5 / 10; grid-row: 1 / 14; }
+.img-4 { grid-column: 5 / 8; grid-row: 15 / 23; }
+.img-5 { grid-column: 8 / 10; grid-row: 15 / 26; }
+.img-6 { grid-column: 10 / 12; grid-row: 5 / 13; }
+.img-7 { grid-column: 10 / 13; grid-row: 14 / 21; }
+.img-8 { grid-column: 10 / 12; grid-row: 22 / 27; }
+
+.collage-item {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #111;
+}
