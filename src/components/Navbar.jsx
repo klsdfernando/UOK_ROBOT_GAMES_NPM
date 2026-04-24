@@ -53,12 +53,12 @@ export default function Navbar() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
+          <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
             LOGIN
-          </button>
-          <button className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase">
+          </Link>
+          <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center">
             REGISTER
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Hamburger */}
@@ -94,12 +94,20 @@ export default function Navbar() {
           ))}
 
           <div className="flex flex-col items-center gap-4 pt-8 border-t border-zinc-800 w-1/2">
-            <button className="text-zinc-300 hover:text-white transition-colors uppercase w-full py-2">
+            <Link 
+              href="/login" 
+              className="text-zinc-300 hover:text-white transition-colors uppercase w-full py-2 text-center"
+              onClick={() => setMobileOpen(false)}
+            >
               LOGIN
-            </button>
-            <button className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase">
+            </Link>
+            <Link 
+              href="/register" 
+              className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center"
+              onClick={() => setMobileOpen(false)}
+            >
               REGISTER
-            </button>
+            </Link>
           </div>
         </div>
       )}

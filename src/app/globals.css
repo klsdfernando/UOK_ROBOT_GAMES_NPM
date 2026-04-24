@@ -126,3 +126,39 @@ body {
   object-fit: cover;
   background-color: #111;
 }
+
+/* === Auth Page Animations === */
+@keyframes wave-animation {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes float-animation {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-wave {
+  animation: wave-animation 15s linear infinite;
+}
+
+.animate-float {
+  animation: float-animation 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-animation 6s ease-in-out 2s infinite;
+}
+
+.animate-float-delayed-more {
+  animation: float-animation 6s ease-in-out 4s infinite;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); filter: blur(10px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.animate-fade-slide {
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

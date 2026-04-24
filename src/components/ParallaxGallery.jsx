@@ -47,7 +47,7 @@ export default function ParallaxGallery({ initialImages }) {
       />
 
       {/* Carousel */}
-      <div className="relative w-full max-w-[1400px] mx-auto z-10 px-4 group">
+      <div className="relative w-full max-w-[1400px] mx-auto z-10 px-0 sm:px-4 group overflow-hidden">
         {images.length > 0 && (
           <Swiper
             effect={"coverflow"}
@@ -59,31 +59,51 @@ export default function ParallaxGallery({ initialImages }) {
               delay: 1000,
               disableOnInteraction: false,
             }}
+            breakpoints={{
+              320: {
+                coverflowEffect: {
+                  rotate: 0,
+                  stretch: 0,
+                  depth: 150,
+                  modifier: 1,
+                  slideShadows: true,
+                }
+              },
+              768: {
+                coverflowEffect: {
+                  rotate: 0,
+                  stretch: 0,
+                  depth: 350,
+                  modifier: 1.5,
+                  slideShadows: true,
+                }
+              }
+            }}
             coverflowEffect={{
               rotate: 0,
               stretch: 0,
-              depth: 350,
-              modifier: 1.5,
+              depth: 150,
+              modifier: 1,
               slideShadows: true,
             }}
             modules={[EffectCoverflow, Autoplay]}
-            className="w-full !py-16"
+            className="w-full !py-10 md:!py-16"
           >
             {images.map((img, index) => (
               <SwiperSlide 
                 key={index} 
-                className="!w-[300px] md:!w-[700px] !h-[200px] md:!h-[450px] rounded-xl overflow-hidden border border-[#00d2ff]/40 shadow-[0_0_30px_rgba(0,210,255,0.15)] bg-[#080808]"
+                className="!w-[80vw] sm:!w-[350px] md:!w-[700px] !h-[55vw] sm:!h-[250px] md:!h-[450px] rounded-xl overflow-hidden border border-[#00d2ff]/40 shadow-[0_0_30px_rgba(0,210,255,0.15)] bg-[#080808]"
               >
                 <Image
                   src={img}
                   alt={`Gallery Image ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 300px, 700px"
+                  sizes="(max-width: 640px) 80vw, (max-width: 768px) 350px, 700px"
                   priority={index < 3}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none flex items-end p-6 md:p-8">
-                  <div className="text-[#00d2ff] font-bold text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent pointer-events-none flex items-end p-4 md:p-8">
+                  <div className="text-[#00d2ff] font-bold text-[8px] sm:text-[10px] md:text-xs tracking-[0.2em] uppercase">
                     FILE_{index.toString().padStart(3, '0')} // ARCHIVE
                   </div>
                 </div>
