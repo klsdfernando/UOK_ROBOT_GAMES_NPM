@@ -3,6 +3,7 @@ import path from 'path';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ParallaxGallery from "@/components/ParallaxGallery";
+import FadeIn from "@/components/FadeIn";
 
 export const metadata = {
   title: "Gallery",
@@ -36,7 +37,9 @@ export default function GalleryPage() {
     <>
       <Navbar />
       <main className="flex-grow pt-16 bg-[#000000]">
-        <ParallaxGallery initialImages={imageFiles} />
+        <FadeIn direction="up">
+          <ParallaxGallery initialImages={imageFiles} />
+        </FadeIn>
       </main>
       <Footer />
     </>

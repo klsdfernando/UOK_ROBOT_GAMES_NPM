@@ -115,13 +115,13 @@ export default function TimelineSection() {
         />
 
         {/* Vertical Timeline */}
-        <div className="relative w-full max-w-4xl mx-auto flex py-12 pl-4 md:pl-0">
+        <div className="relative w-full max-w-4xl mx-auto flex flex-col py-12 px-6 sm:px-10 md:px-0">
           {/* Central Line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant transform md:-translate-x-1/2 z-0">
+          <div className="absolute left-10 sm:left-14 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#1a1c33] transform md:-translate-x-1/2 z-0">
             <div className="absolute top-0 w-full h-1/6 bg-gradient-to-b from-[#00d2ff] to-transparent shadow-[0_0_15px_rgba(0,210,255,0.8)] z-10" />
           </div>
 
-          <div className="flex flex-col gap-24 w-full relative z-10">
+          <div className="flex flex-col gap-16 md:gap-24 w-full relative z-10">
             {timelineStages.map((stage, i) => {
               const isLeft = stage.side === "left";
               return (
@@ -135,7 +135,7 @@ export default function TimelineSection() {
                   <div
                     className={`hidden md:block absolute top-1/2 ${
                       isLeft ? "left-1/2" : "right-1/2"
-                    } w-1/4 h-[2px] bg-outline-variant transform -translate-y-1/2 ${
+                    } w-1/4 h-[2px] bg-[#1a1c33] transform -translate-y-1/2 ${
                       isLeft ? "-translate-x-full" : "translate-x-full"
                     } ${
                       stage.active
@@ -146,35 +146,35 @@ export default function TimelineSection() {
 
                   {/* Label side */}
                   <div
-                    className={`md:w-1/2 ${
+                    className={`w-full md:w-1/2 ${
                       isLeft
                         ? "md:pr-16 text-left md:text-right"
                         : "md:pl-16 text-left"
-                    } mb-4 md:mb-0 ml-16 md:ml-0 flex flex-col ${
+                    } mb-4 md:mb-0 pl-16 sm:pl-20 md:pl-0 flex flex-col ${
                       isLeft ? "items-start md:items-end" : "items-start"
                     } justify-center ${
                       stage.active ? "" : "opacity-50"
                     } md:-translate-y-2`}
                   >
                     <div
-                      className={`font-bold text-xs ${
+                      className={`font-bold text-[11px] ${
                         stage.active
                           ? "text-[#00d2ff]"
-                          : "text-outline"
+                          : "text-zinc-500"
                       } tracking-[0.1em] uppercase mb-1`}
                     >
                       {stage.phase}
                     </div>
-                    <div className="text-2xl font-bold text-white uppercase">
+                    <div className="text-xl md:text-2xl font-black text-white uppercase tracking-wider">
                       {stage.title}
                     </div>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-3">
                       <span
-                        className={`px-2 py-1 ${
+                        className={`px-3 py-1.5 ${
                           stage.active
-                            ? "bg-[#131313] border-outline-variant text-[#00d2ff]"
-                            : "bg-black border-outline-variant text-outline"
-                        } border text-[10px] font-bold tracking-widest rounded-sm`}
+                            ? "bg-[#0055cc]/20 border-[#00d2ff]/30 text-[#00d2ff]"
+                            : "bg-[#0a0a0a] border-[#1a1c33] text-zinc-500"
+                        } border text-[10px] font-bold tracking-[0.15em] rounded-sm`}
                       >
                         {stage.date}
                       </span>
@@ -183,11 +183,11 @@ export default function TimelineSection() {
 
                   {/* Center dot */}
                   <div
-                    className={`absolute left-8 md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-black border-2 ${
+                    className={`absolute left-10 sm:left-14 md:left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-black border-[2px] ${
                       stage.active
-                        ? "border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.4)]"
-                        : "border-outline-variant"
-                    } flex items-center justify-center z-20`}
+                        ? "border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.6)]"
+                        : "border-[#1a1c33]"
+                    } flex items-center justify-center z-20 mt-[2px] md:mt-0`}
                   >
                     {stage.active && (
                       <div className="w-2 h-2 rounded-full bg-[#00d2ff]" />
@@ -196,9 +196,9 @@ export default function TimelineSection() {
 
                   {/* Content side */}
                   <div
-                    className={`md:w-1/2 ${
+                    className={`w-full md:w-1/2 ${
                       isLeft ? "md:pl-16" : "md:pr-16"
-                    } ml-16 md:ml-0 w-full pr-6 md:pr-0 ${
+                    } pl-16 sm:pl-20 md:pl-0 ${
                       stage.active ? "" : "opacity-50"
                     }`}
                   >

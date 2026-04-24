@@ -27,7 +27,9 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col overflow-x-hidden bg-[#000000] text-white w-full max-w-[100vw]">
+        {children}
+      </body>
     </html>
   );
 }

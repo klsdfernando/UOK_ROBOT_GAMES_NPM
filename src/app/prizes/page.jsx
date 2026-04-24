@@ -2,6 +2,7 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
+import FadeIn from "@/components/FadeIn";
 
 export const metadata = {
   title: "Prizes",
@@ -110,24 +111,30 @@ export default function PrizesPage() {
         {/* Robot Battles Prizes */}
         <section id="prizes" className="py-24 px-8 border-t border-outline-variant bg-[#080808]">
           <div className="max-w-6xl mx-auto flex flex-col items-center">
-            <SectionHeader title="ROBOT BATTLES" subtitle="Glory and rewards await the champions of the arena." />
+            <FadeIn direction="up">
+              <SectionHeader title="ROBOT BATTLES" subtitle="Glory and rewards await the champions of the arena." />
+            </FadeIn>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-              <BattleCategoryCard
-                title={<>Heavy Weight<br />Category</>}
-                winnerAmount="LKR 75,000"
-                winnerExtra="+ GIANT NUT"
-                runnerUp1="LKR 50,000"
-                runnerUp2="LKR 30,000"
-                order="order-1"
-              />
-              <BattleCategoryCard
-                title={<>Light Weight<br />Category (Open)</>}
-                winnerAmount="LKR 30,000"
-                winnerExtra="+ GIANT NUT"
-                runnerUp1="LKR 20,000"
-                runnerUp2="LKR 10,000"
-                order="order-2"
-              />
+              <FadeIn direction="up" delay={0.2} className="w-full">
+                <BattleCategoryCard
+                  title={<>Heavy Weight<br />Category</>}
+                  winnerAmount="LKR 75,000"
+                  winnerExtra="+ GIANT NUT"
+                  runnerUp1="LKR 50,000"
+                  runnerUp2="LKR 30,000"
+                  order="order-1"
+                />
+              </FadeIn>
+              <FadeIn direction="up" delay={0.4} className="w-full">
+                <BattleCategoryCard
+                  title={<>Light Weight<br />Category (Open)</>}
+                  winnerAmount="LKR 30,000"
+                  winnerExtra="+ GIANT NUT"
+                  runnerUp1="LKR 20,000"
+                  runnerUp2="LKR 10,000"
+                  order="order-2"
+                />
+              </FadeIn>
             </div>
           </div>
         </section>
@@ -135,32 +142,40 @@ export default function PrizesPage() {
         {/* Robot Race Prizes */}
         <section id="robot-race" className="py-24 px-8 border-t border-outline-variant bg-[#040404]">
           <div className="max-w-6xl mx-auto flex flex-col items-center">
-            <SectionHeader title="ROBOT RACE" subtitle="Speed and precision take the ultimate prize." />
+            <FadeIn direction="up">
+              <SectionHeader title="ROBOT RACE" subtitle="Speed and precision take the ultimate prize." />
+            </FadeIn>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-              <RaceCategoryCard title={<>University<br />Category</>} winnerAmount="LKR 30,000" runnerUp1="LKR 20,000" />
-              <RaceCategoryCard title={<>School<br />Category</>} winnerAmount="LKR 20,000" runnerUp1="LKR 15,000" />
+              <FadeIn direction="up" delay={0.2} className="w-full">
+                <RaceCategoryCard title={<>University<br />Category</>} winnerAmount="LKR 30,000" runnerUp1="LKR 20,000" />
+              </FadeIn>
+              <FadeIn direction="up" delay={0.4} className="w-full">
+                <RaceCategoryCard title={<>School<br />Category</>} winnerAmount="LKR 20,000" runnerUp1="LKR 15,000" />
+              </FadeIn>
             </div>
           </div>
         </section>
 
         {/* Grand Total */}
-        <div className="w-full bg-[#040404] border-t border-b border-outline-variant py-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00e5ff]/5 to-transparent" />
-          <div className="max-w-6xl mx-auto flex flex-col items-center justify-center relative z-10 px-4 text-center space-y-2">
-            <h2 className="text-lg md:text-xl text-zinc-400 uppercase tracking-[0.2em] font-medium">
-              GRAND TOTAL PRIZE POOL
-            </h2>
-            <div
-              className="text-6xl md:text-8xl font-black text-[#00e5ff] tracking-tighter pt-2 pb-4"
-              style={{ textShadow: "0 0 15px rgba(0,229,255,0.4)" }}
-            >
-              Rs. 300,000.00
+        <FadeIn direction="up" viewAmount={0.5}>
+          <div className="w-full bg-[#040404] border-t border-b border-outline-variant py-16 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00e5ff]/5 to-transparent" />
+            <div className="max-w-6xl mx-auto flex flex-col items-center justify-center relative z-10 px-4 text-center space-y-2">
+              <h2 className="text-lg md:text-xl text-zinc-400 uppercase tracking-[0.2em] font-medium">
+                GRAND TOTAL PRIZE POOL
+              </h2>
+              <div
+                className="text-6xl md:text-8xl font-black text-[#00e5ff] tracking-tighter pt-2 pb-4"
+                style={{ textShadow: "0 0 15px rgba(0,229,255,0.4)" }}
+              >
+                Rs. 300,000.00
+              </div>
+              <p className="text-xl md:text-2xl text-zinc-400">
+                Plus certificates, trophies, and special awards
+              </p>
             </div>
-            <p className="text-xl md:text-2xl text-zinc-400">
-              Plus certificates, trophies, and special awards
-            </p>
           </div>
-        </div>
+        </FadeIn>
       </main>
       <Footer />
     </>
