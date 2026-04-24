@@ -31,8 +31,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: Logo & Description */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
+          <div className="space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-4">
               <Link href="/" className="shrink-0">
                 <Image
                   src="/images/logo.png"
@@ -65,7 +65,7 @@ export default function Footer() {
               for glory.
             </p>
             {/* Social Icons */}
-            <div className="flex items-center gap-4 pt-2">
+            <div className="flex items-center justify-center md:justify-start gap-4 pt-2 w-full">
               <a
                 href="#"
                 className="w-9 h-9 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-[#00d2ff] hover:border-[#00d2ff]/50 transition-all duration-300"
@@ -97,16 +97,16 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Quick Links */}
-          <div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
             <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-6">
               Quick Links
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-4 w-full">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center gap-2 group"
+                    className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center justify-center md:justify-start gap-2 group"
                   >
                     <span className="material-symbols-outlined text-[14px] text-outline group-hover:text-[#00d2ff] transition-colors">
                       chevron_right
@@ -119,15 +119,15 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Contact Info */}
-          <div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
             <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-6">
               Contact Info
             </h3>
-            <ul className="space-y-5">
+            <ul className="space-y-5 w-full">
               <li>
                 <a
                   href="mailto:contact@ecsc-uok.com"
-                  className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center gap-3"
+                  className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center justify-center md:justify-start gap-3"
                 >
                   <span className="material-symbols-outlined text-[18px] text-[#0066ff]">
                     mail
@@ -138,7 +138,7 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+94763074621"
-                  className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center gap-3"
+                  className="text-on-surface-variant hover:text-[#00d2ff] transition-colors duration-300 text-sm flex items-center justify-center md:justify-start gap-3"
                 >
                   <span className="material-symbols-outlined text-[18px] text-[#0066ff]">
                     call
@@ -146,7 +146,7 @@ export default function Footer() {
                   +94 76 30 74 621
                 </a>
               </li>
-              <li className="text-on-surface-variant text-sm flex items-center gap-3">
+              <li className="text-on-surface-variant text-sm flex items-center justify-center md:justify-start gap-3">
                 <span className="material-symbols-outlined text-[18px] text-[#0066ff]">
                   location_on
                 </span>
@@ -156,7 +156,7 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Stay Updated */}
-          <div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
             <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-6">
               Stay Updated
             </h3>
@@ -164,7 +164,7 @@ export default function Footer() {
               Get the latest updates about UOK Robot Games 2K26 and future
               robotics events.
             </p>
-            <form onSubmit={handleSubscribe} className="space-y-3">
+            <form onSubmit={handleSubscribe} className="space-y-3 w-full max-w-xs md:max-w-full">
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -186,30 +186,10 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-outline-variant">
-        <div className="max-w-7xl mx-auto px-8 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-zinc-600 text-[10px] uppercase tracking-widest">
+        <div className="max-w-7xl mx-auto px-8 py-6 flex justify-center items-center">
+          <p className="text-zinc-600 text-[10px] uppercase tracking-widest text-center">
             © 2026 UOK Robot Games. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="#"
-              className="text-zinc-600 hover:text-blue-500 text-[10px] uppercase tracking-widest transition-all duration-300"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="#"
-              className="text-zinc-600 hover:text-blue-500 text-[10px] uppercase tracking-widest transition-all duration-300"
-            >
-              Terms of Service
-            </Link>
-            <Link
-              href="#"
-              className="text-zinc-600 hover:text-blue-500 text-[10px] uppercase tracking-widest transition-all duration-300"
-            >
-              Code of Conduct
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
