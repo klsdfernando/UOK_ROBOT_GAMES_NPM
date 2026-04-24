@@ -32,7 +32,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex space-x-8 font-bold uppercase tracking-tighter text-sm">
+        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8 font-bold uppercase tracking-tighter text-sm">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

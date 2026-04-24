@@ -23,7 +23,7 @@ export default function LoginPage() {
 
         {/* Premium Header */}
         <div className="w-full text-center mb-10">
-          <h1 className="text-3xl font-bold text-white tracking-wider mb-2">
+          <h1 className="text-3xl font-black text-white uppercase tracking-widest mb-2">
             Welcome Back
           </h1>
           <p className="text-zinc-400 text-sm tracking-wide">
@@ -38,7 +38,7 @@ export default function LoginPage() {
             <input
               type="text"
               placeholder="Email or Student ID"
-              className="w-full bg-[#0a0a0a] border border-zinc-800/80 rounded-xl text-white text-sm px-4 py-4 focus:outline-none focus:border-[#0055cc] focus:ring-1 focus:ring-[#0055cc]/50 transition-all placeholder:text-zinc-600 shadow-inner"
+              className="w-full bg-[#0b0c16] border border-outline-variant text-on-surface-variant text-sm px-4 py-4 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-outline"
               required
             />
           </div>
@@ -48,7 +48,7 @@ export default function LoginPage() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full bg-[#0a0a0a] border border-zinc-800/80 rounded-xl text-white text-sm px-4 py-4 focus:outline-none focus:border-[#0055cc] focus:ring-1 focus:ring-[#0055cc]/50 transition-all placeholder:text-zinc-600 shadow-inner pr-12"
+              className="w-full bg-[#0b0c16] border border-outline-variant text-on-surface-variant text-sm px-4 py-4 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-outline pr-12"
               required
             />
             <button
@@ -71,7 +71,7 @@ export default function LoginPage() {
           {/* Premium Button */}
           <button
             type="submit"
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-[#004491] to-[#0055cc] text-white font-bold text-sm tracking-widest uppercase hover:opacity-90 shadow-[0_4px_20px_rgba(0,68,145,0.4)] transition-all border border-white/10"
+            className="w-full py-4 bg-[#004491] text-white font-bold text-sm tracking-widest uppercase hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.4)] transition-all duration-300"
           >
             Sign In
           </button>

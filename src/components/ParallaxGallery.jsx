@@ -20,26 +20,7 @@ export default function ParallaxGallery({ initialImages }) {
   }, [initialImages]);
 
   return (
-    <div className="relative w-full overflow-hidden bg-[#000000] py-20 min-h-[800px] flex flex-col items-center justify-center">
-      {/* 3D Grid Background */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #00d2ff 1px, transparent 1px),
-            linear-gradient(to bottom, #00d2ff 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px',
-          backgroundPosition: 'center center',
-          transform: 'perspective(1000px) rotateX(60deg) scale(2.5) translateY(-50px)',
-          transformOrigin: 'top center',
-        }}
-      />
-      
-      {/* Vignette Gradients */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none z-0" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black pointer-events-none z-0" />
-
+    <div className="relative w-full overflow-hidden bg-[#080808] py-24 min-h-[800px] flex flex-col items-center justify-center border-t border-outline-variant">
       {/* Header matching original site UI */}
       <SectionHeader 
         title="PHOTO SHOWCASE" 
@@ -92,7 +73,7 @@ export default function ParallaxGallery({ initialImages }) {
             {images.map((img, index) => (
               <SwiperSlide 
                 key={index} 
-                className="!w-[80vw] sm:!w-[350px] md:!w-[700px] !h-[55vw] sm:!h-[250px] md:!h-[450px] rounded-xl overflow-hidden border border-[#00d2ff]/40 shadow-[0_0_30px_rgba(0,210,255,0.15)] bg-[#080808]"
+                className="!w-[80vw] sm:!w-[350px] md:!w-[700px] !h-[55vw] sm:!h-[250px] md:!h-[450px] rounded-xl overflow-hidden border border-[#1a1c33] shadow-[0_0_50px_rgba(0,0,0,0.9)] bg-[#050505]"
               >
                 <Image
                   src={img}

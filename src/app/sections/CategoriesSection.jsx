@@ -56,41 +56,41 @@ export default function CategoriesSection() {
       {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
         {categories.map((cat) => (
-          <div
+            <div
             key={cat.highlight}
-            className="border border-[#00d2ff]/30 bg-gradient-to-b from-[#00d2ff]/[0.02] to-transparent rounded-2xl p-10 flex flex-col relative overflow-hidden group hover:border-[#00d2ff]/60 transition-colors duration-300"
+            className="border border-[#00d2ff]/30 bg-gradient-to-b from-[#00d2ff]/[0.02] to-transparent rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col relative overflow-hidden group hover:border-[#00d2ff]/60 transition-colors duration-300"
           >
             {/* Icon Box */}
-            <div className="w-14 h-14 rounded-xl bg-[#00d2ff]/10 border border-[#00d2ff]/30 flex items-center justify-center mb-8">
-              <span className="material-symbols-outlined text-[#00d2ff] text-3xl">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-[#00d2ff]/10 border border-[#00d2ff]/30 flex items-center justify-center mb-6 md:mb-8">
+              <span className="material-symbols-outlined text-[#00d2ff] text-2xl md:text-3xl">
                 {cat.icon}
               </span>
             </div>
 
-            <h3 className="text-4xl font-black text-white mb-10">
+            <h3 className="text-3xl md:text-4xl font-black text-white mb-8 md:mb-10">
               {cat.title}{" "}
               <span className="text-[#00d2ff]">{cat.highlight}</span>
             </h3>
 
-            <div className="space-y-8 flex-grow mb-12">
+            <div className="space-y-6 md:space-y-8 flex-grow mb-10 md:mb-12">
               {cat.features.map((feat) => (
-                <div key={feat.title} className="flex items-start gap-4">
-                  <span className="material-symbols-outlined text-[#00d2ff] text-lg mt-1 bg-[#00d2ff]/10 rounded-full p-1.5">
+                <div key={feat.title} className="flex items-start gap-3 md:gap-4">
+                  <span className="material-symbols-outlined text-[#00d2ff] text-base md:text-lg mt-1 bg-[#00d2ff]/10 rounded-full p-1.5 shrink-0">
                     {feat.icon}
                   </span>
                   <div>
-                    <h4 className="text-white font-bold text-lg mb-1">
+                    <h4 className="text-white font-bold text-base md:text-lg mb-1">
                       {feat.title}
                     </h4>
-                    <p className="text-zinc-500 text-sm">{feat.desc}</p>
+                    <p className="text-zinc-500 text-xs md:text-sm leading-relaxed">{feat.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <button className="w-full py-4 border border-[#00d2ff]/40 rounded-xl text-[#00d2ff] font-bold tracking-widest uppercase hover:bg-[#00d2ff]/10 transition-colors flex items-center justify-center gap-3">
+            <button className="w-full py-3 md:py-4 px-2 md:px-0 border border-[#00d2ff]/40 rounded-xl text-[#00d2ff] font-bold tracking-widest uppercase hover:bg-[#00d2ff]/10 transition-colors flex items-center justify-center gap-2 md:gap-3 text-[10px] sm:text-xs">
               {cat.buttonText}{" "}
-              <span className="material-symbols-outlined text-xl">
+              <span className="material-symbols-outlined text-lg md:text-xl">
                 download
               </span>
             </button>

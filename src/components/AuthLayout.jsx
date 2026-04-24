@@ -19,7 +19,7 @@ export default function AuthLayout({ children }) {
       />
       
       {/* Premium Spotlight Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0055cc] rounded-full blur-[150px] opacity-[0.15] pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00d2ff] rounded-full blur-[200px] opacity-[0.05] pointer-events-none z-0" />
 
       {/* Top Left Back Button */}
       <div className="absolute top-8 left-8 sm:left-12 z-20">
@@ -35,9 +35,9 @@ export default function AuthLayout({ children }) {
       </div>
 
       {/* Main Content Card Wrapper - Premium Glass */}
-      <div className="relative z-10 w-full max-w-[420px] bg-zinc-950/60 backdrop-blur-2xl border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-3xl p-8 sm:p-10 animate-fade-slide">
+      <div className="relative z-10 w-full max-w-[420px] bg-[#080808] border border-outline-variant shadow-[0_0_50px_rgba(0,0,0,0.9)] p-8 sm:p-10 animate-fade-slide">
         {/* Subtle top border highlight */}
-        <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-[#00d2ff]/30 to-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]"></div>
         {children}
       </div>
     </div>
