@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const navLinks = [
   { href: "/", label: "Arena" },
@@ -15,6 +15,24 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        setIsLoggedIn(data.authenticated === true);
+      } catch {
+        setIsLoggedIn(false);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkAuth();
+  }, [pathname]); // Re-check on route change
 
   return (
     <>
@@ -53,12 +71,26 @@ export default function Navbar() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
-            LOGIN
-          </Link>
-          <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center">
-            REGISTER
-          </Link>
+          {!checkingAuth && (
+            isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-sm">dashboard</span>
+                DASHBOARD
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
+                  LOGIN
+                </Link>
+                <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center">
+                  REGISTER
+                </Link>
+              </>
+            )
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -94,20 +126,33 @@ export default function Navbar() {
           ))}
 
           <div className="flex flex-col items-center gap-4 pt-8 border-t border-zinc-800 w-1/2">
-            <Link 
-              href="/login" 
-              className="text-zinc-300 hover:text-white transition-colors uppercase w-full py-2 text-center"
-              onClick={() => setMobileOpen(false)}
-            >
-              LOGIN
-            </Link>
-            <Link 
-              href="/register" 
-              className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center"
-              onClick={() => setMobileOpen(false)}
-            >
-              REGISTER
-            </Link>
+            {isLoggedIn ? (
+              <Link 
+                href="/dashboard" 
+                className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center justify-center gap-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                <span className="material-symbols-outlined text-lg">dashboard</span>
+                DASHBOARD
+              </Link>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="text-zinc-300 hover:text-white transition-colors uppercase w-full py-2 text-center"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  LOGIN
+                </Link>
+                <Link 
+                  href="/register" 
+                  className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  REGISTER
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

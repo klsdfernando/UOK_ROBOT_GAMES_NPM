@@ -3,10 +3,42 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/AuthLayout";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        router.push("/dashboard");
+      } else {
+        setError(data.message || "Login failed.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <AuthLayout>
@@ -27,19 +59,29 @@ export default function LoginPage() {
             Welcome Back
           </h1>
           <p className="text-zinc-400 text-sm tracking-wide">
-            Sign in to your pilot dashboard
+            Sign in to your team dashboard
           </p>
         </div>
 
-        <form className="w-full space-y-5" onSubmit={(e) => e.preventDefault()}>
+        {/* Error Message */}
+        {error && (
+          <div className="w-full mb-5 px-4 py-3 bg-red-950/40 border border-red-500/30 text-red-400 text-xs tracking-wide text-center">
+            {error}
+          </div>
+        )}
+
+        <form className="w-full space-y-5" onSubmit={handleSubmit}>
           
-          {/* Input Field */}
+          {/* Email Field */}
           <div className="relative group">
             <input
-              type="text"
-              placeholder="Email or Student ID"
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-[#0b0c16] border border-outline-variant text-on-surface-variant text-sm px-4 py-4 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-outline"
               required
+              disabled={loading}
             />
           </div>
 
@@ -48,8 +90,11 @@ export default function LoginPage() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-[#0b0c16] border border-outline-variant text-on-surface-variant text-sm px-4 py-4 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-outline pr-12"
               required
+              disabled={loading}
             />
             <button
               type="button"
@@ -62,18 +107,20 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <div className="w-full flex justify-end pb-2">
-            <Link href="#" className="text-xs text-zinc-500 hover:text-white transition-colors">
-              Forgot password?
-            </Link>
-          </div>
-
           {/* Premium Button */}
           <button
             type="submit"
-            className="w-full py-4 bg-[#004491] text-white font-bold text-sm tracking-widest uppercase hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.4)] transition-all duration-300"
+            disabled={loading}
+            className="w-full py-4 bg-[#004491] text-white font-bold text-sm tracking-widest uppercase hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                Signing In...
+              </span>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
@@ -81,7 +128,7 @@ export default function LoginPage() {
           <p className="text-zinc-500 text-xs">
             New to the arena?{" "}
             <Link href="/register" className="text-white hover:text-[#00d2ff] font-bold transition-colors">
-              Request Access
+              Register Your Team
             </Link>
           </p>
         </div>
