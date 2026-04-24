@@ -16,12 +16,12 @@ const stats = [
 export default function AboutSection() {
   return (
     <section className="py-24 px-8 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-      <div className="order-1 space-y-6">
+      <div className="order-1 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
         <h2 className="text-[32px] leading-[1.2] font-semibold tracking-[-0.02em] text-white uppercase">
           ABOUT THE EVENT
         </h2>
         <div className="h-[3px] w-16 bg-[#004491] mt-2 mb-6" />
-        <p className="text-[18px] leading-[1.6] text-on-surface-variant text-justify">
+        <p className="text-[18px] leading-[1.6] text-on-surface-variant text-center md:text-justify">
           Following the remarkable success of UOK Robot Battles 2K25, which
           attracted over 100 teams, the Electronics and Computer Science Club
           (ECSC) proudly presents the next evolution of the competition:{" "}
@@ -30,9 +30,9 @@ export default function AboutSection() {
           robotics festival, introducing the new high-speed Robot Race alongside
           our signature destructive Robot Battles.
         </p>
-        <div className="flex flex-col space-y-5 pt-4">
+        <div className="flex flex-col items-center md:items-start space-y-5 pt-4">
           {stats.map((stat) => (
-            <div key={stat.label} className="flex items-center gap-3">
+            <div key={stat.label} className="flex items-center text-left md:text-left gap-3">
               <span className="material-symbols-outlined text-[#00d2ff]">
                 {stat.icon}
               </span>
