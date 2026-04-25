@@ -9,7 +9,6 @@ import Link from "next/link";
 const sidebarItems = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
   { id: "team", label: "Team Details", icon: "group" },
-  { id: "shop", label: "Shop", icon: "storefront" },
 ];
 
 /* ─── Dashboard Overview Section ─── */
@@ -66,109 +65,143 @@ function DashboardSection({ team }) {
   );
 }
 
-/* ─── Phase definitions ─── */
-const phases = [
-  {
-    id: 1,
-    title: "Event Details",
-    icon: "calendar_month",
-    status: "unlocked",         // "unlocked" | "locked"
-    accent: "#004491",
-  },
-  {
-    id: 2,
-    title: "Members Details",
-    icon: "groups",
-    status: "unlocked",
-    accent: "#00d2ff",
-  },
-  {
-    id: 3,
-    title: "Payment Slip",
-    icon: "receipt_long",
-    status: "unlocked",
-    accent: "#10b981",          // emerald
-  },
-  {
-    id: 4,
-    title: "Phase 4",
-    icon: "lock",
-    status: "locked",
-    accent: "#27272a",          // zinc-800
-  },
-  {
-    id: 5,
-    title: "Phase 5",
-    icon: "lock",
-    status: "locked",
-    accent: "#27272a",
-  },
+/* ════════════════════════════════════════════════════════════
+   PHASE SYSTEM — Dynamic, Firestore-driven progression
+   ════════════════════════════════════════════════════════════ */
+
+/* Phase metadata (static — status comes from Firestore) */
+const PHASE_META = [
+  { id: 1, title: "Event Details",   icon: "calendar_month", accent: "#004491" },
+  { id: 2, title: "Members Details", icon: "groups",         accent: "#00d2ff" },
+  { id: 3, title: "Organization Details", icon: "apartment", accent: "#10b981" },
+  { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#f59e0b" },
+  { id: 5, title: "Phase 5",         icon: "hourglass_top",  accent: "#a855f7" },
 ];
 
+/** Compute display status from Firestore phase data */
+function getPhaseStatus(phaseData) {
+  if (!phaseData) return "locked";
+  if (phaseData.completed) return "completed";
+  if (phaseData.devLocked && !phaseData.unlockedAt) return "dev-locked";
+  if (phaseData.unlockedAt) return "unlocked";
+  return "locked";
+}
+
 /* ─── Single Phase Step Node ─── */
-function PhaseNode({ phase, isLast }) {
-  const unlocked = phase.status === "unlocked";
+function PhaseNode({ phase, isLast, onComplete, completing }) {
+  const status = phase.displayStatus;
+  const isOpen = status === "unlocked" || status === "completed";
+
   return (
     <div className="flex gap-4 sm:gap-6">
       {/* Step Indicator Column */}
       <div className="flex flex-col items-center">
-        {/* Circle */}
         <div
           className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 border-2 transition-all ${
-            unlocked
-              ? "border-[var(--accent)] bg-[var(--accent)]/10"
-              : "border-zinc-800 bg-zinc-900/50"
+            status === "completed"
+              ? "border-emerald-500 bg-emerald-500/10"
+              : status === "unlocked"
+                ? "border-[var(--accent)] bg-[var(--accent)]/10"
+                : "border-zinc-800 bg-zinc-900/50"
           }`}
           style={{ "--accent": phase.accent }}
         >
-          <span
-            className={`material-symbols-outlined text-lg sm:text-xl ${
-              unlocked ? "" : "text-zinc-700"
-            }`}
-            style={unlocked ? { color: phase.accent } : undefined}
-          >
-            {phase.icon}
-          </span>
+          {status === "completed" ? (
+            <span className="material-symbols-outlined text-emerald-400 text-lg sm:text-xl">check</span>
+          ) : (
+            <span
+              className={`material-symbols-outlined text-lg sm:text-xl ${isOpen ? "" : "text-zinc-700"}`}
+              style={isOpen ? { color: phase.accent } : undefined}
+            >
+              {(status === "dev-locked" || status === "locked") ? "lock" : phase.icon}
+            </span>
+          )}
         </div>
-        {/* Connector line */}
         {!isLast && (
-          <div className={`w-[2px] flex-1 min-h-[24px] ${unlocked ? "bg-zinc-700/60" : "bg-zinc-800/40"}`} />
+          <div className={`w-[2px] flex-1 min-h-[24px] ${
+            status === "completed" ? "bg-emerald-500/30" : isOpen ? "bg-zinc-700/60" : "bg-zinc-800/40"
+          }`} />
         )}
       </div>
 
       {/* Content */}
       <div className="flex-1 pb-8">
         {/* Phase Header */}
-        <div className="flex items-center gap-3 mb-1 mt-2 sm:mt-2.5">
-          <span className={`text-[10px] uppercase tracking-widest font-bold ${unlocked ? "text-zinc-500" : "text-zinc-700"}`}>
+        <div className="flex items-center gap-3 mb-1 mt-2 sm:mt-2.5 flex-wrap">
+          <span className={`text-[10px] uppercase tracking-widest font-bold ${isOpen ? "text-zinc-500" : "text-zinc-700"}`}>
             Phase {phase.id}
           </span>
-          {unlocked ? (
+          {status === "completed" && (
             <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Unlocked
+              ✓ Completed
             </span>
-          ) : (
+          )}
+          {status === "unlocked" && (
+            <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30">
+              Active
+            </span>
+          )}
+          {status === "locked" && (
             <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-zinc-800/50 text-zinc-600 border border-zinc-800">
               Locked
             </span>
           )}
+          {status === "dev-locked" && (
+            <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-amber-500/10 text-amber-500/70 border border-amber-500/20">
+              Coming Soon
+            </span>
+          )}
         </div>
-        <h3 className={`text-sm sm:text-base font-black uppercase tracking-widest mb-3 ${unlocked ? "text-white" : "text-zinc-700"}`}>
+        <h3 className={`text-sm sm:text-base font-black uppercase tracking-widest mb-3 ${
+          status === "completed" ? "text-zinc-400" : isOpen ? "text-white" : "text-zinc-700"
+        }`}>
           {phase.title}
         </h3>
 
-        {/* Phase Body — only visible for unlocked */}
-        {unlocked && phase.content}
+        {/* Phase Body */}
+        {isOpen && phase.content}
 
-        {/* Locked overlay */}
-        {!unlocked && (
+        {/* Complete button — only for unlocked (not completed) */}
+        {status === "unlocked" && onComplete && !phase.hasCustomSubmit && (
+          <button
+            onClick={() => onComplete(phase.id)}
+            disabled={completing}
+            className="mt-4 px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {completing ? (
+              <>
+                <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-sm">check_circle</span>
+                Complete Phase {phase.id}
+              </>
+            )}
+          </button>
+        )}
+
+        {/* Locked: needs previous phase */}
+        {status === "locked" && (
           <div className="relative bg-[#080808] border border-zinc-800/60 p-6 sm:p-8 overflow-hidden">
             <div className="flex flex-col items-center justify-center text-center py-6">
               <span className="material-symbols-outlined text-zinc-800 text-4xl mb-3">lock</span>
-              <p className="text-zinc-600 text-xs uppercase tracking-widest font-bold">Coming Soon</p>
-              <p className="text-zinc-700 text-[10px] mt-1">This phase will be available soon.</p>
+              <p className="text-zinc-600 text-xs uppercase tracking-widest font-bold">Complete Phase {phase.id - 1} First</p>
+              <p className="text-zinc-700 text-[10px] mt-1">This phase unlocks after the previous one is completed.</p>
             </div>
-            {/* Scan-line decoration */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, white 2px, white 3px)" }} />
+          </div>
+        )}
+
+        {/* Dev-locked: organizers must unlock */}
+        {status === "dev-locked" && (
+          <div className="relative bg-[#080808] border border-amber-500/10 p-6 sm:p-8 overflow-hidden">
+            <div className="flex flex-col items-center justify-center text-center py-6">
+              <span className="material-symbols-outlined text-amber-500/30 text-4xl mb-3">schedule</span>
+              <p className="text-amber-500/50 text-xs uppercase tracking-widest font-bold">Coming Soon</p>
+              <p className="text-zinc-700 text-[10px] mt-1">This phase will be unlocked by the organizers.</p>
+            </div>
             <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, white 2px, white 3px)" }} />
           </div>
         )}
@@ -177,88 +210,800 @@ function PhaseNode({ phase, isLast }) {
   );
 }
 
-/* ─── Team Details Section ─── */
-function TeamDetailsSection({ team }) {
+/* ─── Phase 1: Event Details with Selection ─── */
+function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete, completing }) {
+  const [selectedEvent, setSelectedEvent] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  /* Build phase content dynamically so we can access `team` */
-  const phasesWithContent = phases.map((phase) => {
-    if (phase.id === 1) {
-      return {
-        ...phase,
-        content: (
-          <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: phase.accent }} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Event</p>
-                <p className="text-zinc-200 text-sm font-semibold">UOK Robot Games 2K26</p>
+  const savedData = phaseData?.data || null;
+  const isCompleted = displayStatus === "completed";
+
+  // If completed, show the saved read-only summary
+  if (isCompleted && savedData) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Event</p>
+            <p className="text-zinc-200 text-sm font-semibold">UOK Robot Games 2K26</p>
+          </div>
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Team Name</p>
+            <p className="text-zinc-200 text-sm font-semibold">{team.teamName}</p>
+          </div>
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Selected Event</p>
+            <p className="text-[#00d2ff] text-sm font-bold">{savedData.eventSelection}</p>
+          </div>
+          {savedData.categorySelection && (
+            <div>
+              <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Category</p>
+              <p className="text-[#00d2ff] text-sm font-bold">{savedData.categorySelection}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Leader</p>
+            <p className="text-zinc-200 text-sm font-semibold">{team.leaderName}</p>
+          </div>
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Contact Email</p>
+            <p className="text-zinc-200 text-sm font-semibold">{team.leaderEmail}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Active / unlocked — show selection form
+  const canSubmit = selectedEvent === "Robot Race" || (selectedEvent === "Robot Battles" && selectedCategory);
+
+  const handleSubmit = () => {
+    if (!canSubmit) return;
+    const data = {
+      eventSelection: selectedEvent,
+      categorySelection: selectedEvent === "Robot Battles" ? selectedCategory : "",
+    };
+    onComplete(1, data);
+  };
+
+  return (
+    <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+      {/* Team info row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <div>
+          <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Team Name</p>
+          <p className="text-zinc-200 text-sm font-semibold">{team.teamName}</p>
+        </div>
+        <div>
+          <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Leader</p>
+          <p className="text-zinc-200 text-sm font-semibold">{team.leaderName} · {team.leaderEmail}</p>
+        </div>
+      </div>
+
+      {/* Event Selection */}
+      <div className="mb-2">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Select Your Event</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Option 1: Robot Battles */}
+          <button
+            type="button"
+            onClick={() => { setSelectedEvent("Robot Battles"); setSelectedCategory(""); }}
+            className={`relative text-left p-4 border transition-all duration-200 group ${
+              selectedEvent === "Robot Battles"
+                ? "bg-[#004491]/10 border-[#004491] shadow-[0_0_15px_rgba(0,68,145,0.15)]"
+                : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-1">
+              <span className={`material-symbols-outlined text-xl ${selectedEvent === "Robot Battles" ? "text-[#004491]" : "text-zinc-600"}`}>
+                smart_toy
+              </span>
+              <span className={`text-sm font-black uppercase tracking-widest ${selectedEvent === "Robot Battles" ? "text-white" : "text-zinc-400"}`}>
+                Robot Battles
+              </span>
+            </div>
+            <p className="text-zinc-600 text-[10px] ml-9">Head-to-head combat arena</p>
+            {selectedEvent === "Robot Battles" && (
+              <div className="absolute top-3 right-3">
+                <span className="material-symbols-outlined text-[#004491] text-lg">radio_button_checked</span>
               </div>
-              <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Team Name</p>
-                <p className="text-zinc-200 text-sm font-semibold">{team.teamName}</p>
+            )}
+            {selectedEvent !== "Robot Battles" && (
+              <div className="absolute top-3 right-3">
+                <span className="material-symbols-outlined text-zinc-700 text-lg">radio_button_unchecked</span>
               </div>
-              <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Leader</p>
-                <p className="text-zinc-200 text-sm font-semibold">{team.leaderName}</p>
+            )}
+          </button>
+
+          {/* Option 2: Robot Race */}
+          <button
+            type="button"
+            onClick={() => { setSelectedEvent("Robot Race"); setSelectedCategory(""); }}
+            className={`relative text-left p-4 border transition-all duration-200 group ${
+              selectedEvent === "Robot Race"
+                ? "bg-[#004491]/10 border-[#004491] shadow-[0_0_15px_rgba(0,68,145,0.15)]"
+                : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-1">
+              <span className={`material-symbols-outlined text-xl ${selectedEvent === "Robot Race" ? "text-[#004491]" : "text-zinc-600"}`}>
+                directions_car
+              </span>
+              <span className={`text-sm font-black uppercase tracking-widest ${selectedEvent === "Robot Race" ? "text-white" : "text-zinc-400"}`}>
+                Robot Race
+              </span>
+            </div>
+            <p className="text-zinc-600 text-[10px] ml-9">Speed circuit challenge</p>
+            {selectedEvent === "Robot Race" && (
+              <div className="absolute top-3 right-3">
+                <span className="material-symbols-outlined text-[#004491] text-lg">radio_button_checked</span>
               </div>
-              <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Registered On</p>
-                <p className="text-zinc-200 text-sm font-semibold">
-                  {new Date(team.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            )}
+            {selectedEvent !== "Robot Race" && (
+              <div className="absolute top-3 right-3">
+                <span className="material-symbols-outlined text-zinc-700 text-lg">radio_button_unchecked</span>
+              </div>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Sub-category for Robot Battles */}
+      {selectedEvent === "Robot Battles" && (
+        <div className="mt-5 mb-2">
+          <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Select Weight Category</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Heavy Weight */}
+            <button
+              type="button"
+              onClick={() => setSelectedCategory("Heavy Weight")}
+              className={`relative text-left p-4 border transition-all duration-200 ${
+                selectedCategory === "Heavy Weight"
+                  ? "bg-[#00d2ff]/5 border-[#00d2ff]/50 shadow-[0_0_15px_rgba(0,210,255,0.1)]"
+                  : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`material-symbols-outlined text-xl ${selectedCategory === "Heavy Weight" ? "text-[#00d2ff]" : "text-zinc-600"}`}>
+                  fitness_center
+                </span>
+                <span className={`text-sm font-bold uppercase tracking-widest ${selectedCategory === "Heavy Weight" ? "text-white" : "text-zinc-400"}`}>
+                  Heavy Weight
+                </span>
+              </div>
+              <div className="absolute top-3 right-3">
+                <span className={`material-symbols-outlined text-lg ${selectedCategory === "Heavy Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
+                  {selectedCategory === "Heavy Weight" ? "radio_button_checked" : "radio_button_unchecked"}
+                </span>
+              </div>
+            </button>
+
+            {/* Light Weight */}
+            <button
+              type="button"
+              onClick={() => setSelectedCategory("Light Weight")}
+              className={`relative text-left p-4 border transition-all duration-200 ${
+                selectedCategory === "Light Weight"
+                  ? "bg-[#00d2ff]/5 border-[#00d2ff]/50 shadow-[0_0_15px_rgba(0,210,255,0.1)]"
+                  : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`material-symbols-outlined text-xl ${selectedCategory === "Light Weight" ? "text-[#00d2ff]" : "text-zinc-600"}`}>
+                  speed
+                </span>
+                <span className={`text-sm font-bold uppercase tracking-widest ${selectedCategory === "Light Weight" ? "text-white" : "text-zinc-400"}`}>
+                  Light Weight
+                </span>
+              </div>
+              <div className="absolute top-3 right-3">
+                <span className={`material-symbols-outlined text-lg ${selectedCategory === "Light Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
+                  {selectedCategory === "Light Weight" ? "radio_button_checked" : "radio_button_unchecked"}
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Submit Button */}
+      <button
+        onClick={handleSubmit}
+        disabled={!canSubmit || completing}
+        className="mt-6 px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        {completing ? (
+          <>
+            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <span className="material-symbols-outlined text-sm">check_circle</span>
+            Confirm Event Selection
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+/* ─── Phase 2: Members Details ─── */
+function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComplete, completing }) {
+  const [memberCount, setMemberCount] = useState(1);
+  const [members, setMembers] = useState([]);
+
+  const savedData = phaseData?.data || null;
+  const isCompleted = displayStatus === "completed";
+
+  // Completed — read-only roster
+  if (isCompleted && savedData) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-5">
+          Team Roster · {savedData.memberCount} {savedData.memberCount === 1 ? "Member" : "Members"}
+        </p>
+
+        <div className="space-y-3">
+          {savedData.members.map((m, i) => (
+            <div key={i} className="flex items-center gap-4 bg-[#0b0c16] border border-outline-variant p-4">
+              <div className="w-8 h-8 rounded-full bg-[#004491]/15 flex items-center justify-center shrink-0">
+                <span className="text-[#004491] text-xs font-black">{i + 1}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-zinc-200 text-sm font-semibold truncate">{m.fullName}</p>
+                <p className="text-zinc-500 text-xs">{m.contactNumber}</p>
+              </div>
+              {i === 0 && (
+                <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30 shrink-0">
+                  Leader
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Active — form
+  const handleCountChange = (count) => {
+    const c = Number(count);
+    setMemberCount(c);
+    // Build array: index 0 = leader (pre-filled), rest = empty
+    const arr = [];
+    for (let i = 0; i < c; i++) {
+      if (i === 0) {
+        arr.push({ fullName: team.leaderName, contactNumber: "" });
+      } else {
+        arr.push({ fullName: "", contactNumber: "" });
+      }
+    }
+    setMembers(arr);
+  };
+
+  const updateMember = (index, field, value) => {
+    setMembers((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  // Validate: all members must have name and contact
+  const allFilled = members.length > 0 && members.every((m) => m.fullName.trim() && m.contactNumber.trim());
+
+  const handleSubmit = () => {
+    if (!allFilled) return;
+    onComplete(2, { memberCount, members });
+  };
+
+  return (
+    <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+      {/* Dropdown */}
+      <div className="mb-6">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-3">Number of Team Members (Including Leader)</p>
+        <div className="relative w-full sm:w-64">
+          <select
+            value={memberCount}
+            onChange={(e) => handleCountChange(e.target.value)}
+            className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 appearance-none focus:outline-none focus:border-[#004491] transition-colors cursor-pointer"
+          >
+            <option value={1}>1 Member</option>
+            <option value={2}>2 Members</option>
+            <option value={3}>3 Members</option>
+            <option value={4}>4 Members</option>
+            <option value={5}>5 Members</option>
+          </select>
+          <span className="material-symbols-outlined text-zinc-600 text-lg absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+        </div>
+      </div>
+
+      {/* Member cards */}
+      {members.length > 0 && (
+        <div className="space-y-4">
+          {members.map((m, i) => (
+            <div key={i} className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-7 h-7 rounded-full bg-[#004491]/15 flex items-center justify-center shrink-0">
+                  <span className="text-[#004491] text-[10px] font-black">{i + 1}</span>
+                </div>
+                <p className="text-zinc-400 text-xs font-bold uppercase tracking-widest">
+                  {i === 0 ? "Team Leader" : `Member ${i + 1}`}
                 </p>
+                {i === 0 && (
+                  <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30">
+                    Leader
+                  </span>
+                )}
               </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={m.fullName}
+                  onChange={(e) => updateMember(i, "fullName", e.target.value)}
+                  className="w-full bg-[#080808] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+                  readOnly={i === 0}
+                />
+                <input
+                  type="tel"
+                  placeholder="Contact Number"
+                  value={m.contactNumber}
+                  onChange={(e) => updateMember(i, "contactNumber", e.target.value)}
+                  className="w-full bg-[#080808] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Submit */}
+      {members.length > 0 && (
+        <button
+          onClick={handleSubmit}
+          disabled={!allFilled || completing}
+          className="mt-6 px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          {completing ? (
+            <>
+              <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-sm">check_circle</span>
+              Confirm Members
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ─── Phase 3: Organization Details ─── */
+function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, completing }) {
+  const [teamType, setTeamType] = useState("");
+  const [orgName, setOrgName] = useState("");
+
+  const savedData = phaseData?.data || null;
+  const isCompleted = displayStatus === "completed";
+
+  // Completed — read-only summary
+  if (isCompleted && savedData) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Team Type</p>
+            <p className="text-[#00d2ff] text-sm font-bold">{savedData.teamType}</p>
+          </div>
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Organization Name</p>
+            <p className="text-zinc-200 text-sm font-semibold">{savedData.orgName}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Active — form
+  const teamTypes = [
+    { value: "School Team", icon: "school" },
+    { value: "University Team", icon: "account_balance" },
+    { value: "Public Team", icon: "public" },
+  ];
+
+  const canSubmit = teamType && orgName.trim();
+
+  const handleSubmit = () => {
+    if (!canSubmit) return;
+    onComplete(3, { teamType, orgName: orgName.trim() });
+  };
+
+  return (
+    <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+      {/* Team Type */}
+      <div className="mb-6">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Team Type</p>
+        <p className="text-zinc-600 text-[10px] mb-4">Select the type that best describes your team</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {teamTypes.map((t) => (
+            <button
+              key={t.value}
+              type="button"
+              onClick={() => setTeamType(t.value)}
+              className={`relative text-left p-4 border transition-all duration-200 flex items-center gap-3 ${
+                teamType === t.value
+                  ? "bg-[#004491]/10 border-[#004491] shadow-[0_0_15px_rgba(0,68,145,0.15)]"
+                  : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+              }`}
+            >
+              <span className={`material-symbols-outlined text-lg ${teamType === t.value ? "text-[#004491]" : "text-zinc-600"}`}>
+                {teamType === t.value ? "radio_button_checked" : "radio_button_unchecked"}
+              </span>
+              <span className={`material-symbols-outlined text-xl ${teamType === t.value ? "text-[#00d2ff]" : "text-zinc-600"}`}>
+                {t.icon}
+              </span>
+              <span className={`text-sm font-bold uppercase tracking-widest ${teamType === t.value ? "text-white" : "text-zinc-400"}`}>
+                {t.value}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Organization Name */}
+      <div className="mb-6">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-3">
+          Organization Details
+        </p>
+        <p className="text-zinc-600 text-[10px] mb-3">Name of the institution you represent</p>
+        <input
+          type="text"
+          placeholder="Enter your school, university, or organization name"
+          value={orgName}
+          onChange={(e) => setOrgName(e.target.value)}
+          className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+        />
+      </div>
+
+      {/* Submit */}
+      <button
+        onClick={handleSubmit}
+        disabled={!canSubmit || completing}
+        className="px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        {completing ? (
+          <>
+            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <span className="material-symbols-outlined text-sm">check_circle</span>
+            Confirm Organization
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+/* ─── Phase 4: Payment Slip Upload ─── */
+function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, team }) {
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [referenceNumber, setReferenceNumber] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+
+  const savedData = phaseData?.data || null;
+  const isCompleted = displayStatus === "completed";
+
+  // Completed — read-only summary
+  if (isCompleted && savedData) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Reference Number</p>
+            <p className="text-[#f59e0b] text-sm font-bold">{savedData.referenceNumber}</p>
+          </div>
+          <div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Uploaded On</p>
+            <p className="text-zinc-200 text-sm font-semibold">
+              {new Date(savedData.uploadedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            </p>
+          </div>
+        </div>
+
+        {savedData.slipBase64 && (
+          <div className="bg-[#0b0c16] border border-outline-variant p-4">
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-3">Payment Slip</p>
+            {savedData.fileType && savedData.fileType.startsWith("image/") ? (
+              <img src={savedData.slipBase64} alt="Payment Slip" className="max-h-48 max-w-full object-contain border border-outline-variant mb-3" />
+            ) : null}
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-emerald-500 text-xl">verified</span>
+              <div className="flex-1">
+                <p className="text-zinc-300 text-sm font-semibold">{savedData.fileName || "Payment Slip"}</p>
+                <p className="text-zinc-600 text-[10px]">Uploaded successfully</p>
+              </div>
+              <a
+                href={savedData.slipBase64}
+                download={savedData.fileName || "payment-slip"}
+                className="text-[#004491] text-[10px] uppercase tracking-widest font-bold hover:text-[#5b9aff] transition-colors flex items-center gap-1"
+              >
+                <span className="material-symbols-outlined text-sm">download</span>
+                Download
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Handle file selection
+  const handleFileSelect = (selectedFile) => {
+    if (!selectedFile) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      alert("Only JPG, PNG, WebP, or PDF files are allowed.");
+      return;
+    }
+    if (selectedFile.size > 800 * 1024) {
+      alert("File size must be under 800KB.");
+      return;
+    }
+    setFile(selectedFile);
+    if (selectedFile.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => setPreview(e.target.result);
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setPreview(null);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const droppedFile = e.dataTransfer.files[0];
+    handleFileSelect(droppedFile);
+  };
+
+  const canSubmit = file && referenceNumber.trim();
+
+  const handleSubmit = async () => {
+    if (!canSubmit) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("paymentSlip", file);
+      formData.append("referenceNumber", referenceNumber.trim());
+
+      const res = await fetch("/api/team/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success && data.phases) {
+        onTeamUpdate({ ...team, phases: data.phases });
+      } else {
+        alert(data.message || "Upload failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+      {/* Upload Area */}
+      <div className="mb-6">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Payment Slip</p>
+
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+          onClick={() => document.getElementById("slip-upload").click()}
+          className={`relative cursor-pointer border-2 border-dashed p-8 transition-all duration-200 text-center ${
+            dragOver
+              ? "border-[#f59e0b] bg-[#f59e0b]/5"
+              : file
+                ? "border-emerald-500/40 bg-emerald-500/5"
+                : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]"
+          }`}
+        >
+          <input
+            id="slip-upload"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,application/pdf"
+            className="hidden"
+            onChange={(e) => handleFileSelect(e.target.files[0])}
+          />
+
+          {file ? (
+            <div className="flex flex-col items-center gap-3">
+              {preview ? (
+                <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain border border-outline-variant" />
+              ) : (
+                <span className="material-symbols-outlined text-emerald-500 text-5xl">description</span>
+              )}
               <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Contact Email</p>
-                <p className="text-zinc-200 text-sm font-semibold">{team.leaderEmail}</p>
+                <p className="text-zinc-300 text-sm font-semibold">{file.name}</p>
+                <p className="text-zinc-600 text-[10px] mt-0.5">{(file.size / 1024).toFixed(1)} KB · Click to change</p>
               </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <span className="material-symbols-outlined text-zinc-600 text-5xl">cloud_upload</span>
               <div>
-                <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Venue</p>
-                <p className="text-zinc-200 text-sm font-semibold">University of Kelaniya</p>
+                <p className="text-zinc-400 text-sm font-semibold">Drop your payment slip here</p>
+                <p className="text-zinc-600 text-[10px] mt-0.5">or click to browse · JPG, PNG, WebP, PDF (max 800KB)</p>
               </div>
             </div>
-          </div>
-        ),
-      };
+          )}
+        </div>
+      </div>
+
+      {/* Reference Number */}
+      <div className="mb-6">
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-3">Payment Reference Number</p>
+        <input
+          type="text"
+          placeholder="Enter your payment reference number"
+          value={referenceNumber}
+          onChange={(e) => setReferenceNumber(e.target.value)}
+          className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#f59e0b] transition-colors placeholder:text-zinc-700"
+        />
+      </div>
+
+      {/* Submit */}
+      <button
+        onClick={handleSubmit}
+        disabled={!canSubmit || uploading}
+        className="px-5 py-2.5 bg-[#f59e0b] text-black text-[10px] uppercase tracking-widest font-bold hover:bg-[#d97706] border border-[#f59e0b] hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        {uploading ? (
+          <>
+            <span className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            Uploading...
+          </>
+        ) : (
+          <>
+            <span className="material-symbols-outlined text-sm">upload_file</span>
+            Submit Payment
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+/* ─── Team Details Section ─── */
+function TeamDetailsSection({ team, onTeamUpdate }) {
+  const [completing, setCompleting] = useState(false);
+
+  // Phase data from Firestore (defaults for legacy teams)
+  const phaseData = team.phases || {
+    "1": { completed: false, unlockedAt: new Date().toISOString() },
+    "2": { completed: false, unlockedAt: null },
+    "3": { completed: false, unlockedAt: null },
+    "4": { completed: false, unlockedAt: null },
+    "5": { completed: false, unlockedAt: null, devLocked: true },
+  };
+
+  const handleCompletePhase = async (phaseId, phaseData = null) => {
+    setCompleting(true);
+    try {
+      const body = { phaseId };
+      if (phaseData) body.phaseData = phaseData;
+
+      const res = await fetch("/api/team/phases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+
+      if (data.success && data.phases) {
+        onTeamUpdate({ ...team, phases: data.phases });
+      }
+    } catch (err) {
+      console.error("Phase completion error:", err);
+    } finally {
+      setCompleting(false);
+    }
+  };
+
+  /* Build display phases with content */
+  const displayPhases = PHASE_META.map((meta) => {
+    const data = phaseData[String(meta.id)] || {};
+    const displayStatus = getPhaseStatus(data);
+
+    let content = null;
+
+    if (meta.id === 1) {
+      content = (
+        <Phase1EventDetails
+          team={team}
+          phaseData={data}
+          displayStatus={displayStatus}
+          accent={meta.accent}
+          onComplete={handleCompletePhase}
+          completing={completing}
+        />
+      );
     }
 
-    if (phase.id === 2) {
-      return {
-        ...phase,
-        content: (
-          <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: phase.accent }} />
-            <div className="flex flex-col items-center justify-center text-center py-8">
-              <span className="material-symbols-outlined text-zinc-700 text-5xl mb-4">person_add</span>
-              <p className="text-zinc-400 text-sm font-semibold mb-1">No Members Added Yet</p>
-              <p className="text-zinc-600 text-xs max-w-sm leading-relaxed">
-                You&apos;ll be able to add your team members, assign roles, and manage your full roster here.
-              </p>
-            </div>
-          </div>
-        ),
-      };
+    if (meta.id === 2) {
+      content = (
+        <Phase2MembersDetails
+          team={team}
+          phaseData={data}
+          displayStatus={displayStatus}
+          accent={meta.accent}
+          onComplete={handleCompletePhase}
+          completing={completing}
+        />
+      );
     }
 
-    if (phase.id === 3) {
-      return {
-        ...phase,
-        content: (
-          <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: phase.accent }} />
-            <div className="flex flex-col items-center justify-center text-center py-8">
-              <span className="material-symbols-outlined text-zinc-700 text-5xl mb-4">cloud_upload</span>
-              <p className="text-zinc-400 text-sm font-semibold mb-1">No Payment Submitted</p>
-              <p className="text-zinc-600 text-xs max-w-sm leading-relaxed">
-                Upload your payment slip and reference number here once payment is completed. This will be verified by the organizing committee.
-              </p>
-            </div>
-          </div>
-        ),
-      };
+    if (meta.id === 3) {
+      content = (
+        <Phase3OrgDetails
+          phaseData={data}
+          displayStatus={displayStatus}
+          accent={meta.accent}
+          onComplete={handleCompletePhase}
+          completing={completing}
+        />
+      );
     }
 
-    return phase; // locked phases — no content needed
+    if (meta.id === 4) {
+      content = (
+        <Phase4PaymentSlip
+          phaseData={data}
+          displayStatus={displayStatus}
+          accent={meta.accent}
+          onTeamUpdate={onTeamUpdate}
+          team={team}
+        />
+      );
+    }
+
+    return { ...meta, displayStatus, content, hasCustomSubmit: meta.id <= 4 };
   });
+
+  const completedCount = displayPhases.filter((p) => p.displayStatus === "completed").length;
 
   return (
     <>
@@ -269,7 +1014,7 @@ function TeamDetailsSection({ team }) {
           {team.teamName}
         </h1>
         <p className="text-zinc-500 text-sm">
-          Complete each phase to finalize your registration.
+          Complete each phase to unlock the next. Phases 4 &amp; 5 will be enabled by the organizers.
         </p>
       </div>
 
@@ -278,24 +1023,26 @@ function TeamDetailsSection({ team }) {
         <div className="flex items-center justify-between mb-2">
           <span className="text-zinc-600 text-[10px] uppercase tracking-widest font-bold">Progress</span>
           <span className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">
-            {phases.filter((p) => p.status === "unlocked").length} / {phases.length} Phases
+            {completedCount} / {PHASE_META.length} Completed
           </span>
         </div>
         <div className="w-full h-[3px] bg-zinc-800/60 overflow-hidden">
           <div
-            className="h-full bg-[#004491] transition-all duration-500"
-            style={{ width: `${(phases.filter((p) => p.status === "unlocked").length / phases.length) * 100}%` }}
+            className="h-full bg-emerald-500 transition-all duration-500"
+            style={{ width: `${(completedCount / PHASE_META.length) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Phases Timeline */}
       <div className="relative">
-        {phasesWithContent.map((phase, idx) => (
+        {displayPhases.map((phase, idx) => (
           <PhaseNode
             key={phase.id}
             phase={phase}
-            isLast={idx === phasesWithContent.length - 1}
+            isLast={idx === displayPhases.length - 1}
+            onComplete={handleCompletePhase}
+            completing={completing}
           />
         ))}
       </div>
@@ -303,224 +1050,9 @@ function TeamDetailsSection({ team }) {
   );
 }
 
-/* ─── Shop Products Data ─── */
-const shopProducts = [
-  {
-    id: 1,
-    name: "Official Event T-Shirt",
-    description: "Premium cotton tee with UOK Robot Games 2K26 branding. Available in S, M, L, XL.",
-    price: 1500,
-    currency: "LKR",
-    icon: "checkroom",
-    accent: "#004491",
-    badge: "Popular",
-    badgeColor: "#004491",
-    inStock: true,
-  },
-  {
-    id: 2,
-    name: "Cyber Wristband",
-    description: "Glow-in-the-dark silicone wristband with the official arena logo.",
-    price: 350,
-    currency: "LKR",
-    icon: "watch",
-    accent: "#00d2ff",
-    badge: "New",
-    badgeColor: "#00d2ff",
-    inStock: true,
-  },
-  {
-    id: 3,
-    name: "Sticker Pack",
-    description: "Set of 6 premium holographic stickers featuring robot battle art.",
-    price: 250,
-    currency: "LKR",
-    icon: "auto_awesome",
-    accent: "#a855f7",
-    badge: null,
-    badgeColor: null,
-    inStock: true,
-  },
-  {
-    id: 4,
-    name: "Event Lanyard + ID",
-    description: "Custom lanyard with your team name printed. Includes event ID badge.",
-    price: 500,
-    currency: "LKR",
-    icon: "badge",
-    accent: "#10b981",
-    badge: "Essential",
-    badgeColor: "#10b981",
-    inStock: true,
-  },
-  {
-    id: 5,
-    name: "Arena Cap",
-    description: "Adjustable snapback cap with embroidered arena crest.",
-    price: 1200,
-    currency: "LKR",
-    icon: "sports_esports",
-    accent: "#f59e0b",
-    badge: null,
-    badgeColor: null,
-    inStock: true,
-  },
-  {
-    id: 6,
-    name: "Hoodie — Limited Edition",
-    description: "Premium heavyweight hoodie. Exclusive 2K26 design, limited run of 50.",
-    price: 3500,
-    currency: "LKR",
-    icon: "dry_cleaning",
-    accent: "#ef4444",
-    badge: "Limited",
-    badgeColor: "#ef4444",
-    inStock: false,
-  },
-];
-
-/* ─── Shop Section ─── */
-function ShopSection() {
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (product) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-        );
-      }
-      return [...prev, { ...product, qty: 1 }];
-    });
-  };
-
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-  return (
-    <>
-      {/* Section Header */}
-      <div className="mb-10">
-        <p className="text-[#004491] text-xs uppercase tracking-[0.3em] font-bold mb-3">Merchandise</p>
-        <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider mb-2">
-          Shop
-        </h1>
-        <p className="text-zinc-500 text-sm">
-          Grab official UOK Robot Games merch. Wear the arena.
-        </p>
-      </div>
-
-      {/* Cart Summary (if items added) */}
-      {totalItems > 0 && (
-        <div className="mb-8 relative bg-[#080808] border border-outline-variant p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-[#004491] text-xl">shopping_cart</span>
-            <div>
-              <p className="text-white text-sm font-bold">{totalItems} item{totalItems !== 1 ? "s" : ""} in cart</p>
-              <p className="text-zinc-500 text-xs">Total: <span className="text-zinc-200 font-semibold">LKR {totalPrice.toLocaleString()}</span></p>
-            </div>
-          </div>
-          <button className="bg-[#004491] text-white px-6 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.4)] transition-all duration-300 flex items-center gap-2 w-full sm:w-auto justify-center">
-            <span className="material-symbols-outlined text-sm">lock</span>
-            Checkout Coming Soon
-          </button>
-        </div>
-      )}
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {shopProducts.map((product) => {
-          const cartItem = cart.find((item) => item.id === product.id);
-          return (
-            <div
-              key={product.id}
-              className={`relative bg-[#080808] border border-outline-variant group hover:border-zinc-700 transition-all duration-300 flex flex-col ${
-                !product.inStock ? "opacity-60" : ""
-              }`}
-            >
-              {/* Top accent line */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: product.accent }} />
-
-              {/* Product Icon Area */}
-              <div className="relative h-40 sm:h-44 bg-[#050505] flex items-center justify-center overflow-hidden">
-                <div
-                  className="absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage: `radial-gradient(circle at 50% 50%, ${product.accent}, transparent 70%)`,
-                  }}
-                />
-                <span
-                  className="material-symbols-outlined text-6xl transition-transform duration-300 group-hover:scale-110"
-                  style={{ color: product.accent }}
-                >
-                  {product.icon}
-                </span>
-
-                {/* Badge */}
-                {product.badge && (
-                  <span
-                    className="absolute top-3 right-3 text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 border"
-                    style={{
-                      color: product.badgeColor,
-                      borderColor: `${product.badgeColor}33`,
-                      backgroundColor: `${product.badgeColor}15`,
-                    }}
-                  >
-                    {product.badge}
-                  </span>
-                )}
-
-                {/* Out of Stock overlay */}
-                {!product.inStock && (
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 border border-zinc-700 px-3 py-1 bg-black/80">Sold Out</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Product Info */}
-              <div className="p-5 flex flex-col flex-1">
-                <h3 className="text-white font-bold text-sm mb-1.5 uppercase tracking-wider">{product.name}</h3>
-                <p className="text-zinc-600 text-xs leading-relaxed mb-4 flex-1">{product.description}</p>
-
-                <div className="flex items-end justify-between mt-auto">
-                  <div>
-                    <p className="text-zinc-600 text-[10px] uppercase tracking-widest">Price</p>
-                    <p className="text-white text-lg font-black">
-                      {product.currency} {product.price.toLocaleString()}
-                    </p>
-                  </div>
-
-                  {product.inStock ? (
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="flex items-center gap-1.5 px-4 py-2 text-[10px] uppercase tracking-widest font-bold border transition-all duration-200 hover:shadow-[0_0_12px_rgba(0,68,145,0.3)]"
-                      style={{
-                        color: product.accent,
-                        borderColor: `${product.accent}50`,
-                      }}
-                    >
-                      <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
-                      {cartItem ? `Added (${cartItem.qty})` : "Add"}
-                    </button>
-                  ) : (
-                    <span className="text-zinc-700 text-[10px] uppercase tracking-widest font-bold">
-                      Unavailable
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
-/* ─── Main Dashboard Page ─── */
+/* ════════════════════════════════════════════════════════════
+   MAIN DASHBOARD PAGE
+   ════════════════════════════════════════════════════════════ */
 export default function DashboardPage() {
   const router = useRouter();
   const [team, setTeam] = useState(null);
@@ -579,9 +1111,7 @@ export default function DashboardPage() {
       case "dashboard":
         return <DashboardSection team={team} />;
       case "team":
-        return <TeamDetailsSection team={team} />;
-      case "shop":
-        return <ShopSection />;
+        return <TeamDetailsSection team={team} onTeamUpdate={setTeam} />;
       default:
         return <DashboardSection team={team} />;
     }

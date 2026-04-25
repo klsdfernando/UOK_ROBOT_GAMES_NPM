@@ -83,6 +83,14 @@ export async function POST(req) {
       leaderEmail: leaderEmail.toLowerCase().trim(),
       passwordHash,
       createdAt: new Date().toISOString(),
+      // Phase progression system
+      phases: {
+        "1": { completed: false, unlockedAt: new Date().toISOString() },
+        "2": { completed: false, unlockedAt: null },
+        "3": { completed: false, unlockedAt: null },
+        "4": { completed: false, unlockedAt: null },
+        "5": { completed: false, unlockedAt: null, devLocked: true },
+      },
     });
 
     return NextResponse.json(
