@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
+import { google } from 'googleapis';
+import { Readable } from 'stream';
 import db from '@/lib/firebase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-change-me';
+const FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
+
+// Create Google Drive client using the same Firebase service account
+function getDriveClient() {
+  const auth = new google.auth.GoogleAuth({
+    credentials: {
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    },
+    scopes: ['https://www.googleapis.com/auth/drive.file'],
+  });
+  return google.drive({ version: 'v3', auth });
+}
 
 export async function POST(req) {
   try {
@@ -40,21 +55,55 @@ export async function POST(req) {
       );
     }
 
-    // Validate file size (max 800KB to stay within Firestore doc limits)
-    if (file.size > 800 * 1024) {
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { success: false, message: 'File size must be under 800KB.' },
+        { success: false, message: 'File size must be under 5MB.' },
         { status: 400 }
       );
     }
 
-    // Convert to base64
+    // Fetch team name for the file name
+    const teamRef = db.collection('teams').doc(decoded.teamId);
+    const teamDoc = await teamRef.get();
+    const teamData = teamDoc.data();
+    const teamName = teamData?.teamName || 'Unknown';
+
+    // Upload to Google Drive
+    const drive = getDriveClient();
     const buffer = Buffer.from(await file.arrayBuffer());
-    const base64Data = buffer.toString('base64');
-    const dataUrl = `data:${file.type};base64,${base64Data}`;
+    const ext = file.name.split('.').pop() || 'jpg';
+    const driveFileName = `${teamName}_payment_${Date.now()}.${ext}`;
+
+    const driveResponse = await drive.files.create({
+      requestBody: {
+        name: driveFileName,
+        parents: [FOLDER_ID],
+      },
+      media: {
+        mimeType: file.type,
+        body: Readable.from(buffer),
+      },
+      fields: 'id, webViewLink, webContentLink',
+    });
+
+    const driveFileId = driveResponse.data.id;
+    const viewLink = driveResponse.data.webViewLink;
+
+    // Make file viewable by anyone with the link
+    await drive.permissions.create({
+      fileId: driveFileId,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone',
+      },
+    });
+
+    // Get a direct thumbnail/view URL
+    const driveViewUrl = `https://drive.google.com/file/d/${driveFileId}/view`;
+    const driveThumbnailUrl = `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w800`;
 
     // Update phase 4 in Firestore
-    const teamRef = db.collection('teams').doc(decoded.teamId);
     const now = new Date().toISOString();
 
     const updates = {
@@ -62,7 +111,9 @@ export async function POST(req) {
       'phases.4.completedAt': now,
       'phases.4.data': {
         referenceNumber: referenceNumber.trim(),
-        slipBase64: dataUrl,
+        driveFileId: driveFileId,
+        driveViewUrl: driveViewUrl,
+        driveThumbnailUrl: driveThumbnailUrl,
         fileName: file.name,
         fileType: file.type,
         fileSize: file.size,
@@ -71,8 +122,6 @@ export async function POST(req) {
     };
 
     // Unlock phase 5 if it's not dev-locked
-    const teamDoc = await teamRef.get();
-    const teamData = teamDoc.data();
     const phase5 = teamData?.phases?.['5'] || {};
     if (!phase5.devLocked) {
       updates['phases.5.unlockedAt'] = now;
@@ -95,7 +144,7 @@ export async function POST(req) {
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(
-      { success: false, message: 'Internal server error.' },
+      { success: false, message: error.message || 'Internal server error.' },
       { status: 500 }
     );
   }

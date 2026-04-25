@@ -735,25 +735,26 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
           </div>
         </div>
 
-        {savedData.slipBase64 && (
+        {(savedData.driveViewUrl || savedData.slipBase64) && (
           <div className="bg-[#0b0c16] border border-outline-variant p-4">
             <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-3">Payment Slip</p>
-            {savedData.fileType && savedData.fileType.startsWith("image/") ? (
-              <img src={savedData.slipBase64} alt="Payment Slip" className="max-h-48 max-w-full object-contain border border-outline-variant mb-3" />
+            {savedData.driveThumbnailUrl && savedData.fileType?.startsWith("image/") ? (
+              <img src={savedData.driveThumbnailUrl} alt="Payment Slip" className="max-h-48 max-w-full object-contain border border-outline-variant mb-3" />
             ) : null}
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-emerald-500 text-xl">verified</span>
               <div className="flex-1">
                 <p className="text-zinc-300 text-sm font-semibold">{savedData.fileName || "Payment Slip"}</p>
-                <p className="text-zinc-600 text-[10px]">Uploaded successfully</p>
+                <p className="text-zinc-600 text-[10px]">Uploaded to Google Drive</p>
               </div>
               <a
-                href={savedData.slipBase64}
-                download={savedData.fileName || "payment-slip"}
+                href={savedData.driveViewUrl || savedData.slipBase64}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[#004491] text-[10px] uppercase tracking-widest font-bold hover:text-[#5b9aff] transition-colors flex items-center gap-1"
               >
-                <span className="material-symbols-outlined text-sm">download</span>
-                Download
+                <span className="material-symbols-outlined text-sm">open_in_new</span>
+                View
               </a>
             </div>
           </div>
@@ -770,8 +771,8 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
       alert("Only JPG, PNG, WebP, or PDF files are allowed.");
       return;
     }
-    if (selectedFile.size > 800 * 1024) {
-      alert("File size must be under 800KB.");
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      alert("File size must be under 5MB.");
       return;
     }
     setFile(selectedFile);
@@ -866,7 +867,7 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
               <span className="material-symbols-outlined text-zinc-600 text-5xl">cloud_upload</span>
               <div>
                 <p className="text-zinc-400 text-sm font-semibold">Drop your payment slip here</p>
-                <p className="text-zinc-600 text-[10px] mt-0.5">or click to browse · JPG, PNG, WebP, PDF (max 800KB)</p>
+                <p className="text-zinc-600 text-[10px] mt-0.5">or click to browse · JPG, PNG, WebP, PDF (max 5MB)</p>
               </div>
             </div>
           )}
