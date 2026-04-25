@@ -222,7 +222,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
   if (isCompleted && savedData) {
     return (
       <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Event</p>
@@ -445,7 +445,7 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
   if (isCompleted && savedData) {
     return (
       <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
 
         <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-5">
           Team Roster · {savedData.memberCount} {savedData.memberCount === 1 ? "Member" : "Members"}
@@ -604,7 +604,7 @@ function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, comple
   if (isCompleted && savedData) {
     return (
       <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Team Type</p>
