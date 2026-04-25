@@ -720,12 +720,12 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
   if (isCompleted && savedData) {
     return (
       <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <div>
             <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Reference Number</p>
-            <p className="text-[#f59e0b] text-sm font-bold">{savedData.referenceNumber}</p>
+            <p className="text-[#10b981] text-sm font-bold">{savedData.referenceNumber}</p>
           </div>
           <div>
             <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-1">Uploaded On</p>

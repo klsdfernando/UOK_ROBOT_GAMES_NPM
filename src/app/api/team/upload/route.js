@@ -1,24 +1,10 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { google } from 'googleapis';
-import { Readable } from 'stream';
 import db from '@/lib/firebase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-change-me';
-const FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
-
-// Create Google Drive client using the same Firebase service account
-function getDriveClient() {
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.FIREBASE_CLIENT_EMAIL,
-      private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    },
-    scopes: ['https://www.googleapis.com/auth/drive.file'],
-  });
-  return google.drive({ version: 'v3', auth });
-}
+const APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL;
 
 export async function POST(req) {
   try {
@@ -69,39 +55,32 @@ export async function POST(req) {
     const teamData = teamDoc.data();
     const teamName = teamData?.teamName || 'Unknown';
 
-    // Upload to Google Drive
-    const drive = getDriveClient();
+    // Convert file to base64
     const buffer = Buffer.from(await file.arrayBuffer());
+    const fileBase64 = buffer.toString('base64');
     const ext = file.name.split('.').pop() || 'jpg';
-    const driveFileName = `${teamName}_payment_${Date.now()}.${ext}`;
+    const fileName = `${teamName}_payment_${Date.now()}.${ext}`;
 
-    const driveResponse = await drive.files.create({
-      requestBody: {
-        name: driveFileName,
-        parents: [FOLDER_ID],
-      },
-      media: {
+    // Upload via Google Apps Script
+    const driveRes = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fileBase64,
         mimeType: file.type,
-        body: Readable.from(buffer),
-      },
-      fields: 'id, webViewLink, webContentLink',
+        fileName,
+      }),
     });
 
-    const driveFileId = driveResponse.data.id;
-    const viewLink = driveResponse.data.webViewLink;
+    const driveData = await driveRes.json();
 
-    // Make file viewable by anyone with the link
-    await drive.permissions.create({
-      fileId: driveFileId,
-      requestBody: {
-        role: 'reader',
-        type: 'anyone',
-      },
-    });
-
-    // Get a direct thumbnail/view URL
-    const driveViewUrl = `https://drive.google.com/file/d/${driveFileId}/view`;
-    const driveThumbnailUrl = `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w800`;
+    if (!driveData.success) {
+      console.error('Drive upload error:', driveData.error);
+      return NextResponse.json(
+        { success: false, message: driveData.error || 'Failed to upload to Google Drive.' },
+        { status: 500 }
+      );
+    }
 
     // Update phase 4 in Firestore
     const now = new Date().toISOString();
@@ -111,9 +90,9 @@ export async function POST(req) {
       'phases.4.completedAt': now,
       'phases.4.data': {
         referenceNumber: referenceNumber.trim(),
-        driveFileId: driveFileId,
-        driveViewUrl: driveViewUrl,
-        driveThumbnailUrl: driveThumbnailUrl,
+        driveFileId: driveData.fileId,
+        driveViewUrl: driveData.viewUrl,
+        driveThumbnailUrl: driveData.thumbnailUrl,
         fileName: file.name,
         fileType: file.type,
         fileSize: file.size,
