@@ -74,7 +74,7 @@ const PHASE_META = [
   { id: 1, title: "Event Details",   icon: "calendar_month", accent: "#004491" },
   { id: 2, title: "Members Details", icon: "groups",         accent: "#00d2ff" },
   { id: 3, title: "Organization Details", icon: "apartment", accent: "#10b981" },
-  { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#f59e0b" },
+  { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#004491" },
   { id: 5, title: "Phase 5",         icon: "hourglass_top",  accent: "#a855f7" },
 ];
 
@@ -436,7 +436,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
 /* ─── Phase 2: Members Details ─── */
 function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComplete, completing }) {
   const [memberCount, setMemberCount] = useState(1);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState([{ fullName: team.leaderName || "", contactNumber: "" }]);
 
   const savedData = phaseData?.data || null;
   const isCompleted = displayStatus === "completed";
@@ -836,7 +836,7 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
           onClick={() => document.getElementById("slip-upload").click()}
           className={`relative cursor-pointer border-2 border-dashed p-8 transition-all duration-200 text-center ${
             dragOver
-              ? "border-[#f59e0b] bg-[#f59e0b]/5"
+              ? "border-[#004491] bg-[#004491]/5"
               : file
                 ? "border-emerald-500/40 bg-emerald-500/5"
                 : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]"
@@ -882,7 +882,7 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
           placeholder="Enter your payment reference number"
           value={referenceNumber}
           onChange={(e) => setReferenceNumber(e.target.value)}
-          className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#f59e0b] transition-colors placeholder:text-zinc-700"
+          className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
         />
       </div>
 
@@ -890,7 +890,7 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
       <button
         onClick={handleSubmit}
         disabled={!canSubmit || uploading}
-        className="px-5 py-2.5 bg-[#f59e0b] text-black text-[10px] uppercase tracking-widest font-bold hover:bg-[#d97706] border border-[#f59e0b] hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+        className="px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#003070] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
       >
         {uploading ? (
           <>

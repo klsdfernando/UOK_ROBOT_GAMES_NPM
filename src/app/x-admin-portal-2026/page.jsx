@@ -96,9 +96,9 @@ export default function AdminPanel() {
             value={passkey}
             onChange={(e) => setPasskey(e.target.value)}
             placeholder="Enter admin passkey"
-            style={{ width: "100%", background: "#0b0c16", border: "1px solid #27272a", color: "#e4e4e7", fontSize: 14, padding: "14px 16px", outline: "none", boxSizing: "border-box", marginBottom: 12, fontFamily: "inherit" }}
+            style={{ width: "100%", background: "#0b0c16", border: "1px solid #27272a", color: "#e4e4e7", fontSize: 14, padding: "14px 16px", outline: "none", boxSizing: "border-box", marginBottom: 12, fontFamily: "inherit", borderRadius: 10 }}
           />
-          <button type="submit" style={{ width: "100%", background: "#004491", color: "white", border: "1px solid #004491", padding: "12px", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", fontFamily: "inherit" }}>
+          <button type="submit" style={{ width: "100%", background: "#004491", color: "white", border: "1px solid #004491", padding: "12px", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", fontFamily: "inherit", borderRadius: 10 }}>
             Authenticate
           </button>
         </form>
@@ -125,10 +125,10 @@ export default function AdminPanel() {
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button onClick={fetchTeams} style={{ background: "#0b0c16", border: "1px solid #27272a", color: "#a1a1aa", padding: "8px 14px", fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontFamily: "inherit" }}>
+            <button onClick={fetchTeams} style={{ background: "#0b0c16", border: "1px solid #27272a", color: "#a1a1aa", padding: "8px 14px", fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontFamily: "inherit", borderRadius: 10 }}>
               <span className="material-symbols-outlined" style={{ fontSize: 14 }}>refresh</span> Refresh
             </button>
-            <button onClick={handleExport} disabled={exporting || teams.length === 0} style={{ background: "#004491", border: "1px solid #004491", color: "white", padding: "8px 14px", fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, opacity: exporting ? 0.5 : 1, fontFamily: "inherit" }}>
+            <button onClick={handleExport} disabled={exporting || teams.length === 0} style={{ background: "#004491", border: "1px solid #004491", color: "white", padding: "8px 14px", fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, opacity: exporting ? 0.5 : 1, fontFamily: "inherit", borderRadius: 10 }}>
               <span className="material-symbols-outlined" style={{ fontSize: 14 }}>download</span>
               {exporting ? "Exporting..." : "Export Excel"}
             </button>
@@ -144,7 +144,7 @@ export default function AdminPanel() {
             { label: "Total Members", value: totalMembers, icon: "person", color: "#10b981" },
             { label: "Paid Teams", value: completedTeams, icon: "paid", color: "#f59e0b" },
           ].map((s) => (
-            <div key={s.label} style={{ background: "#0b0c16", border: "1px solid #18181b", padding: "16px 20px", position: "relative", overflow: "hidden" }}>
+            <div key={s.label} style={{ background: "#0b0c16", border: "1px solid #18181b", padding: "16px 20px", position: "relative", overflow: "hidden", borderRadius: 12 }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: s.color }} />
               <span className="material-symbols-outlined" style={{ color: s.color, fontSize: 20, marginBottom: 8, display: "block" }}>{s.icon}</span>
               <p style={{ margin: 0, fontSize: 28, fontWeight: 900, color: "white" }}>{s.value}</p>
@@ -160,12 +160,12 @@ export default function AdminPanel() {
             placeholder="Search teams, leaders, emails, organizations..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ flex: 1, minWidth: 200, background: "#0b0c16", border: "1px solid #27272a", color: "#e4e4e7", fontSize: 13, padding: "10px 14px", outline: "none", fontFamily: "inherit" }}
+            style={{ flex: 1, minWidth: 200, background: "#0b0c16", border: "1px solid #27272a", color: "#e4e4e7", fontSize: 13, padding: "10px 14px", outline: "none", fontFamily: "inherit", borderRadius: 10 }}
           />
           <select
             value={filterEvent}
             onChange={(e) => setFilterEvent(e.target.value)}
-            style={{ background: "#0b0c16", border: "1px solid #27272a", color: "#a1a1aa", fontSize: 12, padding: "10px 14px", outline: "none", cursor: "pointer", fontFamily: "inherit" }}
+            style={{ background: "#0b0c16", border: "1px solid #27272a", color: "#a1a1aa", fontSize: 12, padding: "10px 14px", outline: "none", cursor: "pointer", fontFamily: "inherit", borderRadius: 10 }}
           >
             <option value="">All Events</option>
             <option value="Robot Battles">Robot Battles</option>
@@ -191,7 +191,7 @@ export default function AdminPanel() {
         )}
 
         {!loading && filtered.length > 0 && (
-          <div style={{ background: "#0b0c16", border: "1px solid #18181b", overflow: "hidden" }}>
+          <div style={{ background: "#0b0c16", border: "1px solid #18181b", overflow: "hidden", borderRadius: 12 }}>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                 <thead>
@@ -253,7 +253,7 @@ export default function AdminPanel() {
             onClick={() => setSelectedTeam(null)}
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 16 }}
           >
-            <div onClick={(e) => e.stopPropagation()} style={{ background: "#0b0c16", border: "1px solid #27272a", width: "100%", maxWidth: 640, maxHeight: "90vh", overflowY: "auto" }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ background: "#0b0c16", border: "1px solid #27272a", width: "100%", maxWidth: 640, maxHeight: "90vh", overflowY: "auto", borderRadius: 16 }}>
               {/* Modal header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid #18181b" }}>
                 <div>

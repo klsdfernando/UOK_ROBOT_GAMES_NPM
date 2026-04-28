@@ -38,12 +38,12 @@ export default function Navbar() {
     <>
       {/* Desktop & Mobile Top Bar */}
       <nav className="fixed top-0 w-full z-50 bg-black border-b border-blue-900/50 flex justify-between items-center px-8 h-16 max-w-full">
-        <Link href="/" className="h-8 md:h-10 shrink-0">
+        <Link href="/" className="h-14 md:h-16 shrink-0">
           <Image
-            src="/images/logo.png"
+            src="/images/Robot Battles footer.png"
             alt="UOK Robot Games Logo"
-            width={160}
-            height={40}
+            width={320}
+            height={64}
             className="h-full w-auto object-contain"
             priority
           />
@@ -75,7 +75,7 @@ export default function Navbar() {
             isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center gap-2"
+                className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center gap-2 rounded-lg"
               >
                 <span className="material-symbols-outlined text-sm">dashboard</span>
                 DASHBOARD
@@ -85,7 +85,7 @@ export default function Navbar() {
                 <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
                   LOGIN
                 </Link>
-                <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center">
+                <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg">
                   REGISTER
                 </Link>
               </>
@@ -129,7 +129,7 @@ export default function Navbar() {
             {isLoggedIn ? (
               <Link 
                 href="/dashboard" 
-                className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center justify-center gap-2"
+                className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center justify-center gap-2 rounded-lg"
                 onClick={() => setMobileOpen(false)}
               >
                 <span className="material-symbols-outlined text-lg">dashboard</span>
@@ -146,7 +146,7 @@ export default function Navbar() {
                 </Link>
                 <Link 
                   href="/register" 
-                  className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center"
+                  className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg"
                   onClick={() => setMobileOpen(false)}
                 >
                   REGISTER

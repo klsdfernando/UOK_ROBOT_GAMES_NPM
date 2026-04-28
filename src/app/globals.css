@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* === Android Assassin Font === */
+@font-face {
+  font-family: 'Android Assassin';
+  src: url('/fonts/android-assassin/Android Assassin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === Noxis Font === */
+@font-face {
+  font-family: 'Noxis';
+  src: url('/fonts/noxis/Noxis - Personal Use.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ==========================================
    UOK Robot Games — Design System Tokens
    ========================================== */
@@ -84,6 +102,23 @@ body {
   font-family: var(--font-space-grotesk-var, 'Space Grotesk', sans-serif);
 }
 
+/* === Global Rounded Corners === */
+button,
+[role="button"],
+input,
+select,
+textarea {
+  border-radius: 10px;
+}
+
+/* Cards, panels, and bordered containers */
+.border,
+[class*="border-outline-variant"],
+[class*="border-zinc"],
+[class*="border-blue"] {
+  border-radius: 12px;
+}
+
 /* === Carousel crossfade === */
 .carousel-slide {
   transition: opacity 1s ease-in-out;
@@ -125,6 +160,7 @@ body {
   height: 100%;
   object-fit: cover;
   background-color: #111;
+  border-radius: 12px;
 }
 
 /* === Auth Page Animations === */
