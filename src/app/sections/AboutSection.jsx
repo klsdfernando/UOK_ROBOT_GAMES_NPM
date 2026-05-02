@@ -27,7 +27,7 @@ export default function AboutSection() {
         </h2>
         <div className="h-[3px] w-16 bg-[#004491] mt-2 mb-6" />
         <p className="text-[18px] leading-[1.6] text-on-surface-variant text-center md:text-justify">
-          Following the remarkable success of UOK Robot Battles 2K25, which
+          Following the remarkable success of UOK Robot Battles 2K24 and 2K25, which
           attracted over 100 teams, the Electronics and Computer Science Club
           (ECSC) proudly presents the next evolution of the competition:{" "}
           <strong>UOK Robot Games 2K26</strong>. What began as a fierce battle
@@ -50,7 +50,7 @@ export default function AboutSection() {
       </div>
 
       <div className="order-2">
-        <ImageCarousel images={carouselImages} interval={5000} showFooter={false} />
+        <ImageCarousel images={carouselImages} interval={3000} showFooter={false} />
       </div>
     </section>
   );
