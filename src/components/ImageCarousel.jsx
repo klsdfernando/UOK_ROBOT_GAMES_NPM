@@ -30,7 +30,7 @@ export default function ImageCarousel({
             alt={img.alt || `Slide ${i + 1}`}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className={`carousel-slide absolute inset-0 object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out ${
+            className={`carousel-slide absolute inset-0 object-cover transition-all duration-1000 ease-in-out ${
               i === currentIndex ? "opacity-80 z-[1]" : "opacity-0 z-0"
             }`}
             priority={i === 0}
