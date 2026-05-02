@@ -1,10 +1,14 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
 
 const timelineStages = [
   {
     phase: "PHASE_01 // UPLINK",
     title: "REGISTRATION OPENING",
-    date: "1ST OF MAY",
+    date: "7TH OF MAY",
     side: "left",
     active: true,
     content: {
@@ -56,7 +60,7 @@ const timelineStages = [
   },
 ];
 
-function TimelineContent({ content, active }) {
+function TimelineContent({ content, active, isLoggedIn }) {
   if (content.type === "action" && active) {
     return (
       <div className="bg-[#131313] p-6 border border-outline-variant hover:border-[#00d2ff]/50 transition-colors duration-300 relative overflow-hidden">
@@ -64,12 +68,27 @@ function TimelineContent({ content, active }) {
         <p className="text-sm text-on-surface-variant leading-relaxed mb-6">
           {content.text}
         </p>
-        <button className="flex items-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors">
-          <span className="material-symbols-outlined text-[14px]">
-            {content.buttonIcon}
-          </span>
-          {content.buttonText}
-        </button>
+        {isLoggedIn ? (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors">
+              <span className="material-symbols-outlined text-[14px]">
+                dashboard
+              </span>
+              DASHBOARD
+            </Link>
+            <div className="flex items-center gap-2 text-green-500 font-bold text-[11px] tracking-widest uppercase">
+              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+              REGISTERED
+            </div>
+          </div>
+        ) : (
+          <Link href="/register" className="inline-flex items-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors">
+            <span className="material-symbols-outlined text-[14px]">
+              {content.buttonIcon}
+            </span>
+            {content.buttonText}
+          </Link>
+        )}
       </div>
     );
   }
@@ -106,6 +125,21 @@ function TimelineContent({ content, active }) {
 }
 
 export default function TimelineSection() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        setIsLoggedIn(data.authenticated === true);
+      } catch {
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
   return (
     <section className="py-24 px-8 border-t border-outline-variant bg-[#080808]">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
@@ -127,41 +161,33 @@ export default function TimelineSection() {
               return (
                 <div
                   key={i}
-                  className={`flex flex-col ${
-                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                  } items-start md:items-center w-full group relative`}
+                  className={`flex flex-col ${isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                    } items-start md:items-center w-full group relative`}
                 >
                   {/* Horizontal connector (desktop) */}
                   <div
-                    className={`hidden md:block absolute top-1/2 ${
-                      isLeft ? "left-1/2" : "right-1/2"
-                    } w-1/4 h-[2px] bg-[#1a1c33] transform -translate-y-1/2 ${
-                      isLeft ? "-translate-x-full" : "translate-x-full"
-                    } ${
-                      stage.active
+                    className={`hidden md:block absolute top-1/2 ${isLeft ? "left-1/2" : "right-1/2"
+                      } w-1/4 h-[2px] bg-[#1a1c33] transform -translate-y-1/2 ${isLeft ? "-translate-x-full" : "translate-x-full"
+                      } ${stage.active
                         ? "group-hover:bg-[#00d2ff] transition-colors duration-500"
                         : ""
-                    }`}
+                      }`}
                   />
 
                   {/* Label side */}
                   <div
-                    className={`w-full md:w-1/2 ${
-                      isLeft
+                    className={`w-full md:w-1/2 ${isLeft
                         ? "md:pr-16 text-left md:text-right"
                         : "md:pl-16 text-left"
-                    } mb-4 md:mb-0 pl-16 sm:pl-20 md:pl-0 flex flex-col ${
-                      isLeft ? "items-start md:items-end" : "items-start"
-                    } justify-center ${
-                      stage.active ? "" : "opacity-50"
-                    } md:-translate-y-2`}
+                      } mb-4 md:mb-0 pl-16 sm:pl-20 md:pl-0 flex flex-col ${isLeft ? "items-start md:items-end" : "items-start"
+                      } justify-center ${stage.active ? "" : "opacity-50"
+                      } md:-translate-y-2`}
                   >
                     <div
-                      className={`font-bold text-[11px] ${
-                        stage.active
+                      className={`font-bold text-[11px] ${stage.active
                           ? "text-[#00d2ff]"
                           : "text-zinc-500"
-                      } tracking-[0.1em] uppercase mb-1`}
+                        } tracking-[0.1em] uppercase mb-1`}
                     >
                       {stage.phase}
                     </div>
@@ -170,11 +196,10 @@ export default function TimelineSection() {
                     </div>
                     <div className="flex gap-2 mt-3">
                       <span
-                        className={`px-3 py-1.5 ${
-                          stage.active
+                        className={`px-3 py-1.5 ${stage.active
                             ? "bg-[#0055cc]/20 border-[#00d2ff]/30 text-[#00d2ff]"
                             : "bg-[#0a0a0a] border-[#1a1c33] text-zinc-500"
-                        } border text-[10px] font-bold tracking-[0.15em] rounded-sm`}
+                          } border text-[10px] font-bold tracking-[0.15em] rounded-sm`}
                       >
                         {stage.date}
                       </span>
@@ -183,11 +208,10 @@ export default function TimelineSection() {
 
                   {/* Center dot */}
                   <div
-                    className={`absolute left-10 sm:left-14 md:left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-black border-[2px] ${
-                      stage.active
+                    className={`absolute left-10 sm:left-14 md:left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-black border-[2px] ${stage.active
                         ? "border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.6)]"
                         : "border-[#1a1c33]"
-                    } flex items-center justify-center z-20 mt-[2px] md:mt-0`}
+                      } flex items-center justify-center z-20 mt-[2px] md:mt-0`}
                   >
                     {stage.active && (
                       <div className="w-2 h-2 rounded-full bg-[#00d2ff]" />
@@ -196,15 +220,14 @@ export default function TimelineSection() {
 
                   {/* Content side */}
                   <div
-                    className={`w-full md:w-1/2 ${
-                      isLeft ? "md:pl-16" : "md:pr-16"
-                    } pl-16 sm:pl-20 md:pl-0 ${
-                      stage.active ? "" : "opacity-50"
-                    }`}
+                    className={`w-full md:w-1/2 ${isLeft ? "md:pl-16" : "md:pr-16"
+                      } pl-16 sm:pl-20 md:pl-0 ${stage.active ? "" : "opacity-50"
+                      }`}
                   >
                     <TimelineContent
                       content={stage.content}
                       active={stage.active}
+                      isLoggedIn={isLoggedIn}
                     />
                   </div>
                 </div>

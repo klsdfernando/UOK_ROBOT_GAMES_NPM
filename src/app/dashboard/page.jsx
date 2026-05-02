@@ -1140,7 +1140,7 @@ export default function DashboardPage() {
           </button>
           <Link href="/" className="h-8 md:h-10 shrink-0">
             <Image
-              src="/images/logo.png"
+              src="https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160"
               alt="UOK Robot Games Logo"
               width={160}
               height={40}

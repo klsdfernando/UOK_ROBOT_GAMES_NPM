@@ -28,7 +28,7 @@ export default function HeroSection() {
     <section className="relative h-svh md:h-[819px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
         <Image
-          src="/images/arena-battle.png"
+          src="https://ik.imagekit.io/wfnazmyxh/images/arena-battle.png?updatedAt=1777697842835"
           alt="Cinematic dark combat robot in arena"
           fill
           sizes="100vw"
@@ -77,7 +77,7 @@ export default function HeroSection() {
           {/* Mobile-only Logo Strip */}
           <div className="flex md:hidden items-center justify-around w-full px-6 mb-4">
             <Image
-              src="/images/logo.png"
+              src="https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160"
               alt="Robot Battles Logo"
               width={140}
               height={70}
@@ -85,7 +85,7 @@ export default function HeroSection() {
             />
             <div className="w-[1px] h-10 bg-white/20" />
             <Image
-              src="/images/UniLogo.svg"
+              src="https://ik.imagekit.io/wfnazmyxh/images/UniLogo.svg?updatedAt=1777697834303"
               alt="University of Kelaniya Logo"
               width={140}
               height={70}
@@ -93,7 +93,7 @@ export default function HeroSection() {
             />
             <div className="w-[1px] h-10 bg-white/20" />
             <Image
-              src="/images/club_logo.png"
+              src="https://ik.imagekit.io/wfnazmyxh/images/club_logo.png?updatedAt=1777698175245"
               alt="ECSC Club Logo"
               width={140}
               height={70}

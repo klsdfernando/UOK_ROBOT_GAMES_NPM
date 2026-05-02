@@ -40,7 +40,7 @@ function BattleCategoryCard({ title, winnerAmount, winnerExtra, runnerUp1, runne
           <div className="h-40 w-40 mb-6 relative flex items-center justify-center z-10">
             <Image
               alt="Champion Nut"
-              src="/images/nut.png"
+              src="https://ik.imagekit.io/wfnazmyxh/images/nut.png?updatedAt=1777697856490"
               width={160}
               height={160}
               className="h-full object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)] transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]"

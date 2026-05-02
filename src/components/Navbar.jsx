@@ -40,7 +40,7 @@ export default function Navbar() {
       <nav className="fixed top-0 w-full z-50 bg-black border-b border-blue-900/50 flex justify-between items-center px-8 h-16 max-w-full">
         <Link href="/" className="h-8 md:h-10 shrink-0">
           <Image
-            src="/images/Robot Battles footer3.png"
+            src="https://ik.imagekit.io/wfnazmyxh/images/Robot%20Battles%20footer3.png?updatedAt=1777698174943"
             alt="UOK Robot Games Logo"
             width={320}
             height={64}

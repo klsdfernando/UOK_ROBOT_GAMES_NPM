@@ -69,11 +69,11 @@ export default function RegisterPage() {
         
         {/* Minimalist Premium Logos */}
         <div className="flex items-center justify-center gap-6 mb-10 w-full">
-          <Image src="/images/logo.png" alt="UOK Robot Games" width={100} height={36} className="w-auto h-8 object-contain opacity-90" />
+          <Image src="https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160" alt="UOK Robot Games" width={100} height={36} className="w-auto h-8 object-contain opacity-90" />
           <div className="w-[1px] h-6 bg-zinc-700"></div>
-          <Image src="/images/UniLogo.svg" alt="UOK" width={70} height={36} className="w-auto h-8 object-contain opacity-80" />
+          <Image src="https://ik.imagekit.io/wfnazmyxh/images/UniLogo.svg?updatedAt=1777697834303" alt="UOK" width={70} height={36} className="w-auto h-8 object-contain opacity-80" />
           <div className="w-[1px] h-6 bg-zinc-700"></div>
-          <Image src="/images/club_logo.png" alt="ECSC" width={70} height={36} className="w-auto h-8 object-contain opacity-80" />
+          <Image src="https://ik.imagekit.io/wfnazmyxh/images/club_logo.png?updatedAt=1777698175245" alt="ECSC" width={70} height={36} className="w-auto h-8 object-contain opacity-80" />
         </div>
 
         {/* Premium Header */}

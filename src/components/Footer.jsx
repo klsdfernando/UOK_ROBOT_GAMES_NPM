@@ -35,7 +35,7 @@ export default function Footer() {
             <div className="flex items-center justify-center md:justify-start gap-4">
               <Link href="/" className="shrink-0">
                 <Image
-                  src="/images/logo.png"
+                  src="https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160"
                   alt="UOK Robot Games Logo"
                   width={140}
                   height={50}
@@ -44,7 +44,7 @@ export default function Footer() {
               </Link>
               <div className="w-[1px] h-8 bg-outline-variant" />
               <Image
-                src="/images/UniLogo.svg"
+                src="https://ik.imagekit.io/wfnazmyxh/images/UniLogo.svg?updatedAt=1777697834303"
                 alt="University of Kelaniya Logo"
                 width={100}
                 height={50}
@@ -52,7 +52,7 @@ export default function Footer() {
               />
               <div className="w-[1px] h-8 bg-outline-variant" />
               <Image
-                src="/images/club_logo.png"
+                src="https://ik.imagekit.io/wfnazmyxh/images/club_logo.png?updatedAt=1777698175245"
                 alt="ECSC Club Logo"
                 width={100}
                 height={50}
