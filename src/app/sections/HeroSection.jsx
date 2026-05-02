@@ -1,6 +1,29 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const router = useRouter();
+  const [checking, setChecking] = useState(false);
+
+  const handleJoinClick = async () => {
+    setChecking(true);
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (data.authenticated) {
+        router.push("/dashboard");
+      } else {
+        router.push("/register");
+      }
+    } catch {
+      router.push("/register");
+    } finally {
+      setChecking(false);
+    }
+  };
   return (
     <section className="relative h-svh md:h-[819px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
@@ -78,8 +101,12 @@ export default function HeroSection() {
             />
           </div>
 
-          <button className="border border-[#1a8bff] rounded-full px-12 py-4 bg-[#1a8bff]/5 text-white font-bold text-sm tracking-[0.15em] hover:bg-[#1a8bff]/15 shadow-[0_0_20px_rgba(26,139,255,0.15)] hover:shadow-[0_0_30px_rgba(26,139,255,0.4)] transition-all uppercase">
-            JOIN THE BATTLE
+          <button
+            onClick={handleJoinClick}
+            disabled={checking}
+            className="border border-[#1a8bff] rounded-full px-12 py-4 bg-[#1a8bff]/5 text-white font-bold text-sm tracking-[0.15em] hover:bg-[#1a8bff]/15 shadow-[0_0_20px_rgba(26,139,255,0.15)] hover:shadow-[0_0_30px_rgba(26,139,255,0.4)] transition-all uppercase disabled:opacity-50"
+          >
+            {checking ? "LOADING..." : "JOIN THE BATTLE"}
           </button>
         </div>
       </div>

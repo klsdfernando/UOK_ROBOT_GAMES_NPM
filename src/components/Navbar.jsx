@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "/", label: "Arena" },
+  { href: "/", label: "About" },
   { href: "/prizes", label: "Prizes" },
   { href: "/rules", label: "Rules" },
   { href: "/gallery", label: "Gallery" },
@@ -38,9 +38,9 @@ export default function Navbar() {
     <>
       {/* Desktop & Mobile Top Bar */}
       <nav className="fixed top-0 w-full z-50 bg-black border-b border-blue-900/50 flex justify-between items-center px-8 h-16 max-w-full">
-        <Link href="/" className="h-14 md:h-16 shrink-0">
+        <Link href="/" className="h-8 md:h-10 shrink-0">
           <Image
-            src="/images/Robot Battles footer.png"
+            src="/images/Robot Battles footer3.png"
             alt="UOK Robot Games Logo"
             width={320}
             height={64}
@@ -59,8 +59,8 @@ export default function Navbar() {
                 href={link.href}
                 className={
                   isActive
-                    ? "text-blue-500 border-b border-blue-500 pb-1 hover:bg-zinc-900/50 transition-colors duration-200 bg-blue-950/20"
-                    : "text-zinc-500 hover:text-white hover:bg-zinc-900/50 transition-colors duration-200"
+                    ? "text-[#1a8bff] border-b-2 border-[#1a8bff] pb-1 transition-colors duration-300"
+                    : "text-zinc-500 border-b-2 border-transparent pb-1 hover:text-white transition-colors duration-300"
                 }
               >
                 {link.label}
@@ -75,9 +75,8 @@ export default function Navbar() {
             isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center gap-2 rounded-lg"
+                className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg"
               >
-                <span className="material-symbols-outlined text-sm">dashboard</span>
                 DASHBOARD
               </Link>
             ) : (
@@ -129,10 +128,9 @@ export default function Navbar() {
             {isLoggedIn ? (
               <Link 
                 href="/dashboard" 
-                className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center flex items-center justify-center gap-2 rounded-lg"
+                className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg"
                 onClick={() => setMobileOpen(false)}
               >
-                <span className="material-symbols-outlined text-lg">dashboard</span>
                 DASHBOARD
               </Link>
             ) : (

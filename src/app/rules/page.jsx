@@ -1,16 +1,12 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FadeIn from "@/components/FadeIn";
 
-export const metadata = {
-  title: "Rules",
-  description: "Rules and regulations for UOK Robot Games 2K26 competitions.",
-};
-
-function RuleItem({ children, accent = false }) {
+function RuleItem({ children }) {
   return (
     <li className="flex items-start gap-4">
-      <span className={`material-symbols-outlined ${accent ? "text-[#00d2ff]" : "text-zinc-600"} mt-0.5 text-base`}>
+      <span className="material-symbols-outlined text-zinc-600 mt-0.5 text-base">
         chevron_right
       </span>
       <span>{children}</span>
@@ -22,7 +18,7 @@ function SubSection({ title, children }) {
   return (
     <div className="relative">
       <div className="absolute top-2 -left-6 w-4 h-[1px] bg-zinc-800" />
-      <h4 className="text-sm font-bold text-[#00d2ff] mb-4 uppercase tracking-widest">
+      <h4 className="text-sm font-bold text-[#4a8fe7] mb-4 uppercase tracking-widest">
         {title}
       </h4>
       <ul className="space-y-5 text-zinc-400 list-none">{children}</ul>
@@ -36,145 +32,160 @@ export default function RulesPage() {
       <Navbar />
       <main className="flex-grow pt-16">
         <section className="py-24 px-8 bg-[#000000]">
-          <div className="max-w-4xl mx-auto space-y-32">
+          <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-16 items-start">
             {/* ROBOT BATTLES SECTION */}
-            <FadeIn direction="up">
-              <div>
-                <div className="mb-16 text-center flex flex-col items-center">
-                  <h2 className="text-4xl font-black text-white uppercase tracking-widest">
-                    ROBOT BATTLES
-                  </h2>
-                  <div className="h-[3px] w-16 bg-[#004491] mt-6 mb-6" />
-                  <p className="text-zinc-300 text-lg">
-                    Ensure your machine complies with the arena&apos;s standards.
-                  </p>
+            <div className="animate-fade-slide bg-[#050505] border border-white/[0.06] rounded-3xl p-8 lg:p-12 hover:border-[#004491]/40 transition-colors duration-500 relative overflow-hidden group h-full flex flex-col" style={{ animationDelay: "0.1s" }}>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="mb-14 text-center flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#004491]/10 flex items-center justify-center mb-6 border border-[#004491]/20 group-hover:scale-110 transition-transform duration-500">
+                  <span className="material-symbols-outlined text-[#4a8fe7] text-3xl">shield</span>
                 </div>
+                <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-widest">
+                  ROBOT BATTLES
+                </h2>
+                <div className="h-[2px] w-12 bg-[#004491] mt-5 mb-5" />
+                <p className="text-zinc-400 text-sm lg:text-base">
+                  Ensure your machine complies with the arena&apos;s standards.
+                </p>
+              </div>
 
-                <div className="text-[#00d2ff] font-bold uppercase tracking-[0.2em] text-xs mb-8 border-b border-[#111] pb-4">
-                  COMBAT RULES &amp; REGULATIONS
-                </div>
+              <div className="text-[#4a8fe7] font-bold uppercase tracking-[0.2em] text-[10px] mb-8 border-b border-white/[0.06] pb-4">
+                COMBAT RULES &amp; REGULATIONS
+              </div>
 
-                <div className="space-y-12 border-l-2 border-[#00d2ff] pl-8 py-2">
-                  {/* 1. Team Requirements */}
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-widest">
-                      1. Team Requirements
-                    </h3>
-                    <ul className="space-y-5 text-zinc-400 list-none mb-8">
-                      <RuleItem accent>Each participant can only join one team.</RuleItem>
-                      <RuleItem accent>A team must consist of a maximum of 5 members.</RuleItem>
-                      <RuleItem accent>Must have a unique name and a team leader.</RuleItem>
-                      <RuleItem accent>A team can only compete in one category.</RuleItem>
-                    </ul>
+              <div className="space-y-12 border-l border-white/[0.06] pl-6 py-2 flex-grow">
+                {/* 1. Team Requirements */}
+                <div className="animate-fade-slide" style={{ animationDelay: "0.2s" }}>
+                  <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-[#004491] text-xs">01</span> Team Requirements
+                  </h3>
+                  <ul className="space-y-5 text-zinc-400 list-none mb-8 text-sm lg:text-base">
+                    <RuleItem>Each participant can only join one team.</RuleItem>
+                    <RuleItem>A team must consist of a maximum of 5 members.</RuleItem>
+                    <RuleItem>Must have a unique name and a team leader.</RuleItem>
+                    <RuleItem>A team can only compete in one category.</RuleItem>
+                  </ul>
 
-                    <div className="ml-6 pl-6 border-l border-zinc-800 space-y-10 mb-12">
-                      <SubSection title="Heavy Weight">
-                        <RuleItem>Team members must be affiliated with the same university or school.</RuleItem>
-                      </SubSection>
-                      <SubSection title="Light Weight">
-                        <RuleItem>Team members must be Sri Lankan nationals.</RuleItem>
-                      </SubSection>
-                    </div>
+                  <div className="ml-4 pl-6 border-l border-white/[0.04] space-y-8 mb-10">
+                    <SubSection title="Heavy Weight">
+                      <RuleItem>Team members must be affiliated with the same university or school.</RuleItem>
+                    </SubSection>
+                    <SubSection title="Light Weight">
+                      <RuleItem>Team members must be Sri Lankan nationals.</RuleItem>
+                    </SubSection>
                   </div>
-
-                  {/* 2. Robot Specification */}
-                  <FadeIn direction="up" delay={0.2} viewAmount={0.2}>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-widest">
-                        2. Robot Specification
-                      </h3>
-
-                      <div className="ml-6 pl-6 border-l border-zinc-800 space-y-10 mb-12">
-                        <SubSection title="General">
-                          <RuleItem>Chassis must be custom-made.</RuleItem>
-                          <RuleItem>Power supply must be internal.</RuleItem>
-                          <RuleItem>The maximum voltage between any pair of points cannot exceed 24 V.</RuleItem>
-                          <RuleItem>Immobilized electrolytes can be used (e.g., lithium-ion, sealed lead-acid).</RuleItem>
-                          <RuleItem>Internal combustion engines are not allowed.</RuleItem>
-                          <RuleItem>Participants should bring fully charged batteries and spares.</RuleItem>
-                          <RuleItem>Should have an indicated START/STOP switch.</RuleItem>
-                          <RuleItem>Weaponized robots must have a Master Kill Switch or auto shutdown.</RuleItem>
-                          <RuleItem>Must be remotely controllable once powered on.</RuleItem>
-                          <RuleItem>Must not pose hazard to others.</RuleItem>
-                          <RuleItem>Damage must be limited to the opposing robot.</RuleItem>
-                          <RuleItem>Robots obstructing audience view will be disqualified.</RuleItem>
-                          <RuleItem>All robots must pass technical inspection before combat.</RuleItem>
-                          <RuleItem>Must prevent radio frequency conflicts.</RuleItem>
-                          <RuleItem>Full disclosure of operating principles is required.</RuleItem>
-                          <RuleItem>No weapons using electricity, liquids, explosives, projectiles, lasers, or entanglers.</RuleItem>
-                          <RuleItem>Sharp weapon edges must be covered outside the arena.</RuleItem>
-                        </SubSection>
-
-                        <SubSection title="Heavy Weight">
-                          <RuleItem>Weight must not exceed 20kg.</RuleItem>
-                          <RuleItem>Dimensions within 45 cm × 45 cm (L x W).</RuleItem>
-                          <RuleItem>Can expand to 60cm after battle starts.</RuleItem>
-                        </SubSection>
-
-                        <SubSection title="Light Weight">
-                          <RuleItem>Weight must not exceed 2.5kg.</RuleItem>
-                          <RuleItem>Dimensions within 25 cm × 25 cm (L x W).</RuleItem>
-                          <RuleItem>Can expand to 35cm after battle starts.</RuleItem>
-                        </SubSection>
-                      </div>
-                    </div>
-                  </FadeIn>
-
-                  {/* 3. Safety Requirements */}
-                  <FadeIn direction="up" delay={0.2} viewAmount={0.5}>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-widest">
-                        3. Safety Requirements
-                      </h3>
-                      <ul className="space-y-5 text-zinc-400 list-none">
-                        <RuleItem accent>Entrants must pass safety and technical inspections.</RuleItem>
-                        <RuleItem accent>No fluid or gas leaks allowed.</RuleItem>
-                        <RuleItem accent>Operators must avoid entering the combat zone.</RuleItem>
-                        <RuleItem accent>Sharp edges must be covered outside the arena.</RuleItem>
-                      </ul>
-                    </div>
-                  </FadeIn>
                 </div>
 
-                <div className="flex justify-center pt-16">
-                  <button className="bg-[#004491] text-white px-10 py-4 font-bold hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase tracking-widest text-sm">
-                    Full Guidelines
-                  </button>
+                {/* 2. Robot Specification */}
+                <div className="animate-fade-slide" style={{ animationDelay: "0.35s" }}>
+                  <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-[#004491] text-xs">02</span> Robot Specification
+                  </h3>
+
+                  <div className="ml-4 pl-6 border-l border-white/[0.04] space-y-8 mb-10 text-sm lg:text-base">
+                    <SubSection title="General">
+                      <RuleItem>Chassis must be custom-made.</RuleItem>
+                      <RuleItem>Power supply must be internal.</RuleItem>
+                      <RuleItem>The maximum voltage cannot exceed 24 V.</RuleItem>
+                      <RuleItem>Internal combustion engines are not allowed.</RuleItem>
+                      <RuleItem>Weaponized robots must have a Master Kill Switch.</RuleItem>
+                    </SubSection>
+
+                    <SubSection title="Heavy Weight">
+                      <RuleItem>Weight must not exceed 20kg.</RuleItem>
+                      <RuleItem>Dimensions within 45 cm × 45 cm (L x W).</RuleItem>
+                    </SubSection>
+
+                    <SubSection title="Light Weight">
+                      <RuleItem>Weight must not exceed 2.5kg.</RuleItem>
+                      <RuleItem>Dimensions within 25 cm × 25 cm (L x W).</RuleItem>
+                    </SubSection>
+                  </div>
+                </div>
+
+                {/* 3. Safety Requirements */}
+                <div className="animate-fade-slide" style={{ animationDelay: "0.5s" }}>
+                  <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-[#004491] text-xs">03</span> Safety Requirements
+                  </h3>
+                  <ul className="space-y-5 text-zinc-400 list-none text-sm lg:text-base">
+                    <RuleItem>Entrants must pass safety and technical inspections.</RuleItem>
+                    <RuleItem>Operators must avoid entering the combat zone.</RuleItem>
+                    <RuleItem>Sharp edges must be covered outside the arena.</RuleItem>
+                  </ul>
                 </div>
               </div>
-            </FadeIn>
+
+              <div className="flex justify-center pt-12 mt-auto">
+                <button className="w-full bg-[#004491]/10 text-white px-10 py-4 font-bold hover:bg-[#004491] hover:shadow-[0_0_20px_rgba(0,68,145,0.4)] transition-all duration-300 border border-[#004491]/30 uppercase tracking-widest text-[10px] rounded-xl flex items-center justify-center gap-2">
+                  Download Full Battle Guidelines <span className="material-symbols-outlined text-sm">download</span>
+                </button>
+              </div>
+            </div>
 
             {/* ROBOT GAMES SECTION */}
-            <FadeIn direction="up" viewAmount={0.2}>
-              <div>
-                <div className="mb-16 text-center flex flex-col items-center">
-                  <h2 className="text-4xl font-black text-white uppercase tracking-widest">
-                    ROBOT GAMES
-                  </h2>
-                  <div className="h-[3px] w-16 bg-[#004491] mt-6 mb-6" />
-                  <p className="text-zinc-300 text-lg">
-                    Test your processing power and agility.
-                  </p>
+            <div className="animate-fade-slide bg-[#050505] border border-white/[0.06] rounded-3xl p-8 lg:p-12 hover:border-[#00d2ff]/40 transition-colors duration-500 relative overflow-hidden group h-full flex flex-col" style={{ animationDelay: "0.15s" }}>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="mb-14 text-center flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#00d2ff]/10 flex items-center justify-center mb-6 border border-[#00d2ff]/20 group-hover:scale-110 transition-transform duration-500">
+                  <span className="material-symbols-outlined text-[#00d2ff] text-3xl">route</span>
+                </div>
+                <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-widest">
+                  ROBOT RACE
+                </h2>
+                <div className="h-[2px] w-12 bg-[#00d2ff] mt-5 mb-5" />
+                <p className="text-zinc-400 text-sm lg:text-base">
+                  Test your processing power, speed, and agility.
+                </p>
+              </div>
+
+              <div className="text-[#00d2ff] font-bold uppercase tracking-[0.2em] text-[10px] mb-8 border-b border-white/[0.06] pb-4">
+                CHALLENGE RULES &amp; REGULATIONS
+              </div>
+
+              <div className="space-y-12 border-l border-white/[0.06] pl-6 py-2 flex-grow">
+                {/* 1. Track Requirements */}
+                <div className="animate-fade-slide" style={{ animationDelay: "0.3s" }}>
+                  <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-[#00d2ff] text-xs">01</span> Track Requirements
+                  </h3>
+                  <ul className="space-y-5 text-zinc-400 list-none mb-8 text-sm lg:text-base">
+                    <RuleItem>Robots must navigate a predefined obstacle course.</RuleItem>
+                    <RuleItem>Line-following capabilities are mandatory for Section A.</RuleItem>
+                    <RuleItem>Robots must complete the course within 5 minutes.</RuleItem>
+                    <RuleItem>No physical human intervention is allowed during the run.</RuleItem>
+                  </ul>
                 </div>
 
-                <div className="text-[#00d2ff] font-bold uppercase tracking-[0.2em] text-xs mb-8 border-b border-[#111] pb-4">
-                  CHALLENGE RULES &amp; REGULATIONS
-                </div>
-
-                <div className="space-y-12 border-l-2 border-[#00d2ff] pl-8 py-2">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-widest">
-                      1. General Category Rules
-                    </h3>
-                    <ul className="space-y-5 text-zinc-400 list-none mb-6">
-                      <RuleItem accent>[Dummy Rule] All participants must adhere to the standard operating procedures.</RuleItem>
-                      <RuleItem accent>[Dummy Rule] Robots must complete the obstacle course within 5 minutes.</RuleItem>
-                      <RuleItem accent>[Dummy Rule] Autonomous navigation is required for section B of the track.</RuleItem>
-                    </ul>
+                {/* 2. Robot Specification */}
+                <div className="animate-fade-slide" style={{ animationDelay: "0.4s" }}>
+                  <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-[#00d2ff] text-xs">02</span> Robot Specification
+                  </h3>
+                  <div className="ml-4 pl-6 border-l border-white/[0.04] space-y-8 mb-10 text-sm lg:text-base">
+                    <SubSection title="Dimensions & Weight">
+                      <RuleItem>Weight must not exceed 3.0kg.</RuleItem>
+                      <RuleItem>Maximum dimensions are 30 cm × 30 cm × 30 cm.</RuleItem>
+                      <RuleItem>Expanding mechanisms are strictly prohibited.</RuleItem>
+                    </SubSection>
+                    
+                    <SubSection title="Power & Control">
+                      <RuleItem>Maximum operating voltage is 12 V.</RuleItem>
+                      <RuleItem>Must include an emergency stop button accessible from top.</RuleItem>
+                      <RuleItem>Remote controls must operate on a 2.4GHz frequency.</RuleItem>
+                    </SubSection>
                   </div>
                 </div>
               </div>
-            </FadeIn>
+
+              <div className="flex justify-center pt-12 mt-auto">
+                <button className="w-full bg-[#00d2ff]/10 text-white px-10 py-4 font-bold hover:bg-[#00d2ff] hover:text-[#000] hover:shadow-[0_0_20px_rgba(0,210,255,0.4)] transition-all duration-300 border border-[#00d2ff]/30 uppercase tracking-widest text-[10px] rounded-xl flex items-center justify-center gap-2">
+                  Download Full Race Guidelines <span className="material-symbols-outlined text-sm">download</span>
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </main>

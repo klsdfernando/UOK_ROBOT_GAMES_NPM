@@ -3,8 +3,14 @@
 import ImageCarousel from "@/components/ImageCarousel";
 
 const carouselImages = [
-  { src: "/images/hero-robot.png", alt: "Robot Engineering 1" },
-  { src: "/images/arena-battle.png", alt: "Robot Engineering 2" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/hero-robot.png", alt: "Robot Engineering 1" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/556680408_722935227472197_2286349896804963750_n.jpg", alt: "Robot games ceremony highlights" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/555065961_722935330805520_525735304827127548_n.jpg", alt: "Teams competing in robot games" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/556096215_722902080808845_8829078484183091548_n.jpg", alt: "Winning robot showcase" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/arena-battle.png", alt: "Robot Engineering 2" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/554045483_722831444149242_7777983510118687532_n.jpg", alt: "Robot battle arena action shot" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/555742867_723031784129208_6635773029058720488_n.jpg", alt: "Event audience and competitors" },
+  { src: "https://ik.imagekit.io/wfnazmyxh/Highlights/555381515_722917777473942_8306143381322434299_n.jpg", alt: "Robot combat close-up" },
 ];
 
 const stats = [
@@ -45,7 +51,7 @@ export default function AboutSection() {
       </div>
 
       <div className="order-2">
-        <ImageCarousel images={carouselImages} interval={5000} />
+        <ImageCarousel images={carouselImages} interval={5000} showFooter={false} />
       </div>
     </section>
   );

@@ -461,9 +461,13 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
                 <p className="text-zinc-200 text-sm font-semibold truncate">{m.fullName}</p>
                 <p className="text-zinc-500 text-xs">{m.contactNumber}</p>
               </div>
-              {i === 0 && (
-                <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30 shrink-0">
+              {i === 0 ? (
+                <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30 shrink-0 rounded-md">
                   Leader
+                </span>
+              ) : (
+                <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-white/[0.04] text-zinc-400 border border-white/[0.08] shrink-0 rounded-md">
+                  Member
                 </span>
               )}
             </div>

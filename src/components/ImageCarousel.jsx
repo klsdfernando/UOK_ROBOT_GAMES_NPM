@@ -8,6 +8,7 @@ export default function ImageCarousel({
   interval = 5000,
   label = "ARCHIVE VISUALS",
   title = "Event Highlights",
+  showFooter = true,
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -36,13 +37,17 @@ export default function ImageCarousel({
           />
         ))}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/90 to-transparent pointer-events-none z-[2]" />
-      <div className="absolute bottom-8 left-8 flex flex-col z-[3]">
-        <span className="text-[11px] font-bold text-[#00d2ff] tracking-[0.2em] uppercase mb-1">
-          {label}
-        </span>
-        <span className="text-2xl font-semibold text-white">{title}</span>
-      </div>
+      {showFooter && (
+        <>
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/90 to-transparent pointer-events-none z-[2]" />
+          <div className="absolute bottom-8 left-8 flex flex-col z-[3]">
+            <span className="text-[11px] font-bold text-[#00d2ff] tracking-[0.2em] uppercase mb-1">
+              {label}
+            </span>
+            <span className="text-2xl font-semibold text-white">{title}</span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

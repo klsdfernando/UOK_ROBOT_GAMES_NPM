@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "robotbattles.ecsc-uok.com",
         pathname: "/People/**",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
+      },
     ],
   },
 };
