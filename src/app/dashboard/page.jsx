@@ -283,6 +283,17 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
         </div>
       </div>
 
+      {/* IMPORTANT RULE */}
+      <div className="mb-6 bg-red-950/30 border border-red-500/30 rounded-lg p-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-red-500" />
+        <div className="flex items-start gap-3">
+          <span className="material-symbols-outlined text-red-500 text-xl shrink-0 mt-0.5">warning</span>
+          <p className="text-red-200/80 text-xs leading-relaxed">
+            A team may participate in either <strong className="text-white">Robot Battle</strong> or <strong className="text-white">Robot Race</strong>, but <strong className="text-red-400">not both</strong>. Each participant may only belong to <strong className="text-red-400">one team</strong>. Failure to comply will result in <strong className="text-red-400">disqualification</strong>.
+          </p>
+        </div>
+      </div>
+
       {/* Event Selection */}
       <div className="mb-2">
         <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Select Your Event</p>

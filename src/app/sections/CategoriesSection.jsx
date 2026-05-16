@@ -64,13 +64,15 @@ export default function CategoriesSection() {
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-60" />
 
             {/* Icon Box */}
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-[#004491]/10 border border-[#004491]/25 flex items-center justify-center mb-6 md:mb-8">
-              <span className="material-symbols-outlined text-[#4a8fe7] text-2xl md:text-3xl">
-                {cat.icon}
-              </span>
+            <div className="flex justify-center md:justify-start mb-6 md:mb-8">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-[#004491]/10 border border-[#004491]/25 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#4a8fe7] text-2xl md:text-3xl">
+                  {cat.icon}
+                </span>
+              </div>
             </div>
 
-            <h3 className="text-3xl md:text-4xl font-black text-white mb-8 md:mb-10">
+            <h3 className="text-3xl md:text-4xl font-black text-white mb-8 md:mb-10 text-center md:text-left">
               {cat.title}{" "}
               <span className="text-[#4a8fe7]">{cat.highlight}</span>
             </h3>

@@ -59,7 +59,7 @@ export default function HeroSection() {
             <div className="h-[2px] w-12 bg-[#1a8bff]/60" />
           </div>
 
-          <h1 className="flex flex-col items-center mb-2 md:mb-16">
+          <h1 className="flex flex-col items-center mb-4 md:mb-8">
             <span
               className="text-[#0055cc]/50 text-[120px] md:text-[180px] leading-none tracking-normal"
               style={{ fontFamily: "'Noxis', sans-serif", WebkitTextStroke: "3px #0055cc" }}
@@ -74,31 +74,31 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          {/* Mobile-only Logo Strip */}
-          <div className="flex md:hidden items-center justify-around w-full px-6 mb-4">
-            <Image
-              src="https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160"
-              alt="Robot Battles Logo"
-              width={140}
-              height={70}
-              className="h-12 w-auto object-contain"
-            />
-            <div className="w-[1px] h-10 bg-white/20" />
-            <Image
-              src="https://ik.imagekit.io/wfnazmyxh/images/UniLogo.svg?updatedAt=1777697834303"
-              alt="University of Kelaniya Logo"
-              width={140}
-              height={70}
-              className="h-14 w-auto object-contain"
-            />
-            <div className="w-[1px] h-10 bg-white/20" />
-            <Image
-              src="https://ik.imagekit.io/wfnazmyxh/images/club_logo.png?updatedAt=1777698175245"
-              alt="ECSC Club Logo"
-              width={140}
-              height={70}
-              className="h-14 w-auto object-contain"
-            />
+          {/* Collaborations */}
+          <div className="flex flex-col items-center gap-3 mb-8">
+            <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500">
+              In Association With
+            </span>
+            <div className="flex items-center gap-5">
+              <div className="bg-white rounded-xl px-5 py-3 shadow-lg">
+                <Image
+                  src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-05-16%20at%202.44.03%20PM.jpeg"
+                  alt="Collaboration Partner 1"
+                  width={160}
+                  height={60}
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
+              <div className="bg-white rounded-xl px-5 py-3 shadow-lg">
+                <Image
+                  src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-05-16%20at%202.44.04%20PM.jpeg"
+                  alt="Collaboration Partner 2"
+                  width={160}
+                  height={60}
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
+            </div>
           </div>
 
           <button

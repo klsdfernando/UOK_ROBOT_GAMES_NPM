@@ -69,14 +69,14 @@ function TimelineContent({ content, active, isLoggedIn }) {
           {content.text}
         </p>
         {isLoggedIn ? (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Link href="/dashboard" className="inline-flex items-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center gap-4">
+            <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-8 py-3 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors w-full sm:w-auto">
               <span className="material-symbols-outlined text-[14px]">
                 dashboard
               </span>
               DASHBOARD
             </Link>
-            <div className="flex items-center gap-2 text-green-500 font-bold text-[11px] tracking-widest uppercase">
+            <div className="flex items-center gap-2 text-green-400 font-bold text-[11px] tracking-widest uppercase bg-green-500/10 border border-green-500/30 rounded-full px-5 py-2">
               <span className="material-symbols-outlined text-[16px]">check_circle</span>
               REGISTERED
             </div>

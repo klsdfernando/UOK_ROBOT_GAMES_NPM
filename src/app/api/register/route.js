@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { scryptSync, randomBytes } from 'crypto';
 import db from '@/lib/firebase';
+import { sendRegistrationEmail } from '@/lib/email';
 
 function hashPassword(password) {
   const salt = randomBytes(16).toString('hex');
@@ -92,6 +93,13 @@ export async function POST(req) {
         "5": { completed: false, unlockedAt: null, devLocked: true },
       },
     });
+
+    // Send registration confirmation email (non-blocking)
+    sendRegistrationEmail({
+      teamName: teamName.trim(),
+      leaderName: leaderName.trim(),
+      leaderEmail: leaderEmail.toLowerCase().trim(),
+    }).catch(err => console.error('Email send failed:', err));
 
     return NextResponse.json(
       { success: true, message: 'Team registered successfully!' },
