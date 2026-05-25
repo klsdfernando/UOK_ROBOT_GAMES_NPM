@@ -31,8 +31,9 @@ export default async function AnnouncementPage({ params }) {
     );
   }
 
-  const formattedDate = announcement.createdAt
-    ? new Date(announcement.createdAt).toLocaleDateString('en-US', {
+  const displayDate = announcement.date || announcement.createdAt;
+  const formattedDate = displayDate
+    ? new Date(displayDate).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -56,44 +57,52 @@ export default async function AnnouncementPage({ params }) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-3xl mx-auto px-6 -mt-32">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 sm:-mt-40 mb-24">
+        
         {/* Back button */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-medium mb-8 transition-colors"
-        >
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-          Back to Home
-        </Link>
-
-        {/* Tag */}
-        <div className="mb-4">
-          <span className="px-3 py-1.5 bg-[#004491]/30 text-[10px] font-bold tracking-[0.15em] text-[#5b9aff] uppercase rounded-md border border-[#004491]/30">
-            {announcement.tag}
-          </span>
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-[#0a0a0a]/80 backdrop-blur-md border border-white/[0.08] rounded-full px-4 py-2 text-zinc-400 hover:text-white hover:border-white/[0.2] text-xs font-bold tracking-widest uppercase transition-all duration-300"
+          >
+            <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Home
+          </Link>
         </div>
 
-        {/* Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
-          {announcement.title}
-        </h1>
+        <div className="bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl p-6 sm:p-10 md:p-16 relative overflow-hidden">
+          {/* Top accent line */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-80" />
 
-        {/* Date */}
-        <div className="flex items-center gap-2 mb-10 pb-8 border-b border-white/[0.08]">
-          <span className="material-symbols-outlined text-[16px] text-zinc-600">calendar_today</span>
-          <time className="text-sm text-zinc-500 font-medium">{formattedDate}</time>
+          {/* Tag */}
+          <div className="mb-6 flex justify-start">
+            <span className="px-4 py-2 bg-[#004491]/20 text-[11px] font-bold tracking-[0.2em] text-[#5b9aff] uppercase rounded-md border border-[#004491]/30">
+              {announcement.tag}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-8 tracking-tight">
+            {announcement.title}
+          </h1>
+
+          {/* Date */}
+          <div className="flex items-center gap-3 mb-12 pb-8 border-b border-white/[0.06]">
+            <span className="material-symbols-outlined text-[18px] text-zinc-600">calendar_today</span>
+            <time className="text-sm md:text-base text-zinc-500 font-medium tracking-wide">{formattedDate}</time>
+          </div>
+
+          {/* Article Body */}
+          <article className="prose prose-invert max-w-none">
+            {announcement.content.split('\n').map((paragraph, i) =>
+              paragraph.trim() ? (
+                <p key={i} className="text-[16px] md:text-[18px] leading-[1.8] text-zinc-400 mb-6 font-light">
+                  {paragraph}
+                </p>
+              ) : null
+            )}
+          </article>
         </div>
-
-        {/* Article Body */}
-        <article className="pb-24">
-          {announcement.content.split('\n').map((paragraph, i) =>
-            paragraph.trim() ? (
-              <p key={i} className="text-[17px] leading-[1.8] text-zinc-400 mb-6">
-                {paragraph}
-              </p>
-            ) : null
-          )}
-        </article>
       </div>
     </div>
   );

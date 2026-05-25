@@ -391,7 +391,7 @@ function AnnouncementsManager() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '' });
+  const [form, setForm] = useState({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '', date: '' });
 
   const ADMIN_SECRET = "uok-cyber-circuit-admin-x9k4m7";
 
@@ -409,13 +409,13 @@ function AnnouncementsManager() {
 
   const openAdd = () => {
     setEditingId(null);
-    setForm({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '' });
+    setForm({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '', date: '' });
     setShowForm(true);
   };
 
   const openEdit = (a) => {
     setEditingId(a.id);
-    setForm({ title: a.title, tag: a.tag, excerpt: a.excerpt, content: a.content, imageUrl: a.imageUrl });
+    setForm({ title: a.title, tag: a.tag, excerpt: a.excerpt, content: a.content, imageUrl: a.imageUrl, date: a.date || a.createdAt || '' });
     setShowForm(true);
   };
 
@@ -541,6 +541,11 @@ function AnnouncementsManager() {
                 <select value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} style={{ ...inputStyle, cursor: 'pointer' }}>
                   {tagOptions.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
+              </div>
+
+              <div>
+                <label style={labelStyle}>Date / Timestamp</label>
+                <input type="datetime-local" value={form.date ? new Date(form.date).toISOString().slice(0,16) : ''} onChange={(e) => setForm({ ...form, date: e.target.value ? new Date(e.target.value).toISOString() : '' })} style={inputStyle} />
               </div>
 
               <div>

@@ -57,7 +57,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { title, tag, excerpt, content, imageUrl } = body;
+    const { title, tag, excerpt, content, imageUrl, date } = body;
 
     if (!title || !tag || !excerpt || !content || !imageUrl) {
       return NextResponse.json(
@@ -72,6 +72,7 @@ export async function POST(req) {
       excerpt,
       content,
       imageUrl,
+      date: date || new Date().toISOString(), // Fallback if no date is provided
       createdAt: new Date().toISOString(),
     });
 
@@ -95,7 +96,7 @@ export async function PUT(req) {
 
   try {
     const body = await req.json();
-    const { id, title, tag, excerpt, content, imageUrl } = body;
+    const { id, title, tag, excerpt, content, imageUrl, date } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -110,6 +111,7 @@ export async function PUT(req) {
       excerpt,
       content,
       imageUrl,
+      date: date || new Date().toISOString(), // Fallback if missing
       updatedAt: new Date().toISOString(),
     });
 

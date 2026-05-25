@@ -77,8 +77,8 @@ export default function AnnouncementsSection() {
                     schedule
                   </span>
                   <time className="text-[11px] font-bold tracking-[0.1em] text-zinc-500 uppercase">
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("en-US", {
+                    {(item.date || item.createdAt)
+                      ? new Date(item.date || item.createdAt).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
