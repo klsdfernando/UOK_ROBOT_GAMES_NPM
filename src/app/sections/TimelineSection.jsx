@@ -63,14 +63,14 @@ const timelineStages = [
 function TimelineContent({ content, active, isLoggedIn }) {
   if (content.type === "action" && active) {
     return (
-      <div className="bg-[#131313] p-6 border border-outline-variant hover:border-[#00d2ff]/50 transition-colors duration-300 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-16 h-[2px] bg-[#00d2ff]" />
+      <div className="bg-[#131313] p-6 border border-outline-variant hover:border-[#004491]/50 transition-colors duration-300 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-16 h-[2px] bg-[#004491]" />
         <p className="text-sm text-on-surface-variant leading-relaxed mb-6">
           {content.text}
         </p>
         {isLoggedIn ? (
           <div className="flex flex-col items-center sm:flex-row sm:items-center gap-4">
-            <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-8 py-3 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors w-full sm:w-auto">
+            <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 bg-[#004491]/10 border border-[#004491] text-[#5b9aff] px-8 py-3 font-bold text-[10px] tracking-widest uppercase hover:bg-[#004491]/20 transition-colors w-full sm:w-auto">
               <span className="material-symbols-outlined text-[14px]">
                 dashboard
               </span>
@@ -82,7 +82,7 @@ function TimelineContent({ content, active, isLoggedIn }) {
             </div>
           </div>
         ) : (
-          <Link href="/register" className="inline-flex items-center gap-2 bg-[#00d2ff]/10 border border-[#00d2ff] text-[#00d2ff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#00d2ff]/20 transition-colors">
+          <Link href="/register" className="inline-flex items-center gap-2 bg-[#004491]/10 border border-[#004491] text-[#5b9aff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#004491]/20 transition-colors">
             <span className="material-symbols-outlined text-[14px]">
               {content.buttonIcon}
             </span>
@@ -152,7 +152,7 @@ export default function TimelineSection() {
         <div className="relative w-full max-w-4xl mx-auto flex flex-col py-12 px-6 sm:px-10 md:px-0">
           {/* Central Line */}
           <div className="absolute left-10 sm:left-14 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#1a1c33] transform md:-translate-x-1/2 z-0">
-            <div className="absolute top-0 w-full h-1/6 bg-gradient-to-b from-[#00d2ff] to-transparent shadow-[0_0_15px_rgba(0,210,255,0.8)] z-10" />
+            <div className="absolute top-0 w-full h-1/6 bg-gradient-to-b from-[#004491] to-transparent shadow-[0_0_15px_rgba(0,68,145,0.8)] z-10" />
           </div>
 
           <div className="flex flex-col gap-16 md:gap-24 w-full relative z-10">
@@ -169,7 +169,7 @@ export default function TimelineSection() {
                     className={`hidden md:block absolute top-1/2 ${isLeft ? "left-1/2" : "right-1/2"
                       } w-1/4 h-[2px] bg-[#1a1c33] transform -translate-y-1/2 ${isLeft ? "-translate-x-full" : "translate-x-full"
                       } ${stage.active
-                        ? "group-hover:bg-[#00d2ff] transition-colors duration-500"
+                        ? "group-hover:bg-[#004491] transition-colors duration-500"
                         : ""
                       }`}
                   />
@@ -185,7 +185,7 @@ export default function TimelineSection() {
                   >
                     <div
                       className={`font-bold text-[11px] ${stage.active
-                          ? "text-[#00d2ff]"
+                          ? "text-[#5b9aff]"
                           : "text-zinc-500"
                         } tracking-[0.1em] uppercase mb-1`}
                     >
@@ -197,7 +197,7 @@ export default function TimelineSection() {
                     <div className="flex gap-2 mt-3">
                       <span
                         className={`px-3 py-1.5 ${stage.active
-                            ? "bg-[#0055cc]/20 border-[#00d2ff]/30 text-[#00d2ff]"
+                            ? "bg-[#004491]/20 border-[#004491]/30 text-[#5b9aff]"
                             : "bg-[#0a0a0a] border-[#1a1c33] text-zinc-500"
                           } border text-[10px] font-bold tracking-[0.15em] rounded-sm`}
                       >
@@ -209,12 +209,12 @@ export default function TimelineSection() {
                   {/* Center dot */}
                   <div
                     className={`absolute left-10 sm:left-14 md:left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-black border-[2px] ${stage.active
-                        ? "border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.6)]"
+                        ? "border-[#004491] shadow-[0_0_20px_rgba(0,68,145,0.6)]"
                         : "border-[#1a1c33]"
                       } flex items-center justify-center z-20 mt-[2px] md:mt-0`}
                   >
                     {stage.active && (
-                      <div className="w-2 h-2 rounded-full bg-[#00d2ff]" />
+                      <div className="w-2 h-2 rounded-full bg-[#004491]" />
                     )}
                   </div>
 

@@ -13,6 +13,7 @@ export default function AdminPanel() {
   const [filterEvent, setFilterEvent] = useState("");
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [exporting, setExporting] = useState(false);
+  const [activeTab, setActiveTab] = useState("teams");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -135,6 +136,31 @@ export default function AdminPanel() {
           </div>
         </div>
 
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: 4, marginBottom: 24, borderBottom: '1px solid #18181b' }}>
+          {['teams', 'announcements'].map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{
+              padding: '10px 20px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em',
+              textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit',
+              background: activeTab === tab ? '#0b0c16' : 'transparent',
+              color: activeTab === tab ? '#5b9aff' : '#52525b',
+              border: activeTab === tab ? '1px solid #27272a' : '1px solid transparent',
+              borderBottom: activeTab === tab ? '1px solid #0b0c16' : '1px solid transparent',
+              borderRadius: '10px 10px 0 0', marginBottom: -1,
+            }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14, verticalAlign: 'middle', marginRight: 6 }}>
+                {tab === 'teams' ? 'groups' : 'campaign'}
+              </span>
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'announcements' && (
+          <AnnouncementsManager />
+        )}
+
+        {activeTab === 'teams' && (<>
         {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
           {[
@@ -352,7 +378,203 @@ export default function AdminPanel() {
             </div>
           </div>
         )}
+        </>)}
       </div>
+    </div>
+  );
+}
+
+/* ==================== Announcements Manager ==================== */
+function AnnouncementsManager() {
+  const [announcements, setAnnouncements] = useState([]);
+  const [announcementLoading, setAnnouncementLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '' });
+
+  const ADMIN_SECRET = "uok-cyber-circuit-admin-x9k4m7";
+
+  const fetchAnnouncements = async () => {
+    setAnnouncementLoading(true);
+    try {
+      const res = await fetch('/api/admin/announcements', { headers: { 'x-admin-secret': ADMIN_SECRET } });
+      const data = await res.json();
+      if (data.success) setAnnouncements(data.announcements);
+    } catch (err) { console.error(err); }
+    finally { setAnnouncementLoading(false); }
+  };
+
+  useEffect(() => { fetchAnnouncements(); }, []);
+
+  const openAdd = () => {
+    setEditingId(null);
+    setForm({ title: '', tag: 'EVENT UPDATE', excerpt: '', content: '', imageUrl: '' });
+    setShowForm(true);
+  };
+
+  const openEdit = (a) => {
+    setEditingId(a.id);
+    setForm({ title: a.title, tag: a.tag, excerpt: a.excerpt, content: a.content, imageUrl: a.imageUrl });
+    setShowForm(true);
+  };
+
+  const handleSave = async () => {
+    if (!form.title || !form.excerpt || !form.content || !form.imageUrl) { alert('All fields are required.'); return; }
+    setSaving(true);
+    try {
+      const method = editingId ? 'PUT' : 'POST';
+      const body = editingId ? { id: editingId, ...form } : form;
+      const res = await fetch('/api/admin/announcements', {
+        method, headers: { 'Content-Type': 'application/json', 'x-admin-secret': ADMIN_SECRET },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (data.success) { setShowForm(false); fetchAnnouncements(); }
+      else alert(data.message || 'Error saving.');
+    } catch (err) { console.error(err); alert('Failed to save.'); }
+    finally { setSaving(false); }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('Delete this announcement?')) return;
+    try {
+      const res = await fetch('/api/admin/announcements', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json', 'x-admin-secret': ADMIN_SECRET },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (data.success) fetchAnnouncements();
+    } catch (err) { console.error(err); }
+  };
+
+  const tagOptions = ['REGISTRATION', 'EVENT UPDATE', 'PARTNERSHIP', 'RESULTS', 'GENERAL'];
+
+  const inputStyle = { width: '100%', background: '#0b0c16', border: '1px solid #27272a', color: '#e4e4e7', fontSize: 13, padding: '10px 14px', outline: 'none', fontFamily: 'inherit', borderRadius: 10, boxSizing: 'border-box' };
+  const labelStyle = { display: 'block', fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#71717a', marginBottom: 6 };
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <div>
+          <p style={{ margin: 0, fontSize: 24, fontWeight: 900, color: 'white' }}>{announcements.length} <span style={{ fontSize: 14, color: '#52525b', fontWeight: 600 }}>/ 3</span></p>
+          <p style={{ margin: 0, fontSize: 9, color: '#52525b', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>Announcements</p>
+        </div>
+        <button onClick={openAdd} disabled={announcements.length >= 3} style={{ background: '#004491', border: '1px solid #004491', color: 'white', padding: '10px 18px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: announcements.length >= 3 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', borderRadius: 10, opacity: announcements.length >= 3 ? 0.4 : 1 }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>add</span>
+          Add New
+        </button>
+      </div>
+
+      {/* Loading */}
+      {announcementLoading && (
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ width: 24, height: 24, border: '2px solid #27272a', borderTopColor: '#004491', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
+          <p style={{ color: '#52525b', fontSize: 11, marginTop: 12, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Loading...</p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {/* Empty */}
+      {!announcementLoading && announcements.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: '#52525b' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 48, marginBottom: 12, display: 'block' }}>campaign</span>
+          <p style={{ fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase' }}>No announcements yet</p>
+        </div>
+      )}
+
+      {/* Cards */}
+      {!announcementLoading && announcements.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+          {announcements.map((a) => (
+            <div key={a.id} style={{ background: '#0b0c16', border: '1px solid #18181b', borderRadius: 12, overflow: 'hidden', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: '#004491' }} />
+              {a.imageUrl && (
+                <div style={{ width: '100%', height: 160, background: '#111', overflow: 'hidden' }}>
+                  <img src={a.imageUrl} alt={a.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              )}
+              <div style={{ padding: 16 }}>
+                <span style={{ display: 'inline-block', padding: '3px 8px', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', background: '#00449115', color: '#5b9aff', border: '1px solid #00449130', borderRadius: 6, marginBottom: 8 }}>
+                  {a.tag}
+                </span>
+                <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: 'white', marginBottom: 6, lineHeight: 1.4 }}>{a.title}</h3>
+                <p style={{ margin: 0, fontSize: 12, color: '#71717a', lineHeight: 1.5, marginBottom: 12 }}>{a.excerpt}</p>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button onClick={() => openEdit(a)} style={{ flex: 1, background: 'transparent', border: '1px solid #27272a', color: '#a1a1aa', padding: '8px', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>edit</span> Edit
+                  </button>
+                  <button onClick={() => handleDelete(a.id)} style={{ background: 'transparent', border: '1px solid #ef444430', color: '#ef4444', padding: '8px 12px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Form Modal */}
+      {showForm && (
+        <div onClick={() => setShowForm(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#0b0c16', border: '1px solid #27272a', width: '100%', maxWidth: 560, maxHeight: '90vh', overflowY: 'auto', borderRadius: 16, padding: 0 }}>
+            {/* Modal Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #18181b' }}>
+              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'white' }}>
+                {editingId ? 'Edit Announcement' : 'New Announcement'}
+              </h2>
+              <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', padding: 4 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
+              </button>
+            </div>
+
+            {/* Form Body */}
+            <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <label style={labelStyle}>Title</label>
+                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Announcement title" style={inputStyle} />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Tag</label>
+                <select value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} style={{ ...inputStyle, cursor: 'pointer' }}>
+                  {tagOptions.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label style={labelStyle}>Image URL</label>
+                <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} placeholder="https://ik.imagekit.io/..." style={inputStyle} />
+                {form.imageUrl && (
+                  <div style={{ marginTop: 8, borderRadius: 8, overflow: 'hidden', border: '1px solid #27272a', height: 120 }}>
+                    <img src={form.imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display = 'none'} />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label style={labelStyle}>Excerpt (short summary for card)</label>
+                <textarea value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Brief summary shown on the homepage card..." rows={2} style={{ ...inputStyle, resize: 'vertical' }} />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Full Content</label>
+                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Full article body. Use new lines for paragraphs..." rows={6} style={{ ...inputStyle, resize: 'vertical' }} />
+              </div>
+
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', paddingTop: 8 }}>
+                <button onClick={() => setShowForm(false)} style={{ background: 'transparent', border: '1px solid #27272a', color: '#a1a1aa', padding: '10px 20px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 10 }}>
+                  Cancel
+                </button>
+                <button onClick={handleSave} disabled={saving} style={{ background: '#004491', border: '1px solid #004491', color: 'white', padding: '10px 20px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 10, opacity: saving ? 0.5 : 1 }}>
+                  {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

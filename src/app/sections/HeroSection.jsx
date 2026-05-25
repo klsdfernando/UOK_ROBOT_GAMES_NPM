@@ -25,7 +25,7 @@ export default function HeroSection() {
     }
   };
   return (
-    <section className="relative h-svh md:h-[819px] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-svh flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
         <Image
           src="https://ik.imagekit.io/wfnazmyxh/images/arena-battle.png?updatedAt=1777697842835"
@@ -38,7 +38,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
       </div>
 
-      <div className="relative z-10 w-full h-full flex flex-col items-center justify-evenly md:justify-center">
+      <div className="relative z-10 w-full flex flex-col items-center justify-center py-24">
         {/* Huge Background Text */}
         <div className="absolute inset-0 flex items-center justify-center select-none z-[1] pointer-events-none mt-12">
           <span className="text-[250px] md:text-[480px] font-black text-white/10 tracking-tighter leading-none">
@@ -47,8 +47,8 @@ export default function HeroSection() {
         </div>
 
         {/* Foreground Content */}
-        <div className="relative z-[2] text-center px-4 max-w-5xl mx-auto flex flex-col items-center justify-between h-[70%] md:h-auto md:justify-start mt-0 md:mt-12 pt-0 pb-8 md:pb-0">
-          <div className="flex items-center gap-4 mb-6">
+        <div className="relative z-[2] text-center px-4 max-w-5xl mx-auto flex flex-col items-center justify-center gap-6">
+          <div className="flex items-center gap-4">
             <div className="h-[2px] w-12 bg-[#1a8bff]/60" />
             <p
               className="text-[#1a8bff] font-bold tracking-[0.3em] uppercase text-xs md:text-sm"
@@ -59,7 +59,7 @@ export default function HeroSection() {
             <div className="h-[2px] w-12 bg-[#1a8bff]/60" />
           </div>
 
-          <h1 className="flex flex-col items-center mb-4 md:mb-8">
+          <h1 className="flex flex-col items-center">
             <span
               className="text-[#0055cc]/50 text-[120px] md:text-[180px] leading-none tracking-normal"
               style={{ fontFamily: "'Noxis', sans-serif", WebkitTextStroke: "3px #0055cc" }}
@@ -75,7 +75,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Collaborations */}
-          <div className="flex flex-col items-center gap-3 mb-8">
+          <div className="flex flex-col items-center gap-3">
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500">
               In Association With
             </span>
