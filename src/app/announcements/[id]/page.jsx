@@ -82,7 +82,7 @@ export default async function AnnouncementPage({ params }) {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-8 tracking-tight">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-[1.2] mb-8 tracking-tight">
             {announcement.title}
           </h1>
 
