@@ -138,7 +138,7 @@ export default function AdminPanel() {
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: 4, marginBottom: 24, borderBottom: '1px solid #18181b' }}>
-          {['teams', 'announcements'].map(tab => (
+          {['teams', 'announcements', 'subscribers'].map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)} style={{
               padding: '10px 20px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em',
               textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit',
@@ -149,7 +149,7 @@ export default function AdminPanel() {
               borderRadius: '10px 10px 0 0', marginBottom: -1,
             }}>
               <span className="material-symbols-outlined" style={{ fontSize: 14, verticalAlign: 'middle', marginRight: 6 }}>
-                {tab === 'teams' ? 'groups' : 'campaign'}
+                {tab === 'teams' ? 'groups' : tab === 'announcements' ? 'campaign' : 'mail'}
               </span>
               {tab}
             </button>
@@ -158,6 +158,10 @@ export default function AdminPanel() {
 
         {activeTab === 'announcements' && (
           <AnnouncementsManager />
+        )}
+
+        {activeTab === 'subscribers' && (
+          <SubscribersManager />
         )}
 
         {activeTab === 'teams' && (<>
@@ -341,16 +345,32 @@ export default function AdminPanel() {
                   </DetailGrid>
                   {selectedTeam.driveViewUrl && (
                     <div style={{ marginTop: 12 }}>
-                      {selectedTeam.driveThumbnailUrl && (
-                        <div style={{ border: "1px solid #27272a", overflow: "hidden", marginBottom: 10 }}>
-                          <img src={selectedTeam.driveThumbnailUrl} alt="Payment Slip" style={{ maxWidth: "100%", height: "auto", display: "block" }} />
-                        </div>
-                      )}
+                      {(() => {
+                        // Extract file ID from the drive view URL
+                        const match = selectedTeam.driveViewUrl?.match(/\/d\/([^/]+)/);
+                        const fileId = match?.[1] || (selectedTeam.driveThumbnailUrl?.match(/[?&]id=([^&]+)/)?.[1]);
+                        if (fileId) {
+                          return (
+                            <div style={{ border: "1px solid #27272a", overflow: "hidden", marginBottom: 10, borderRadius: 8, background: "#111" }}>
+                              <img
+                                src={`https://lh3.googleusercontent.com/d/${fileId}=w600`}
+                                alt="Payment Slip"
+                                style={{ maxWidth: "100%", height: "auto", display: "block", maxHeight: 300, objectFit: "contain", margin: "0 auto" }}
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.parentElement.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
                       <a
                         href={selectedTeam.driveViewUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", padding: "8px 14px", background: "#00449115", color: "#5b9aff", border: "1px solid #00449130", textDecoration: "none", cursor: "pointer" }}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", padding: "8px 14px", background: "#00449115", color: "#5b9aff", border: "1px solid #00449130", textDecoration: "none", cursor: "pointer", borderRadius: 8 }}
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: 14 }}>open_in_new</span>
                         View on Google Drive
@@ -577,6 +597,122 @@ function AnnouncementsManager() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ==================== Subscribers Manager ==================== */
+function SubscribersManager() {
+  const [subscribers, setSubscribers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const ADMIN_SECRET = "uok-cyber-circuit-admin-x9k4m7";
+
+  const fetchSubscribers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/subscribers', { headers: { 'x-admin-secret': ADMIN_SECRET } });
+      const data = await res.json();
+      if (data.success) setSubscribers(data.subscribers);
+    } catch (err) { console.error(err); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => { fetchSubscribers(); }, []);
+
+  const handleDelete = async (id) => {
+    if (!confirm('Remove this subscriber?')) return;
+    try {
+      const res = await fetch('/api/subscribers', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json', 'x-admin-secret': ADMIN_SECRET },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (data.success) fetchSubscribers();
+    } catch (err) { console.error(err); }
+  };
+
+  const copyAll = () => {
+    const emails = subscribers.map(s => s.email).join(', ');
+    navigator.clipboard.writeText(emails);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <div>
+          <p style={{ margin: 0, fontSize: 24, fontWeight: 900, color: 'white' }}>{subscribers.length}</p>
+          <p style={{ margin: 0, fontSize: 9, color: '#52525b', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>Subscribers</p>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={fetchSubscribers} style={{ background: '#0b0c16', border: '1px solid #27272a', color: '#a1a1aa', padding: '8px 14px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', borderRadius: 10 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>refresh</span> Refresh
+          </button>
+          {subscribers.length > 0 && (
+            <button onClick={copyAll} style={{ background: '#004491', border: '1px solid #004491', color: 'white', padding: '8px 14px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', borderRadius: 10 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>{copied ? 'check' : 'content_copy'}</span>
+              {copied ? 'Copied!' : 'Copy All Emails'}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Loading */}
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ width: 24, height: 24, border: '2px solid #27272a', borderTopColor: '#004491', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
+          <p style={{ color: '#52525b', fontSize: 11, marginTop: 12, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Loading...</p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {/* Empty */}
+      {!loading && subscribers.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: '#52525b' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 48, marginBottom: 12, display: 'block' }}>mail</span>
+          <p style={{ fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase' }}>No subscribers yet</p>
+        </div>
+      )}
+
+      {/* Table */}
+      {!loading && subscribers.length > 0 && (
+        <div style={{ background: '#0b0c16', border: '1px solid #18181b', overflow: 'hidden', borderRadius: 12 }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid #27272a' }}>
+                  {['#', 'Email', 'Subscribed At', 'Actions'].map((h) => (
+                    <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#52525b', whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {subscribers.map((s, i) => (
+                  <tr key={s.id} style={{ borderBottom: '1px solid #18181b', transition: 'background 0.15s' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = '#111218')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <td style={{ padding: '10px 14px', color: '#52525b', fontWeight: 600 }}>{i + 1}</td>
+                    <td style={{ padding: '10px 14px', fontWeight: 600, color: 'white' }}>{s.email}</td>
+                    <td style={{ padding: '10px 14px', color: '#71717a', whiteSpace: 'nowrap', fontSize: 11 }}>
+                      {s.subscribedAt ? new Date(s.subscribedAt).toLocaleDateString('en-LK', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}
+                    </td>
+                    <td style={{ padding: '10px 14px' }}>
+                      <button onClick={() => handleDelete(s.id)} style={{ background: 'transparent', border: '1px solid #ef444430', color: '#ef4444', padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>delete</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

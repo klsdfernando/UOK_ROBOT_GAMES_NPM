@@ -13,52 +13,150 @@ const sidebarItems = [
 
 /* ─── Dashboard Overview Section ─── */
 function DashboardSection({ team }) {
+  const phases = team.phases || {};
+  const completedCount = Object.values(phases).filter(p => p?.completed).length;
+  const totalPhases = Object.keys(phases).length || 5;
+  const progressPercent = Math.round((completedCount / totalPhases) * 100);
+
+  // Extract event info from phase 1
+  const phase1Data = phases['1']?.data || null;
+  const eventName = phase1Data?.eventSelection || null;
+  const categoryName = phase1Data?.categorySelection || null;
+
+  // Extract member info from phase 2
+  const phase2Data = phases['2']?.data || null;
+  const memberCount = phase2Data?.memberCount || 1;
+
+  // Extract org info from phase 3
+  const phase3Data = phases['3']?.data || null;
+  const orgName = phase3Data?.orgName || null;
+
+  // SVG progress ring
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
+
   return (
     <>
-      {/* Welcome Header */}
-      <div className="mb-10">
-        <p className="text-[#004491] text-xs uppercase tracking-[0.3em] font-bold mb-3">Overview</p>
-        <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider mb-2">
-          Welcome, {team.leaderName}
-        </h1>
-        <p className="text-zinc-500 text-sm">
-          Here&apos;s a quick snapshot of your team&apos;s status.
-        </p>
+      {/* Hero Welcome Banner */}
+      <div className="relative rounded-2xl overflow-hidden mb-8 border border-white/[0.06]">
+        {/* Background gradients */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#004491]/20 via-[#080808] to-[#080808]" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#004491]/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#00d2ff]/5 rounded-full blur-[80px]" />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#004491] to-transparent" />
+
+        <div className="relative z-10 p-6 sm:p-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          {/* Left: Welcome text */}
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#004491]/15 flex items-center justify-center border border-[#004491]/20">
+                <span className="material-symbols-outlined text-[#5b9aff] text-xl">waving_hand</span>
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#5b9aff]">Dashboard</span>
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-2">
+              Welcome back, <span className="text-[#5b9aff]">{team.leaderName?.split(' ')[0]}</span>
+            </h1>
+            <p className="text-zinc-500 text-sm max-w-md">
+              Track your registration progress, manage your team, and get ready for UOK Robot Games 2K26.
+            </p>
+
+            {/* Quick badges */}
+            <div className="flex flex-wrap gap-2 mt-5">
+              <span className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-widest font-bold px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Registered
+              </span>
+              {eventName && (
+                <span className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-widest font-bold px-3 py-1.5 bg-[#004491]/15 text-[#5b9aff] border border-[#004491]/30 rounded-full">
+                  <span className="material-symbols-outlined text-[12px]">{eventName === 'Robot Battles' ? 'smart_toy' : 'directions_car'}</span>
+                  {eventName}
+                </span>
+              )}
+              {categoryName && (
+                <span className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-widest font-bold px-3 py-1.5 bg-white/[0.04] text-zinc-400 border border-white/[0.08] rounded-full">
+                  {categoryName}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Right: Progress Ring */}
+          <div className="flex flex-col items-center gap-3 shrink-0">
+            <div className="relative w-36 h-36">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                {/* Background ring */}
+                <circle cx="60" cy="60" r={radius} fill="none" stroke="#1a1a2e" strokeWidth="8" />
+                {/* Progress ring */}
+                <circle
+                  cx="60" cy="60" r={radius} fill="none"
+                  stroke="url(#progressGrad)" strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  className="transition-all duration-1000 ease-out"
+                />
+                <defs>
+                  <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#004491" />
+                    <stop offset="100%" stopColor="#00d2ff" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              {/* Center text */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-3xl font-black text-white">{completedCount}</span>
+                <span className="text-[9px] uppercase tracking-widest text-zinc-500 font-bold">of {totalPhases}</span>
+              </div>
+            </div>
+            <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold text-center">Phases Complete</p>
+          </div>
+        </div>
       </div>
 
-      {/* Info Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {/* Card: Team Info */}
-        <div className="relative bg-[#080808] border border-outline-variant p-6 group hover:border-[#004491]/50 transition-colors duration-300">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-          <div className="flex items-center gap-3 mb-4">
-            <span className="material-symbols-outlined text-[#004491] text-xl">badge</span>
-            <h3 className="text-white font-bold text-xs uppercase tracking-widest">Team Leader</h3>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {/* Team Card */}
+        <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-5 group hover:border-[#004491]/40 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491] opacity-60" />
+          <div className="w-9 h-9 rounded-lg bg-[#004491]/10 flex items-center justify-center mb-3 border border-[#004491]/15">
+            <span className="material-symbols-outlined text-[#5b9aff] text-lg">groups</span>
           </div>
-          <p className="text-zinc-300 text-lg font-semibold">{team.leaderName}</p>
-          <p className="text-zinc-500 text-xs mt-1">{team.leaderEmail}</p>
+          <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1">Team</p>
+          <p className="text-white text-sm font-bold truncate">{team.teamName}</p>
         </div>
 
-        {/* Card: Registration Status */}
-        <div className="relative bg-[#080808] border border-outline-variant p-6 group hover:border-[#004491]/50 transition-colors duration-300">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500" />
-          <div className="flex items-center gap-3 mb-4">
-            <span className="material-symbols-outlined text-emerald-500 text-xl">verified</span>
-            <h3 className="text-white font-bold text-xs uppercase tracking-widest">Status</h3>
+        {/* Members Card */}
+        <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-5 group hover:border-[#00d2ff]/40 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00d2ff] opacity-60" />
+          <div className="w-9 h-9 rounded-lg bg-[#00d2ff]/10 flex items-center justify-center mb-3 border border-[#00d2ff]/15">
+            <span className="material-symbols-outlined text-[#00d2ff] text-lg">person</span>
           </div>
-          <p className="text-emerald-400 text-lg font-semibold">Registered</p>
-          <p className="text-zinc-500 text-xs mt-1">Since {new Date(team.createdAt).toLocaleDateString()}</p>
+          <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1">Members</p>
+          <p className="text-white text-sm font-bold">{memberCount} {memberCount === 1 ? 'Member' : 'Members'}</p>
         </div>
 
-        {/* Card: Event */}
-        <div className="relative bg-[#080808] border border-outline-variant p-6 group hover:border-[#004491]/50 transition-colors duration-300">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00d2ff]" />
-          <div className="flex items-center gap-3 mb-4">
-            <span className="material-symbols-outlined text-[#00d2ff] text-xl">emoji_events</span>
-            <h3 className="text-white font-bold text-xs uppercase tracking-widest">Event</h3>
+        {/* Organization Card */}
+        <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-5 group hover:border-emerald-500/40 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500 opacity-60" />
+          <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 border border-emerald-500/15">
+            <span className="material-symbols-outlined text-emerald-400 text-lg">apartment</span>
           </div>
-          <p className="text-zinc-300 text-lg font-semibold">UOK Robot Games 2K26</p>
-          <p className="text-zinc-500 text-xs mt-1">University of Kelaniya</p>
+          <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1">Organization</p>
+          <p className="text-white text-sm font-bold truncate">{orgName || '—'}</p>
+        </div>
+
+        {/* Registered Since */}
+        <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-5 group hover:border-amber-500/40 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-amber-500 opacity-60" />
+          <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mb-3 border border-amber-500/15">
+            <span className="material-symbols-outlined text-amber-400 text-lg">calendar_today</span>
+          </div>
+          <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1">Registered</p>
+          <p className="text-white text-sm font-bold">
+            {new Date(team.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </p>
         </div>
       </div>
     </>

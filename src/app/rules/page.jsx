@@ -125,23 +125,23 @@ export default function RulesPage() {
             </div>
 
             {/* ROBOT GAMES SECTION */}
-            <div className="animate-fade-slide bg-[#050505] border border-white/[0.06] rounded-3xl p-8 lg:p-12 hover:border-[#00d2ff]/40 transition-colors duration-500 relative overflow-hidden group h-full flex flex-col" style={{ animationDelay: "0.15s" }}>
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="animate-fade-slide bg-[#050505] border border-white/[0.06] rounded-3xl p-8 lg:p-12 hover:border-[#004491]/40 transition-colors duration-500 relative overflow-hidden group h-full flex flex-col" style={{ animationDelay: "0.15s" }}>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="mb-14 text-center flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-[#00d2ff]/10 flex items-center justify-center mb-6 border border-[#00d2ff]/20 group-hover:scale-110 transition-transform duration-500">
-                  <span className="material-symbols-outlined text-[#00d2ff] text-3xl">route</span>
+                <div className="w-16 h-16 rounded-2xl bg-[#004491]/10 flex items-center justify-center mb-6 border border-[#004491]/20 group-hover:scale-110 transition-transform duration-500">
+                  <span className="material-symbols-outlined text-[#4a8fe7] text-3xl">route</span>
                 </div>
                 <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-widest">
                   ROBOT RACE
                 </h2>
-                <div className="h-[2px] w-12 bg-[#00d2ff] mt-5 mb-5" />
+                <div className="h-[2px] w-12 bg-[#004491] mt-5 mb-5" />
                 <p className="text-zinc-400 text-sm lg:text-base">
                   Test your processing power, speed, and agility.
                 </p>
               </div>
 
-              <div className="text-[#00d2ff] font-bold uppercase tracking-[0.2em] text-[10px] mb-8 border-b border-white/[0.06] pb-4">
+              <div className="text-[#4a8fe7] font-bold uppercase tracking-[0.2em] text-[10px] mb-8 border-b border-white/[0.06] pb-4">
                 CHALLENGE RULES &amp; REGULATIONS
               </div>
 
@@ -149,7 +149,7 @@ export default function RulesPage() {
                 {/* 1. Track Requirements */}
                 <div className="animate-fade-slide" style={{ animationDelay: "0.3s" }}>
                   <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
-                    <span className="text-[#00d2ff] text-xs">01</span> Track Requirements
+                    <span className="text-[#004491] text-xs">01</span> Track Requirements
                   </h3>
                   <ul className="space-y-5 text-zinc-400 list-none mb-8 text-sm lg:text-base">
                     <RuleItem>Robots must navigate a predefined obstacle course.</RuleItem>
@@ -162,7 +162,7 @@ export default function RulesPage() {
                 {/* 2. Robot Specification */}
                 <div className="animate-fade-slide" style={{ animationDelay: "0.4s" }}>
                   <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
-                    <span className="text-[#00d2ff] text-xs">02</span> Robot Specification
+                    <span className="text-[#004491] text-xs">02</span> Robot Specification
                   </h3>
                   <div className="ml-4 pl-6 border-l border-white/[0.04] space-y-8 mb-10 text-sm lg:text-base">
                     <SubSection title="Dimensions & Weight">
@@ -181,7 +181,7 @@ export default function RulesPage() {
               </div>
 
               <div className="flex justify-center pt-12 mt-auto">
-                <button className="w-full bg-[#00d2ff]/10 text-white px-10 py-4 font-bold hover:bg-[#00d2ff] hover:text-[#000] hover:shadow-[0_0_20px_rgba(0,210,255,0.4)] transition-all duration-300 border border-[#00d2ff]/30 uppercase tracking-widest text-[10px] rounded-xl flex items-center justify-center gap-2">
+                <button className="w-full bg-[#004491]/10 text-white px-10 py-4 font-bold hover:bg-[#004491] hover:shadow-[0_0_20px_rgba(0,68,145,0.4)] transition-all duration-300 border border-[#004491]/30 uppercase tracking-widest text-[10px] rounded-xl flex items-center justify-center gap-2">
                   Download Full Race Guidelines <span className="material-symbols-outlined text-sm">download</span>
                 </button>
               </div>
