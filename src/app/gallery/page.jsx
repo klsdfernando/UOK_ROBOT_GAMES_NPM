@@ -1,14 +1,14 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ParallaxGallery from "@/components/ParallaxGallery";
-import FadeIn from "@/components/FadeIn";
+import GallerySections from "@/components/GallerySections";
 
 export const metadata = {
   title: "Gallery",
   description: "Photo showcase from UOK Robot Games events.",
 };
 
-const imageNames = [
+/* ─── 2K25 Robot Battles ─── */
+const images2K25 = [
   "555589916_722933607472359_9166889348646112287_n.jpg",
   "556310826_722921707473549_4606007473812775157_n.jpg",
   "555014843_723029697462750_4432004934463293603_n.jpg",
@@ -78,20 +78,44 @@ const imageNames = [
   "556011556_722927490806304_3316647131210611897_n.jpg",
   "554762521_722910900807963_6386737536864422749_n.jpg",
   "556539894_722912430807810_6101954313070395570_n.jpg",
-  "555290670_723019794130407_2513010055279244829_n.jpg"
+  "555290670_723019794130407_2513010055279244829_n.jpg",
+].map(name => `https://ik.imagekit.io/wfnazmyxh/Gallery/gallery/${name}`);
+
+/* ─── 2K24 Robot Battles (placeholder — swap with real photos later) ─── */
+const images2K24 = [
+  "555589916_722933607472359_9166889348646112287_n.jpg",
+  "556310826_722921707473549_4606007473812775157_n.jpg",
+  "555014843_723029697462750_4432004934463293603_n.jpg",
+  "555440403_722915930807460_8393553423610469884_n.jpg",
+  "555427331_723025844129802_995392390642546013_n.jpg",
+  "555439594_723030654129321_189053224069715748_n.jpg",
+  "556104231_722913720807681_8484854729722014986_n.jpg",
+  "554916011_723018370797216_763721810711562825_n.jpg",
+  "556768033_723033777462342_3709928515720158069_n.jpg",
+  "555883727_722912174141169_8144912965492111976_n.jpg",
+  "555413221_723027034129683_2324360739733621651_n.jpg",
+  "554601377_723030284129358_5433920282106577187_n.jpg",
+  "555532755_723027230796330_8773766384845401054_n.jpg",
+  "555793383_723030010796052_4673133491903563274_n.jpg",
+  "555650148_722941570804896_2185426752064728652_n.jpg",
+  "555835931_722922844140102_2579186548114013331_n.jpg",
+  "555296104_722930404139346_2493566139783329352_n.jpg",
+  "553755076_722912147474505_8213215541281655926_n.jpg",
+  "555096034_723034167462303_7636611408725825981_n.jpg",
+  "556460551_722946660804387_164641071004406610_n.jpg",
+].map(name => `https://ik.imagekit.io/wfnazmyxh/Gallery/gallery/${name}`);
+
+const sections = [
+  { id: "2k25", label: "2K25 Robot Battles", images: images2K25 },
+  { id: "2k24", label: "2K24 Robot Battles", images: images2K24 },
 ];
 
-const imageFiles = imageNames.map(name => `https://ik.imagekit.io/wfnazmyxh/Gallery/gallery/${name}`);
-
 export default function GalleryPage() {
-
   return (
     <>
       <Navbar />
       <main className="flex-grow pt-16 bg-[#000000]">
-        <FadeIn direction="up">
-          <ParallaxGallery initialImages={imageFiles} />
-        </FadeIn>
+        <GallerySections sections={sections} />
       </main>
       <Footer />
     </>

@@ -82,27 +82,43 @@ function DashboardSection({ team }) {
             </div>
           </div>
 
-          {/* Right: Progress Ring */}
+          {/* Right: Segmented Progress Ring */}
           <div className="flex flex-col items-center gap-3 shrink-0">
             <div className="relative w-36 h-36">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                {/* Background ring */}
-                <circle cx="60" cy="60" r={radius} fill="none" stroke="#1a1a2e" strokeWidth="8" />
-                {/* Progress ring */}
-                <circle
-                  cx="60" cy="60" r={radius} fill="none"
-                  stroke="url(#progressGrad)" strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                  className="transition-all duration-1000 ease-out"
-                />
                 <defs>
                   <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#004491" />
                     <stop offset="100%" stopColor="#00d2ff" />
                   </linearGradient>
+                  {/* Mask to create 5 discrete flat segments */}
+                  <mask id="segmentMask">
+                    <circle
+                      cx="60" cy="60" r={radius}
+                      fill="none" stroke="white" strokeWidth="8"
+                      strokeLinecap="butt"
+                      strokeDasharray={`${(circumference / 5) - 6} 6`}
+                      strokeDashoffset={-3}
+                    />
+                  </mask>
                 </defs>
+                
+                {/* Background segments */}
+                <circle
+                  cx="60" cy="60" r={radius}
+                  fill="none" stroke="#1a1a2e" strokeWidth="8"
+                  mask="url(#segmentMask)"
+                />
+                
+                {/* Animated continuous gradient progress */}
+                <circle
+                  cx="60" cy="60" r={radius}
+                  fill="none" stroke="url(#progressGrad)" strokeWidth="8"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  className="transition-all duration-1000 ease-out"
+                  mask="url(#segmentMask)"
+                />
               </svg>
               {/* Center text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -354,13 +370,13 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
   }
 
   // Active / unlocked — show selection form
-  const canSubmit = selectedEvent === "Robot Race" || (selectedEvent === "Robot Battles" && selectedCategory);
+  const canSubmit = (selectedEvent === "Robot Battles" || selectedEvent === "Robot Race") && selectedCategory;
 
   const handleSubmit = () => {
     if (!canSubmit) return;
     const data = {
       eventSelection: selectedEvent,
-      categorySelection: selectedEvent === "Robot Battles" ? selectedCategory : "",
+      categorySelection: selectedCategory,
     };
     onComplete(1, data);
   };
@@ -485,6 +501,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Heavy Weight
                 </span>
               </div>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Heavy Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Heavy Weight" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -510,9 +527,71 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Light Weight
                 </span>
               </div>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Light Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Light Weight" ? "radio_button_checked" : "radio_button_unchecked"}
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Sub-category for Robot Race */}
+      {selectedEvent === "Robot Race" && (
+        <div className="mt-5 mb-2">
+          <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Select Race Category</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* University Category */}
+            <button
+              type="button"
+              onClick={() => setSelectedCategory("University Category")}
+              className={`relative text-left p-4 border transition-all duration-200 ${
+                selectedCategory === "University Category"
+                  ? "bg-[#00d2ff]/5 border-[#00d2ff]/50 shadow-[0_0_15px_rgba(0,210,255,0.1)]"
+                  : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`material-symbols-outlined text-xl ${selectedCategory === "University Category" ? "text-[#00d2ff]" : "text-zinc-600"}`}>
+                  account_balance
+                </span>
+                <span className={`text-sm font-bold uppercase tracking-widest ${selectedCategory === "University Category" ? "text-white" : "text-zinc-400"}`}>
+                  University Category
+                </span>
+              </div>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
+              <div className="absolute top-3 right-3">
+                <span className={`material-symbols-outlined text-lg ${selectedCategory === "University Category" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
+                  {selectedCategory === "University Category" ? "radio_button_checked" : "radio_button_unchecked"}
+                </span>
+              </div>
+            </button>
+
+            {/* School Category */}
+            <button
+              type="button"
+              onClick={() => setSelectedCategory("School Category")}
+              className={`relative text-left p-4 border transition-all duration-200 ${
+                selectedCategory === "School Category"
+                  ? "bg-emerald-500/5 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                  : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`material-symbols-outlined text-xl ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>
+                  school
+                </span>
+                <span className={`text-sm font-bold uppercase tracking-widest ${selectedCategory === "School Category" ? "text-white" : "text-zinc-400"}`}>
+                  School Category
+                </span>
+              </div>
+              <p className={`text-[10px] ml-9 mt-1 ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>Registration: FREE</p>
+              <div className="absolute top-3 right-3">
+                <span className={`material-symbols-outlined text-lg ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-700"}`}>
+                  {selectedCategory === "School Category" ? "radio_button_checked" : "radio_button_unchecked"}
                 </span>
               </div>
             </button>
@@ -672,7 +751,11 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
                   type="tel"
                   placeholder="Contact Number"
                   value={m.contactNumber}
-                  onChange={(e) => updateMember(i, "contactNumber", e.target.value)}
+                  onChange={(e) => {
+                    // Only allow numbers and the plus sign for country codes
+                    const numericValue = e.target.value.replace(/[^0-9+]/g, '');
+                    updateMember(i, "contactNumber", numericValue);
+                  }}
                   className="w-full bg-[#080808] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
                 />
               </div>
@@ -934,89 +1017,207 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
     }
   };
 
+  // Determine payment amount from Phase 1 data
+  const phase1Data = team?.phases?.['1']?.data || null;
+  const eventSel = phase1Data?.eventSelection || '';
+  const catSel = phase1Data?.categorySelection || '';
+  const isFree = eventSel === 'Robot Race' && catSel === 'School Category';
+  const paymentAmount = (() => {
+    if (eventSel === 'Robot Battles' && catSel === 'Heavy Weight') return 'Rs. 1,000';
+    if (eventSel === 'Robot Battles' && catSel === 'Light Weight') return 'Rs. 500';
+    if (eventSel === 'Robot Race' && catSel === 'University Category') return 'Rs. 500';
+    if (eventSel === 'Robot Race' && catSel === 'School Category') return 'FREE';
+    return null;
+  })();
+
   return (
     <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
       <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
 
-      {/* Upload Area */}
-      <div className="mb-6">
-        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Payment Slip</p>
-
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-          onClick={() => document.getElementById("slip-upload").click()}
-          className={`relative cursor-pointer border-2 border-dashed p-8 transition-all duration-200 text-center ${
-            dragOver
-              ? "border-[#004491] bg-[#004491]/5"
-              : file
-                ? "border-emerald-500/40 bg-emerald-500/5"
-                : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]"
-          }`}
-        >
-          <input
-            id="slip-upload"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            className="hidden"
-            onChange={(e) => handleFileSelect(e.target.files[0])}
-          />
-
-          {file ? (
-            <div className="flex flex-col items-center gap-3">
-              {preview ? (
-                <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain border border-outline-variant" />
-              ) : (
-                <span className="material-symbols-outlined text-emerald-500 text-5xl">description</span>
-              )}
-              <div>
-                <p className="text-zinc-300 text-sm font-semibold">{file.name}</p>
-                <p className="text-zinc-600 text-[10px] mt-0.5">{(file.size / 1024).toFixed(1)} KB · Click to change</p>
-              </div>
+      {/* Payment Amount Info */}
+      {paymentAmount && (
+        <div className={`mb-6 p-4 rounded-lg border relative overflow-hidden ${
+          isFree
+            ? 'bg-emerald-950/30 border-emerald-500/30'
+            : 'bg-[#004491]/10 border-[#004491]/30'
+        }`}>
+          <div className={`absolute top-0 left-0 right-0 h-[2px] ${
+            isFree ? 'bg-emerald-500' : 'bg-[#004491]'
+          }`} />
+          <div className="flex items-center gap-3">
+            <span className={`material-symbols-outlined text-2xl ${
+              isFree ? 'text-emerald-400' : 'text-[#5b9aff]'
+            }`}>{isFree ? 'celebration' : 'payments'}</span>
+            <div>
+              <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-0.5">
+                {eventSel} · {catSel}
+              </p>
+              <p className={`text-lg font-black ${
+                isFree ? 'text-emerald-400' : 'text-[#5b9aff]'
+              }`}>
+                {isFree ? '🎉 FREE Registration!' : `Registration Fee: ${paymentAmount}`}
+              </p>
             </div>
-          ) : (
-            <div className="flex flex-col items-center gap-3">
-              <span className="material-symbols-outlined text-zinc-600 text-5xl">cloud_upload</span>
-              <div>
-                <p className="text-zinc-400 text-sm font-semibold">Drop your payment slip here</p>
-                <p className="text-zinc-600 text-[10px] mt-0.5">or click to browse · JPG, PNG, WebP, PDF (max 5MB)</p>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Reference Number */}
-      <div className="mb-6">
-        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-3">Payment Reference Number</p>
-        <input
-          type="text"
-          placeholder="Enter your payment reference number"
-          value={referenceNumber}
-          onChange={(e) => setReferenceNumber(e.target.value)}
-          className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
-        />
-      </div>
+      {isFree ? (
+        /* ── FREE registration: no upload needed ── */
+        <>
+          <div className="text-center py-8">
+            <span className="material-symbols-outlined text-emerald-400 text-5xl mb-4 block">verified</span>
+            <p className="text-zinc-300 text-sm font-semibold mb-1">No payment required for School Category</p>
+            <p className="text-zinc-600 text-[10px]">Click below to confirm your free registration</p>
+          </div>
+          <button
+            onClick={async () => {
+              setUploading(true);
+              try {
+                const res = await fetch("/api/team/complete-free", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ teamId: team.id }),
+                });
+                const data = await res.json();
+                if (data.success && data.phases) {
+                  onTeamUpdate({ ...team, phases: data.phases });
+                } else {
+                  alert(data.message || "Failed. Please try again.");
+                }
+              } catch (err) {
+                console.error("Error:", err);
+                alert("Failed. Please try again.");
+              } finally {
+                setUploading(false);
+              }
+            }}
+            disabled={uploading}
+            className="px-5 py-2.5 bg-emerald-600 text-white text-[10px] uppercase tracking-widest font-bold hover:bg-emerald-700 border border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {uploading ? (
+              <>
+                <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-sm">check_circle</span>
+                Confirm Free Registration
+              </>
+            )}
+          </button>
+        </>
+      ) : (
+        /* ── Paid registration: upload slip + reference ── */
+        <>
+          {/* Bank Details */}
+          <div className="mb-6 bg-[#0b0c16] border border-outline-variant p-4">
+            <div className="flex items-center gap-2 mb-3 border-b border-outline-variant pb-2">
+              <span className="material-symbols-outlined text-[#00d2ff] text-xl">account_balance</span>
+              <h4 className="text-zinc-200 text-sm font-bold uppercase tracking-widest">Bank Details for Transfer</h4>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-start sm:items-center gap-2">
+                <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">account_balance_wallet</span>
+                <p className="text-zinc-400 text-xs">Bank: <span className="text-white font-semibold">People's Bank</span></p>
+              </div>
+              <div className="flex items-start sm:items-center gap-2">
+                <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">location_on</span>
+                <p className="text-zinc-400 text-xs">Branch: <span className="text-white font-semibold">Kelaniya</span></p>
+              </div>
+              <div className="flex items-start sm:items-center gap-2">
+                <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">badge</span>
+                <p className="text-zinc-400 text-xs">Account Name: <span className="text-white font-semibold">Electronics and Computer Science Student Club</span></p>
+              </div>
+              <div className="flex items-start sm:items-center gap-2">
+                <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">pin</span>
+                <p className="text-zinc-400 text-xs">Account Number: <span className="text-white font-semibold text-sm">055200290051008</span></p>
+              </div>
+            </div>
+          </div>
 
-      {/* Submit */}
-      <button
-        onClick={handleSubmit}
-        disabled={!canSubmit || uploading}
-        className="px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#003070] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
-      >
-        {uploading ? (
-          <>
-            <span className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-            Uploading...
-          </>
-        ) : (
-          <>
-            <span className="material-symbols-outlined text-sm">upload_file</span>
-            Submit Payment
-          </>
-        )}
-      </button>
+          {/* Upload Area */}
+          <div className="mb-6">
+            <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Payment Slip</p>
+
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById("slip-upload").click()}
+              className={`relative cursor-pointer border-2 border-dashed p-8 transition-all duration-200 text-center ${
+                dragOver
+                  ? "border-[#004491] bg-[#004491]/5"
+                  : file
+                    ? "border-emerald-500/40 bg-emerald-500/5"
+                    : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]"
+              }`}
+            >
+              <input
+                id="slip-upload"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                className="hidden"
+                onChange={(e) => handleFileSelect(e.target.files[0])}
+              />
+
+              {file ? (
+                <div className="flex flex-col items-center gap-3">
+                  {preview ? (
+                    <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain border border-outline-variant" />
+                  ) : (
+                    <span className="material-symbols-outlined text-emerald-500 text-5xl">description</span>
+                  )}
+                  <div>
+                    <p className="text-zinc-300 text-sm font-semibold">{file.name}</p>
+                    <p className="text-zinc-600 text-[10px] mt-0.5">{(file.size / 1024).toFixed(1)} KB · Click to change</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-3">
+                  <span className="material-symbols-outlined text-zinc-600 text-5xl">cloud_upload</span>
+                  <div>
+                    <p className="text-zinc-400 text-sm font-semibold">Drop your payment slip here</p>
+                    <p className="text-zinc-600 text-[10px] mt-0.5">or click to browse · JPG, PNG, WebP, PDF (max 5MB)</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Reference Number */}
+          <div className="mb-6">
+            <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-3">Payment Reference Number</p>
+            <input
+              type="text"
+              placeholder="Enter your payment reference number"
+              value={referenceNumber}
+              onChange={(e) => setReferenceNumber(e.target.value)}
+              className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+            />
+          </div>
+
+          {/* Submit */}
+          <button
+            onClick={handleSubmit}
+            disabled={!canSubmit || uploading}
+            className="px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#003070] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            {uploading ? (
+              <>
+                <span className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-sm">upload_file</span>
+                Submit Payment
+              </>
+            )}
+          </button>
+        </>
+      )}
     </div>
   );
 }
@@ -1033,6 +1234,27 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
     "4": { completed: false, unlockedAt: null },
     "5": { completed: false, unlockedAt: null, devLocked: true },
   };
+
+  // Auto-complete Phase 4 for free registrations (Robot Race School Category)
+  useEffect(() => {
+    const p1 = phaseData['1'];
+    const p3 = phaseData['3'];
+    const p4 = phaseData['4'];
+    const isFree = p1?.data?.eventSelection === 'Robot Race' && p1?.data?.categorySelection === 'School Category';
+    if (isFree && p3?.completed && !p4?.completed) {
+      fetch("/api/team/complete-free", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.phases) {
+            onTeamUpdate({ ...team, phases: data.phases });
+          }
+        })
+        .catch(err => console.error("Auto-complete free registration error:", err));
+    }
+  }, [phaseData['3']?.completed]);
 
   const handleCompletePhase = async (phaseId, phaseData = null) => {
     setCompleting(true);

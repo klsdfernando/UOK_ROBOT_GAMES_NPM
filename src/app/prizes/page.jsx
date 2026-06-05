@@ -169,7 +169,7 @@ export default function PrizesPage() {
                 className="text-6xl md:text-8xl font-black text-[#00e5ff] tracking-tighter pt-2 pb-4"
                 style={{ textShadow: "0 0 15px rgba(0,229,255,0.4)" }}
               >
-                <CountUp target={300000} duration={2500} prefix="Rs. " />
+                <CountUp target={300000} duration={1500} prefix="Rs. " />
               </div>
               <p className="text-xl md:text-2xl text-zinc-400">
                 Plus certificates, trophies, and special awards
