@@ -59,6 +59,14 @@ export async function POST(req) {
 
     const currentPhase = phases[String(phaseId)] || {};
 
+    // Backward compatibility for legacy teams completing Phase 5
+    if (phaseId === 5 && currentPhase.devLocked && phases['4']?.completed) {
+      currentPhase.devLocked = false;
+      if (!currentPhase.unlockedAt) {
+        currentPhase.unlockedAt = new Date().toISOString();
+      }
+    }
+
     // Check if phase is unlocked (has unlockedAt set)
     if (!currentPhase.unlockedAt) {
       return NextResponse.json(
