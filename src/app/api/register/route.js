@@ -91,6 +91,7 @@ export async function POST(req) {
         "3": { completed: false, unlockedAt: null },
         "4": { completed: false, unlockedAt: null },
         "5": { completed: false, unlockedAt: null },
+        "6": { completed: false, unlockedAt: null, devLocked: true },
       },
     });
 

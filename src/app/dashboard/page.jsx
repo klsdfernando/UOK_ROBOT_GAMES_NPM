@@ -190,6 +190,7 @@ const PHASE_META = [
   { id: 3, title: "Organization Details", icon: "apartment", accent: "#10b981" },
   { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#004491" },
   { id: 5, title: "WhatsApp Group",   icon: "forum",          accent: "#25D366" },
+  { id: 6, title: "Phase 6",          icon: "hourglass_top",  accent: "#a855f7" },
 ];
 
 /** Compute display status from Firestore phase data */
@@ -1391,13 +1392,28 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
   const [completing, setCompleting] = useState(false);
 
   // Phase data from Firestore (defaults for legacy teams)
-  const phaseData = team.phases || {
+  const rawPhaseData = team.phases || {
     "1": { completed: false, unlockedAt: new Date().toISOString() },
     "2": { completed: false, unlockedAt: null },
     "3": { completed: false, unlockedAt: null },
     "4": { completed: false, unlockedAt: null },
     "5": { completed: false, unlockedAt: null },
+    "6": { completed: false, unlockedAt: null, devLocked: true },
   };
+
+  // Backward compat: strip devLocked from Phase 5 for teams registered before the WhatsApp phase update
+  const phaseData = { ...rawPhaseData };
+  if (phaseData['5']?.devLocked) {
+    phaseData['5'] = { ...phaseData['5'], devLocked: false };
+    // If Phase 4 is completed, auto-unlock Phase 5
+    if (phaseData['4']?.completed && !phaseData['5']?.unlockedAt) {
+      phaseData['5'] = { ...phaseData['5'], unlockedAt: new Date().toISOString() };
+    }
+  }
+  // Ensure Phase 6 exists for legacy teams
+  if (!phaseData['6']) {
+    phaseData['6'] = { completed: false, unlockedAt: null, devLocked: true };
+  }
 
   // Auto-complete Phase 4 for free registrations (Robot Race School Category)
   useEffect(() => {

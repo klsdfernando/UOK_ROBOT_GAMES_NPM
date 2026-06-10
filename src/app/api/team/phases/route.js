@@ -20,7 +20,7 @@ export async function POST(req) {
     const decoded = jwt.verify(token, JWT_SECRET);
     const { phaseId, phaseData } = await req.json();
 
-    if (!phaseId || ![1, 2, 3, 4, 5].includes(phaseId)) {
+    if (!phaseId || ![1, 2, 3, 4, 5, 6].includes(phaseId)) {
       return NextResponse.json(
         { success: false, message: 'Invalid phase ID.' },
         { status: 400 }
@@ -46,7 +46,8 @@ export async function POST(req) {
       "2": { completed: false, unlockedAt: null },
       "3": { completed: false, unlockedAt: null },
       "4": { completed: false, unlockedAt: null },
-      "5": { completed: false, unlockedAt: null, devLocked: true },
+      "5": { completed: false, unlockedAt: null },
+      "6": { completed: false, unlockedAt: null, devLocked: true },
     };
 
     // If team has no phases data, initialize it in Firestore
@@ -87,7 +88,7 @@ export async function POST(req) {
 
     // Unlock the next phase if it exists and is not dev-locked
     const nextPhaseId = phaseId + 1;
-    if (nextPhaseId <= 5) {
+    if (nextPhaseId <= 6) {
       const nextPhase = phases[String(nextPhaseId)] || {};
       // Only auto-unlock if the next phase is NOT developer-locked
       if (!nextPhase.devLocked) {
