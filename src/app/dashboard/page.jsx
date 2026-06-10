@@ -189,7 +189,7 @@ const PHASE_META = [
   { id: 2, title: "Members Details", icon: "groups",         accent: "#00d2ff" },
   { id: 3, title: "Organization Details", icon: "apartment", accent: "#10b981" },
   { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#004491" },
-  { id: 5, title: "WhatsApp Group",   icon: "forum",          accent: "#25D366" },
+  { id: 5, title: "WhatsApp Group",   icon: "forum",          accent: "#004491" },
   { id: 6, title: "Phase 6",          icon: "hourglass_top",  accent: "#a855f7" },
 ];
 
