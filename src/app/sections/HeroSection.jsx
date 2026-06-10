@@ -79,23 +79,23 @@ export default function HeroSection() {
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500">
               In Association With
             </span>
-            <div className="flex items-center gap-5">
-              <div className="bg-white rounded-xl px-5 py-3 shadow-lg">
+            <div className="flex items-stretch gap-5 w-full max-w-[500px] justify-center">
+              <div className="bg-white rounded-xl px-5 py-4 shadow-lg w-1/2 flex items-center justify-center">
                 <Image
                   src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-05-16%20at%202.44.03%20PM.jpeg"
                   alt="Collaboration Partner 1"
-                  width={160}
-                  height={60}
-                  className="h-14 w-auto object-contain"
+                  width={200}
+                  height={80}
+                  className="w-full h-auto object-contain max-h-20"
                 />
               </div>
-              <div className="bg-white rounded-xl px-5 py-3 shadow-lg">
+              <div className="bg-white rounded-xl px-5 py-4 shadow-lg w-1/2 flex items-center justify-center">
                 <Image
-                  src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-05-16%20at%202.44.04%20PM.jpeg"
+                  src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-06-09%20at%203.26.17%20PM.jpeg"
                   alt="Collaboration Partner 2"
-                  width={160}
-                  height={60}
-                  className="h-14 w-auto object-contain"
+                  width={200}
+                  height={80}
+                  className="w-full h-auto object-contain max-h-20"
                 />
               </div>
             </div>
