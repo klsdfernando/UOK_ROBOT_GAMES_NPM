@@ -189,7 +189,7 @@ const PHASE_META = [
   { id: 2, title: "Members Details", icon: "groups",         accent: "#00d2ff" },
   { id: 3, title: "Organization Details", icon: "apartment", accent: "#10b981" },
   { id: 4, title: "Payment Slip",    icon: "receipt_long",   accent: "#004491" },
-  { id: 5, title: "Phase 5",         icon: "hourglass_top",  accent: "#a855f7" },
+  { id: 5, title: "WhatsApp Group",   icon: "forum",          accent: "#25D366" },
 ];
 
 /** Compute display status from Firestore phase data */
@@ -1222,6 +1222,170 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
   );
 }
 
+/* ─── WhatsApp Group Links by Event + Category ─── */
+const WHATSAPP_GROUPS = {
+  "Robot Battles|Heavy Weight": {
+    name: "UOK Robot Battle 2K26 - Heavy Weight Category",
+    url: "https://chat.whatsapp.com/Gtq8WY80kLeKnUgwYALuwf",
+  },
+  "Robot Battles|Light Weight": {
+    name: "UOK Robot Battle 2K26 - Light Weight Category",
+    url: "https://chat.whatsapp.com/KK2dFehd8baB3Zyz6Fnnov",
+  },
+  "Robot Race|University Category": {
+    name: "UOK Robot Race 2K26 - University Category",
+    url: "https://chat.whatsapp.com/Kvf2XmMP90oI3HdjLK5oMw",
+  },
+  "Robot Race|School Category": {
+    name: "UOK Robot Race 2K26 - School Category",
+    url: "https://chat.whatsapp.com/JQ5QuUjwhBi3pcbFoENapA",
+  },
+};
+
+/* ─── Phase 5: WhatsApp Group ─── */
+function Phase5WhatsAppGroup({ team, phaseData, displayStatus, accent, onComplete, completing }) {
+  const savedData = phaseData?.data || null;
+  const isCompleted = displayStatus === "completed";
+
+  // Get event + category from Phase 1
+  const phase1Data = team.phases?.['1']?.data || {};
+  const eventSelection = phase1Data.eventSelection || "";
+  const categorySelection = phase1Data.categorySelection || "";
+  const groupKey = `${eventSelection}|${categorySelection}`;
+  const group = WHATSAPP_GROUPS[groupKey] || null;
+
+  // Completed — read-only summary
+  if (isCompleted && savedData) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-[#25D366]/15 flex items-center justify-center">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#25D366">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-zinc-200 text-sm font-bold">{savedData.groupName || "WhatsApp Group"}</p>
+            <p className="text-emerald-400 text-xs font-semibold">✓ Joined</p>
+          </div>
+        </div>
+
+        <div className="bg-[#0b0c16] border border-outline-variant p-4">
+          <p className="text-zinc-600 text-[10px] uppercase tracking-widest mb-2">Confirmed At</p>
+          <p className="text-zinc-300 text-sm font-semibold">
+            {new Date(savedData.joinedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // No group found (Phase 1 not completed yet — shouldn't happen but handle gracefully)
+  if (!group) {
+    return (
+      <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+        <div className="flex flex-col items-center justify-center text-center py-6">
+          <span className="material-symbols-outlined text-zinc-700 text-4xl mb-3">error_outline</span>
+          <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">Event Not Selected</p>
+          <p className="text-zinc-600 text-[10px] mt-1">Please complete Phase 1 first to see your WhatsApp group.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Active — show WhatsApp group link + join button
+  const handleConfirmJoined = () => {
+    onComplete(5, {
+      groupName: group.name,
+      groupUrl: group.url,
+      joinedAt: new Date().toISOString(),
+    });
+  };
+
+  return (
+    <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+
+      {/* Info text */}
+      <div className="mb-6">
+        <p className="text-zinc-400 text-sm leading-relaxed">
+          Join your category's official WhatsApp group to receive updates, announcements, and communicate with the organizers.
+        </p>
+      </div>
+
+      {/* WhatsApp Group Card */}
+      <div className="bg-[#0b0c16] border border-[#25D366]/20 rounded-lg p-5 mb-6">
+        <div className="flex items-start gap-4">
+          {/* WhatsApp Icon */}
+          <div className="w-12 h-12 rounded-xl bg-[#25D366]/15 flex items-center justify-center shrink-0 border border-[#25D366]/20">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#25D366">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-[#25D366] text-[10px] uppercase tracking-widest font-bold mb-1">Your WhatsApp Group</p>
+            <p className="text-white text-sm font-bold mb-1 leading-snug">{group.name}</p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30 rounded-md">
+                {eventSelection}
+              </span>
+              <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-white/[0.04] text-zinc-400 border border-white/[0.08] rounded-md">
+                {categorySelection}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Join Link Button */}
+        <a
+          href={group.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 w-full flex items-center justify-center gap-2 py-3 bg-[#25D366] text-white font-bold text-sm tracking-widest uppercase hover:bg-[#1da851] transition-all duration-300 rounded-lg hover:shadow-[0_0_20px_rgba(37,211,102,0.3)]"
+        >
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          Join WhatsApp Group
+        </a>
+      </div>
+
+      {/* Important note */}
+      <div className="bg-amber-500/5 border border-amber-500/15 rounded-lg p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <span className="material-symbols-outlined text-amber-500 text-xl shrink-0 mt-0.5">info</span>
+          <p className="text-zinc-400 text-xs leading-relaxed">
+            Please join the WhatsApp group first using the button above, then click the confirmation button below to complete this phase.
+          </p>
+        </div>
+      </div>
+
+      {/* Confirm Button */}
+      <button
+        onClick={handleConfirmJoined}
+        disabled={completing}
+        className="w-full py-3 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {completing ? (
+          <>
+            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Confirming...
+          </>
+        ) : (
+          <>
+            <span className="material-symbols-outlined text-sm">check_circle</span>
+            I Have Joined the Group
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
 /* ─── Team Details Section ─── */
 function TeamDetailsSection({ team, onTeamUpdate }) {
   const [completing, setCompleting] = useState(false);
@@ -1232,7 +1396,7 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
     "2": { completed: false, unlockedAt: null },
     "3": { completed: false, unlockedAt: null },
     "4": { completed: false, unlockedAt: null },
-    "5": { completed: false, unlockedAt: null, devLocked: true },
+    "5": { completed: false, unlockedAt: null },
   };
 
   // Auto-complete Phase 4 for free registrations (Robot Race School Category)
@@ -1336,7 +1500,20 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
       );
     }
 
-    return { ...meta, displayStatus, content, hasCustomSubmit: meta.id <= 4 };
+    if (meta.id === 5) {
+      content = (
+        <Phase5WhatsAppGroup
+          team={team}
+          phaseData={data}
+          displayStatus={displayStatus}
+          accent={meta.accent}
+          onComplete={handleCompletePhase}
+          completing={completing}
+        />
+      );
+    }
+
+    return { ...meta, displayStatus, content, hasCustomSubmit: meta.id <= 5 };
   });
 
   const completedCount = displayPhases.filter((p) => p.displayStatus === "completed").length;
@@ -1350,7 +1527,7 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
           {team.teamName}
         </h1>
         <p className="text-zinc-500 text-sm">
-          Complete each phase to unlock the next. Phases 4 &amp; 5 will be enabled by the organizers.
+          Complete each phase to unlock the next and finalize your registration.
         </p>
       </div>
 
