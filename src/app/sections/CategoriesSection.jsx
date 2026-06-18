@@ -16,6 +16,7 @@ const categories = [
       },
     ],
     buttonText: "DOWNLOAD BATTLE RULES",
+    href: "https://ik.imagekit.io/wfnazmyxh/GuildLines/Robot%20Battle%202K26%20Guidelines%20(FINAL).pdf",
   },
   {
     title: "Robot",
@@ -34,6 +35,7 @@ const categories = [
       },
     ],
     buttonText: "DOWNLOAD RACE RULES",
+    href: "https://ik.imagekit.io/wfnazmyxh/GuildLines/UOK%20Robot%20Race%202K26-%20Full%20Guidelines.pdf",
   },
 ];
 
@@ -93,12 +95,17 @@ export default function CategoriesSection() {
               ))}
             </div>
 
-            <button className="w-full py-3 md:py-4 px-2 md:px-0 border border-white/[0.1] rounded-xl text-zinc-300 font-bold tracking-widest uppercase hover:bg-[#004491]/15 hover:border-[#004491]/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 text-[10px] sm:text-xs">
+            <a
+              href={cat.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 md:py-4 px-2 md:px-0 border border-white/[0.1] rounded-xl text-zinc-300 font-bold tracking-widest uppercase hover:bg-[#004491]/15 hover:border-[#004491]/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 text-[10px] sm:text-xs"
+            >
               {cat.buttonText}{" "}
               <span className="material-symbols-outlined text-lg md:text-xl">
                 download
               </span>
-            </button>
+            </a>
           </div>
         ))}
       </div>

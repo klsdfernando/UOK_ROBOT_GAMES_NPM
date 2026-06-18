@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 const timelineStages = [
   {
     phase: "PHASE_01 // UPLINK",
     title: "REGISTRATION OPENING",
-    date: "7TH OF MAY",
+    date: "22ND OF JUNE",
     side: "left",
     active: true,
     content: {
@@ -19,25 +20,25 @@ const timelineStages = [
     },
   },
   {
-    phase: "PHASE_02 // TRAINING",
-    title: "ROBOT BATTLE WORKSHOP",
-    date: "10TH OF JUNE",
-    side: "right",
-    active: false,
-    content: { type: "locked", text: "ZOOM LINK LOCKED", icon: "link_off" },
-  },
-  {
-    phase: "PHASE_03 // DEADLINE",
+    phase: "PHASE_02 // DEADLINE",
     title: "REGISTRATION CLOSING",
-    date: "20TH OF JUNE",
-    side: "left",
+    date: "9TH OF AUGUST",
+    side: "right",
     active: false,
     content: { type: "info", text: "SUBMISSIONS LOCKED" },
   },
   {
+    phase: "PHASE_03 // TRAINING",
+    title: "ROBOT BATTLE WORKSHOP",
+    date: "29TH OF AUGUST",
+    side: "left",
+    active: false,
+    content: { type: "locked", text: "ZOOM LINK LOCKED", icon: "link_off" },
+  },
+  {
     phase: "PHASE_04 // PREPARATION",
-    title: "ROBOT GAMES WORKSHOP",
-    date: "22ND OF AUGUST",
+    title: "ROBOT RACE WORKSHOP",
+    date: "5TH OF SEPTEMBER",
     side: "right",
     active: false,
     content: { type: "locked", text: "ZOOM LINK LOCKED", icon: "link_off" },
@@ -45,7 +46,7 @@ const timelineStages = [
   {
     phase: "PHASE_05 // BRIEFING",
     title: "AWARENESS SESSION",
-    date: "12TH OF SEPTEMBER",
+    date: "19TH OF SEPTEMBER",
     side: "left",
     active: false,
     content: { type: "locked", text: "ZOOM LINK LOCKED", icon: "link_off" },
@@ -53,14 +54,14 @@ const timelineStages = [
   {
     phase: "PHASE_06 // APEX",
     title: "ROBOT GAMES 2K26",
-    date: "19TH OF SEPTEMBER",
+    date: "9TH OF OCTOBER",
     side: "right",
     active: false,
     content: { type: "info", text: "MAIN EVENT LOCKED" },
   },
 ];
 
-function TimelineContent({ content, active, isLoggedIn }) {
+function TimelineContent({ content, active, isLoggedIn, isBeforeOpenDate, isRegistrationClosed }) {
   if (content.type === "action" && active) {
     return (
       <div className="bg-[#131313] p-6 border border-outline-variant hover:border-[#004491]/50 transition-colors duration-300 relative overflow-hidden">
@@ -80,6 +81,16 @@ function TimelineContent({ content, active, isLoggedIn }) {
               <span className="material-symbols-outlined text-[16px]">check_circle</span>
               REGISTERED
             </div>
+          </div>
+        ) : isBeforeOpenDate ? (
+          <div className="inline-flex items-center gap-2 bg-[#0a0c14] border border-[#004491]/30 text-[#5b9aff] px-6 py-3 font-bold text-[10px] tracking-widest uppercase">
+            <span className="material-symbols-outlined text-[14px]">schedule</span>
+            OPENING SOON
+          </div>
+        ) : isRegistrationClosed ? (
+          <div className="inline-flex items-center gap-2 bg-red-950/30 border border-red-500/20 text-red-400 px-6 py-3 font-bold text-[10px] tracking-widest uppercase">
+            <span className="material-symbols-outlined text-[14px]">block</span>
+            REGISTRATION CLOSED
           </div>
         ) : (
           <Link href="/register" className="inline-flex items-center gap-2 bg-[#004491]/10 border border-[#004491] text-[#5b9aff] px-6 py-2 font-bold text-[10px] tracking-widest uppercase hover:bg-[#004491]/20 transition-colors">
@@ -126,6 +137,7 @@ function TimelineContent({ content, active, isLoggedIn }) {
 
 export default function TimelineSection() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isBeforeOpenDate, isRegistrationClosed } = useRegistrationConfig();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -228,6 +240,8 @@ export default function TimelineSection() {
                       content={stage.content}
                       active={stage.active}
                       isLoggedIn={isLoggedIn}
+                      isBeforeOpenDate={isBeforeOpenDate}
+                      isRegistrationClosed={isRegistrationClosed}
                     />
                   </div>
                 </div>

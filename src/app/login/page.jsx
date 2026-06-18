@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/AuthLayout";
+import RegistrationLockScreen from "@/components/RegistrationLockScreen";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 export default function LoginPage() {
+  const { isBeforeOpenDate, isRegistrationClosed, loading: configLoading } = useRegistrationConfig();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -39,6 +42,10 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  // Guard: before opening date, show lock screen
+  if (configLoading) return <div className="min-h-screen bg-black" />;
+  if (isBeforeOpenDate) return <RegistrationLockScreen />;
 
   return (
     <AuthLayout>
@@ -134,14 +141,16 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-10 text-center w-full border-t border-white/5 pt-6">
-          <p className="text-zinc-500 text-xs">
-            New to the arena?{" "}
-            <Link href="/register" className="text-white hover:text-[#00d2ff] font-bold transition-colors">
-              Register Your Team
-            </Link>
-          </p>
-        </div>
+        {!isRegistrationClosed && (
+          <div className="mt-10 text-center w-full border-t border-white/5 pt-6">
+            <p className="text-zinc-500 text-xs">
+              New to the arena?{" "}
+              <Link href="/register" className="text-white hover:text-[#00d2ff] font-bold transition-colors">
+                Register Your Team
+              </Link>
+            </p>
+          </div>
+        )}
 
       </div>
     </AuthLayout>

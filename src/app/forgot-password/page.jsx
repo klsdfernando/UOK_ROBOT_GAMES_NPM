@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/AuthLayout";
+import RegistrationLockScreen from "@/components/RegistrationLockScreen";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 export default function ForgotPasswordPage() {
+  const { isBeforeOpenDate, loading: configLoading } = useRegistrationConfig();
   const router = useRouter();
 
   // Steps: 1 = email, 2 = verify code, 3 = new password
@@ -125,6 +128,10 @@ export default function ForgotPasswordPage() {
     2: { title: "Verify Code", subtitle: "Enter the 6-digit code sent to your email" },
     3: { title: "New Password", subtitle: "Create a strong new password for your team" },
   };
+
+  // Guard: before opening date, show lock screen
+  if (configLoading) return <div className="min-h-screen bg-black" />;
+  if (isBeforeOpenDate) return <RegistrationLockScreen />;
 
   return (
     <AuthLayout>

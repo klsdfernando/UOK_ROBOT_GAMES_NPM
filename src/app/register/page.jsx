@@ -5,8 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/AuthLayout";
+import RegistrationLockScreen from "@/components/RegistrationLockScreen";
+import RegistrationClosedScreen from "@/components/RegistrationClosedScreen";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 export default function RegisterPage() {
+  const { isBeforeOpenDate, isRegistrationClosed, loading: configLoading } = useRegistrationConfig();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,6 +68,15 @@ export default function RegisterPage() {
   };
 
   return (
+    <>
+      {/* Guard: Before opening date */}
+      {configLoading ? (
+        <div className="min-h-screen bg-black" />
+      ) : isBeforeOpenDate ? (
+        <RegistrationLockScreen />
+      ) : isRegistrationClosed ? (
+        <RegistrationClosedScreen />
+      ) : (
     <AuthLayout>
       <div className="flex flex-col items-center w-full">
         
@@ -204,5 +217,7 @@ export default function RegisterPage() {
 
       </div>
     </AuthLayout>
+      )}
+    </>
   );
 }

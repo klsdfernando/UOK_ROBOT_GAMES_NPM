@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 const navLinks = [
   { href: "/", label: "About" },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const { isBeforeOpenDate, isRegistrationClosed, loading: configLoading } = useRegistrationConfig();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -84,9 +86,11 @@ export default function Navbar() {
                 <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-bold tracking-wider transition-colors uppercase">
                   LOGIN
                 </Link>
-                <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg">
-                  REGISTER
-                </Link>
+                {!isRegistrationClosed && (
+                  <Link href="/register" className="bg-[#004491] text-white px-6 py-2 text-sm font-bold tracking-wider hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg">
+                    REGISTER
+                  </Link>
+                )}
               </>
             )
           )}
@@ -142,13 +146,15 @@ export default function Navbar() {
                 >
                   LOGIN
                 </Link>
-                <Link 
-                  href="/register" 
-                  className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  REGISTER
-                </Link>
+                {!isRegistrationClosed && (
+                  <Link 
+                    href="/register" 
+                    className="bg-[#004491] text-white px-6 py-3 w-full hover:bg-[#002d5e] transition-colors border border-[#004491] uppercase text-center rounded-lg"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    REGISTER
+                  </Link>
+                )}
               </>
             )}
           </div>
