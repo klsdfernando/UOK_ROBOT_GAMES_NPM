@@ -221,3 +221,156 @@ export async function sendRegistrationEmail({ teamName, leaderName, leaderEmail 
     return { success: false, error: err.message };
   }
 }
+
+/**
+ * Send password reset verification code email
+ */
+export async function sendPasswordResetEmail({ leaderName, leaderEmail, code }) {
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #000000; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+
+          <!-- Header -->
+          <tr>
+            <td style="text-align: center; padding: 30px 0 20px;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase;">
+                UOK ROBOT GAMES
+              </h1>
+              <p style="margin: 8px 0 0; color: #004491; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700;">
+                2K26 · PASSWORD RESET
+              </p>
+            </td>
+          </tr>
+
+          <!-- Blue accent line -->
+          <tr>
+            <td style="padding: 0 40px;">
+              <div style="height: 2px; background: linear-gradient(90deg, transparent, #004491, transparent);"></div>
+            </td>
+          </tr>
+
+          <!-- Reset Badge -->
+          <tr>
+            <td style="text-align: center; padding: 30px 40px 10px;">
+              <div style="display: inline-block; background-color: #0c1a3d; border: 1px solid #004491; border-radius: 50px; padding: 8px 24px;">
+                <span style="color: #60a5fa; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;">
+                  🔐 PASSWORD RESET REQUEST
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Message -->
+          <tr>
+            <td style="padding: 20px 40px 10px;">
+              <h2 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700;">
+                Hi, ${leaderName}!
+              </h2>
+              <p style="margin: 12px 0 0; color: #a1a1aa; font-size: 14px; line-height: 1.7;">
+                We received a request to reset your password for <strong style="color: #ffffff;">UOK Robot Games 2K26</strong>. 
+                Use the verification code below to proceed.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Verification Code -->
+          <tr>
+            <td style="padding: 20px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0a0a0a; border: 1px solid #27272a; border-radius: 8px;">
+                <tr>
+                  <td style="padding: 30px; text-align: center;">
+                    <p style="margin: 0 0 10px; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; font-weight: 700;">Your Verification Code</p>
+                    <p style="margin: 0; color: #ffffff; font-size: 40px; font-weight: 900; letter-spacing: 12px; font-family: 'Courier New', monospace;">
+                      ${code}
+                    </p>
+                    <p style="margin: 12px 0 0; color: #71717a; font-size: 11px;">
+                      This code expires in <strong style="color: #fbbf24;">10 minutes</strong>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Security Warning -->
+          <tr>
+            <td style="padding: 10px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1c0a0a; border: 1px solid #7f1d1d80; border-radius: 8px; border-top: 2px solid #ef4444;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <p style="margin: 0 0 6px; color: #fca5a5; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
+                      ⚠ Security Notice
+                    </p>
+                    <p style="margin: 0; color: #d4d4d8; font-size: 12px; line-height: 1.7;">
+                      If you <strong style="color: #fca5a5;">did not request</strong> this password reset, 
+                      please ignore this email. Your password will remain unchanged. 
+                      <strong style="color: #ffffff;">Never share this code with anyone.</strong>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 24px 40px 0;">
+              <div style="height: 1px; background-color: #27272a;"></div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="text-align: center; padding: 24px 40px;">
+              <p style="margin: 0 0 6px; color: #52525b; font-size: 11px;">
+                Electronics &amp; Computer Science Club (ECSC) · University of Kelaniya
+              </p>
+              <p style="margin: 0 0 12px; color: #52525b; font-size: 11px;">
+                UOK Robot Games 2K26
+              </p>
+              <p style="margin: 0; color: #ef4444; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">
+                ⛔ This is an automated email. Please do not reply.
+              </p>
+              <p style="margin: 6px 0 0; color: #71717a; font-size: 10px;">
+                For inquiries, contact us at <a href="mailto:contact@ecsc-uok.com" style="color: #004491; text-decoration: underline;">contact@ecsc-uok.com</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'UOK Robot Games <robot-games@ecsc-uok.com>',
+      to: [leaderEmail],
+      subject: `🔐 Password Reset Code — UOK Robot Games 2K26`,
+      html,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error };
+    }
+
+    console.log('Password reset email sent:', data?.id);
+    return { success: true, id: data?.id };
+  } catch (err) {
+    console.error('Password reset email failed:', err);
+    return { success: false, error: err.message };
+  }
+}

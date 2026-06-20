@@ -50,6 +50,14 @@ export async function POST(req) {
 
     await db.collection('teams').doc(teamId).update(updates);
 
+    // Unlock Phase 5 (WhatsApp group) if not dev-locked
+    const phase5 = teamData?.phases?.['5'] || {};
+    if (!phase5.devLocked) {
+      await db.collection('teams').doc(teamId).update({
+        'phases.5.unlockedAt': now,
+      });
+    }
+
     // Fetch updated phases
     const updatedDoc = await db.collection('teams').doc(teamId).get();
     const updatedPhases = updatedDoc.data().phases;
