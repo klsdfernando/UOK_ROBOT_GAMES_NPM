@@ -3,8 +3,14 @@ import Footer from "@/components/Footer";
 import GallerySections from "@/components/GallerySections";
 
 export const metadata = {
-  title: "Gallery",
-  description: "Photo showcase from UOK Robot Games events.",
+  title: "Gallery — Event Photos & Highlights",
+  description:
+    "Browse photos and highlights from UOK Robot Battles 2K24 and 2K25 events. Combat robots in action, winning teams, and the electrifying arena atmosphere at University of Kelaniya's premier robotics competition.",
+  openGraph: {
+    title: "UOK Robot Games Gallery — Event Photos & Highlights",
+    description:
+      "Photos from past UOK Robot Battles events — combat robots, winning teams, and arena action at University of Kelaniya.",
+  },
 };
 
 /* ─── 2K25 Robot Battles ─── */

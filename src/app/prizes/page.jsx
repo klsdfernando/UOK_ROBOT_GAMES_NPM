@@ -6,8 +6,14 @@ import FadeIn from "@/components/FadeIn";
 import CountUp from "@/components/CountUp";
 
 export const metadata = {
-  title: "Prizes",
-  description: "Prize pools and rewards for UOK Robot Games 2K26 competitions.",
+  title: "Prizes — Rs. 300,000+ Prize Pool",
+  description:
+    "UOK Robot Games 2K26 prize pool breakdown. Rs. 75,000 for Robot Battles Heavyweight winner, Rs. 30,000 for Lightweight. Robot Race prizes for university and school categories. Over Rs. 300,000 in total prizes plus trophies and certificates.",
+  openGraph: {
+    title: "UOK Robot Games 2K26 Prizes — Rs. 300,000+ Prize Pool",
+    description:
+      "Complete prize breakdown for Robot Battles and Robot Race competitions at UOK Robot Games 2K26.",
+  },
 };
 
 function PrizeCard({ title, bgColor, shadowColor, hoverShadow, textColor, amount }) {
