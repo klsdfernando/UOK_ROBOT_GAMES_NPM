@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "robotbattles.ecsc-uok.com"
+        }
+      ],
+      "destination": "https://robotgames.ecsc-uok.com/:path*",
+      "permanent": true
+    }
+  ]
+}
