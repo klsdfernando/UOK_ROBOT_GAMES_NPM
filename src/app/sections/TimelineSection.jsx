@@ -11,7 +11,7 @@ const timelineStages = [
   {
     phase: "PHASE_01 // UPLINK",
     title: "REGISTRATION OPENING",
-    date: "22ND OF JUNE",
+    date: "1ST OF JULY",
     side: "left",
     active: true,
     content: {
