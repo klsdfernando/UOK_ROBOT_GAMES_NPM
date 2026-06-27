@@ -16,6 +16,9 @@ export const metadata = {
   },
   description:
     "UOK Robot Games 2K26 — The ultimate multi-competition robotics festival featuring Robot Battles and Robot Race, organized by ECSC, University of Kelaniya.",
+  icons: {
+    icon: "https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160",
+  },
 };
 
 export default function RootLayout({ children }) {
