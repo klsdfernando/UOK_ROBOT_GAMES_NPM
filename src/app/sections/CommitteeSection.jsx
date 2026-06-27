@@ -5,43 +5,43 @@ const members = [
   {
     name: "DR KASUN PIYUMAL",
     role: "SENIOR TREASURER",
-    image: "https://robotbattles.ecsc-uok.com/People/TR.png",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/TR.png",
     email: "kasunp@kln.ac.lk",
   },
   {
-    name: "SUPUN THARAKA",
+    name: "THIVINA LIYANAGE",
     role: "PROJECT MANAGER",
-    image: "https://robotbattles.ecsc-uok.com/People/PM1.png",
-    phone: "+94 76 131 2170",
-    email: "tharaka-ec21028@stu.kln.ac.lk",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/thivina.png",
+    phone: "+94 76 307 4621",
+    email: "chandun-ec22058@stu.kln.ac.lk",
   },
   {
-    name: "MANEESHA GUNARATHNA",
+    name: "DILHARA BANDARA",
     role: "PROJECT MANAGER",
-    image: "https://robotbattles.ecsc-uok.com/People/PM2.png",
-    phone: "+94 77 109 2426",
-    email: "gunarat-ec21026@stu.kln.ac.lk",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/dilhara.png",
+    phone: "+94 70 389 2138",
+    email: "bandara-ec22037@stu.kln.ac.lk",
   },
   {
-    name: "KAVINDU PABASARA",
+    name: "ARUNA KAUSHALYA",
     role: "PROJECT MANAGER",
-    image: "https://robotbattles.ecsc-uok.com/People/PM3.png",
-    phone: "+94 71 866 9299",
-    email: "bandara-ec21031@stu.kln.ac.lk",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/aruna.png",
+    phone: "+94 78 885 5693",
+    email: "samaraw-ec22004@stu.kln.ac.lk",
   },
   {
-    name: "CHAMODA DASANAYAKE",
+    name: "CHARITH SENEVIRATNE",
     role: "ER COORDINATOR",
-    image: "https://robotbattles.ecsc-uok.com/People/ER1.png",
-    phone: "+94 70 494 9802",
-    email: "dasanay-ec21074@stu.kln.ac.lk",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/charith.png",
+    phone: "+94 71 386 6650",
+    email: "tmcjsen-ec22066@stu.kln.ac.lk",
   },
   {
-    name: "VISHWA RAJARATHNE",
-    role: "ER COORDINATOR",
-    image: "https://robotbattles.ecsc-uok.com/People/ER2.png",
-    phone: "+94 71 076 9883",
-    email: "rajarat-ec21009@stu.kln.ac.lk",
+    name: "PASINDU CHAMIKA",
+    role: "ASSISTANT TECHNICAL COORDINATOR",
+    image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/pasindu.png",
+    phone: "+94 71 642 1543",
+    email: "dayarat-ec23039@stu.kln.ac.lk",
   },
 ];
 
@@ -49,9 +49,9 @@ export default function CommitteeSection() {
   return (
     <section className="py-24 px-8 bg-[#080808] border-y border-outline-variant">
       <div className="max-w-7xl mx-auto">
-        <SectionHeader 
-          title="ORGANIZING COMMITTEE" 
-          subtitle="Meet the dedicated team operating behind the scenes of the ultimate robotics festival." 
+        <SectionHeader
+          title="ORGANIZING COMMITTEE"
+          subtitle="Meet the dedicated team operating behind the scenes of the ultimate robotics festival."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

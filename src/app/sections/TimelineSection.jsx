@@ -5,6 +5,8 @@ import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
 import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
+// Registration is now officially open. 
+
 const timelineStages = [
   {
     phase: "PHASE_01 // UPLINK",
@@ -14,7 +16,7 @@ const timelineStages = [
     active: true,
     content: {
       type: "action",
-      text: "Registration is now officially open. Teams must submit their primary details and blueprints to begin the sequence.",
+      text: "Teams must submit their primary details and blueprints to begin the sequence.",
       buttonText: "REGISTER NOW",
       buttonIcon: "how_to_reg",
     },
@@ -189,16 +191,16 @@ export default function TimelineSection() {
                   {/* Label side */}
                   <div
                     className={`w-full md:w-1/2 ${isLeft
-                        ? "md:pr-16 text-left md:text-right"
-                        : "md:pl-16 text-left"
+                      ? "md:pr-16 text-left md:text-right"
+                      : "md:pl-16 text-left"
                       } mb-4 md:mb-0 pl-16 sm:pl-20 md:pl-0 flex flex-col ${isLeft ? "items-start md:items-end" : "items-start"
                       } justify-center ${stage.active ? "" : "opacity-50"
                       } md:-translate-y-2`}
                   >
                     <div
                       className={`font-bold text-[11px] ${stage.active
-                          ? "text-[#5b9aff]"
-                          : "text-zinc-500"
+                        ? "text-[#5b9aff]"
+                        : "text-zinc-500"
                         } tracking-[0.1em] uppercase mb-1`}
                     >
                       {stage.phase}
@@ -209,8 +211,8 @@ export default function TimelineSection() {
                     <div className="flex gap-2 mt-3">
                       <span
                         className={`px-3 py-1.5 ${stage.active
-                            ? "bg-[#004491]/20 border-[#004491]/30 text-[#5b9aff]"
-                            : "bg-[#0a0a0a] border-[#1a1c33] text-zinc-500"
+                          ? "bg-[#004491]/20 border-[#004491]/30 text-[#5b9aff]"
+                          : "bg-[#0a0a0a] border-[#1a1c33] text-zinc-500"
                           } border text-[10px] font-bold tracking-[0.15em] rounded-sm`}
                       >
                         {stage.date}
@@ -221,8 +223,8 @@ export default function TimelineSection() {
                   {/* Center dot */}
                   <div
                     className={`absolute left-10 sm:left-14 md:left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-black border-[2px] ${stage.active
-                        ? "border-[#004491] shadow-[0_0_20px_rgba(0,68,145,0.6)]"
-                        : "border-[#1a1c33]"
+                      ? "border-[#004491] shadow-[0_0_20px_rgba(0,68,145,0.6)]"
+                      : "border-[#1a1c33]"
                       } flex items-center justify-center z-20 mt-[2px] md:mt-0`}
                   >
                     {stage.active && (
