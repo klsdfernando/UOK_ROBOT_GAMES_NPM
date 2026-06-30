@@ -49,8 +49,8 @@ export const metadata = {
   creator: "ECSC - University of Kelaniya",
   publisher: "Electronics and Computer Science Club (ECSC)",
   icons: {
-    icon: "https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160",
-    apple: "https://ik.imagekit.io/wfnazmyxh/images/logo.png?updatedAt=1777697840160",
+    icon: "https://ik.imagekit.io/wfnazmyxh/images/Logo%20Favicon.png",
+    apple: "https://ik.imagekit.io/wfnazmyxh/images/Logo%20Favicon.png",
   },
   openGraph: {
     type: "website",
