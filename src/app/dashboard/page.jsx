@@ -262,7 +262,7 @@ function PhaseNode({ phase, isLast, onComplete, completing }) {
             </span>
           )}
           {status === "dev-locked" && (
-            <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-amber-500/10 text-amber-500/70 border border-amber-500/20">
+            <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30">
               Coming Soon
             </span>
           )}
@@ -502,7 +502,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Heavy Weight
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,500</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Heavy Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Heavy Weight" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -528,7 +528,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Light Weight
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Light Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Light Weight" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -563,7 +563,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   University Category
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "University Category" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "University Category" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -589,7 +589,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   School Category
                 </span>
               </div>
-              <p className={`text-[10px] ml-9 mt-1 ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>Registration: FREE</p>
+              <p className={`text-[10px] ml-9 mt-1 ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>Registration fee: Rs. 500</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-700"}`}>
                   {selectedCategory === "School Category" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -1022,12 +1022,13 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
   const phase1Data = team?.phases?.['1']?.data || null;
   const eventSel = phase1Data?.eventSelection || '';
   const catSel = phase1Data?.categorySelection || '';
-  const isFree = eventSel === 'Robot Race' && catSel === 'School Category';
+  // No categories are free anymore
+  const isFree = false;
   const paymentAmount = (() => {
-    if (eventSel === 'Robot Battles' && catSel === 'Heavy Weight') return 'Rs. 1,000';
-    if (eventSel === 'Robot Battles' && catSel === 'Light Weight') return 'Rs. 500';
-    if (eventSel === 'Robot Race' && catSel === 'University Category') return 'Rs. 500';
-    if (eventSel === 'Robot Race' && catSel === 'School Category') return 'FREE';
+    if (eventSel === 'Robot Battles' && catSel === 'Heavy Weight') return 'Rs. 1,500';
+    if (eventSel === 'Robot Battles' && catSel === 'Light Weight') return 'Rs. 1,000';
+    if (eventSel === 'Robot Race' && catSel === 'University Category') return 'Rs. 1,000';
+    if (eventSel === 'Robot Race' && catSel === 'School Category') return 'Rs. 500';
     return null;
   })();
 
@@ -1427,29 +1428,13 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
   if (!phaseData['6']) {
     phaseData['6'] = { completed: false, unlockedAt: null, devLocked: true };
   } else {
-    // Always force Phase 6 as dev-locked, even if somehow unlocked
-    phaseData['6'] = { ...phaseData['6'], devLocked: true, completed: false };
+    // Always force Phase 6 as dev-locked and clear unlockedAt so it shows as 'Coming Soon'
+    phaseData['6'] = { ...phaseData['6'], devLocked: true, completed: false, unlockedAt: null };
   }
 
-  // Auto-complete Phase 4 for free registrations (Robot Race School Category)
+  // Auto-complete Phase 4 for free registrations (Disabled - No free categories)
   useEffect(() => {
-    const p1 = phaseData['1'];
-    const p3 = phaseData['3'];
-    const p4 = phaseData['4'];
-    const isFree = p1?.data?.eventSelection === 'Robot Race' && p1?.data?.categorySelection === 'School Category';
-    if (isFree && p3?.completed && !p4?.completed) {
-      fetch("/api/team/complete-free", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.phases) {
-            onTeamUpdate({ ...team, phases: data.phases });
-          }
-        })
-        .catch(err => console.error("Auto-complete free registration error:", err));
-    }
+    // Left intentionally blank
   }, [phaseData['3']?.completed]);
 
   const handleCompletePhase = async (phaseId, phaseData = null) => {
