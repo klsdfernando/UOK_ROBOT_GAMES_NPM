@@ -5,7 +5,6 @@ import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
 import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
-// Registration is now officially open. 
 
 const timelineStages = [
   {
@@ -16,7 +15,7 @@ const timelineStages = [
     active: true,
     content: {
       type: "action",
-      text: "Teams must submit their primary details and blueprints to begin the sequence.",
+      text: "Registration is now officially open. Teams must submit their primary details and blueprints to begin the sequence.",
       buttonText: "REGISTER NOW",
       buttonIcon: "how_to_reg",
     },

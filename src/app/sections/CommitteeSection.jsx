@@ -7,6 +7,7 @@ const members = [
     role: "SENIOR TREASURER",
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/TR.png",
     email: "kasunp@kln.ac.lk",
+    zoom: 1,       // ← change this to zoom in/out (e.g. 1.2 = 120%, 0.8 = 80%)
   },
   {
     name: "THIVINA LIYANAGE",
@@ -14,6 +15,7 @@ const members = [
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/thivina.png",
     phone: "+94 76 307 4621",
     email: "chandun-ec22058@stu.kln.ac.lk",
+    zoom: 1.6,
   },
   {
     name: "DILHARA BANDARA",
@@ -21,6 +23,7 @@ const members = [
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/dilhara.png",
     phone: "+94 70 389 2138",
     email: "bandara-ec22037@stu.kln.ac.lk",
+    zoom: 1.6,
   },
   {
     name: "ARUNA KAUSHALYA",
@@ -28,6 +31,7 @@ const members = [
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/aruna.png",
     phone: "+94 78 885 5693",
     email: "samaraw-ec22004@stu.kln.ac.lk",
+    zoom: 1.45,
   },
   {
     name: "CHARITH SENEVIRATNE",
@@ -35,6 +39,7 @@ const members = [
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/charith.png",
     phone: "+94 71 386 6650",
     email: "tmcjsen-ec22066@stu.kln.ac.lk",
+    zoom: 1.6,
   },
   {
     name: "PASINDU CHAMIKA",
@@ -42,6 +47,7 @@ const members = [
     image: "https://ik.imagekit.io/wfnazmyxh/ROBOT%20Games%20OC/pasindu.png",
     phone: "+94 71 642 1543",
     email: "dayarat-ec23039@stu.kln.ac.lk",
+    zoom: 1.6,
   },
 ];
 
@@ -66,6 +72,7 @@ export default function CommitteeSection() {
                   alt={member.name}
                   className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110 relative z-0 mt-2"
                   src={member.image}
+                  style={{ transform: `scale(${member.zoom || 1})` }}
                 />
               </div>
 
