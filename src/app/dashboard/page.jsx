@@ -502,7 +502,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Heavy Weight
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,500</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Heavy Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Heavy Weight" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -528,7 +528,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   Light Weight
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "Light Weight" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "Light Weight" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -563,7 +563,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   University Category
                 </span>
               </div>
-              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 500</p>
+              <p className="text-zinc-600 text-[10px] ml-9 mt-1">Registration fee: Rs. 1,000</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "University Category" ? "text-[#00d2ff]" : "text-zinc-700"}`}>
                   {selectedCategory === "University Category" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -589,7 +589,7 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
                   School Category
                 </span>
               </div>
-              <p className={`text-[10px] ml-9 mt-1 ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>Registration: FREE</p>
+              <p className={`text-[10px] ml-9 mt-1 ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-600"}`}>Registration fee: Rs. 500</p>
               <div className="absolute top-3 right-3">
                 <span className={`material-symbols-outlined text-lg ${selectedCategory === "School Category" ? "text-emerald-400" : "text-zinc-700"}`}>
                   {selectedCategory === "School Category" ? "radio_button_checked" : "radio_button_unchecked"}
@@ -1022,12 +1022,12 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
   const phase1Data = team?.phases?.['1']?.data || null;
   const eventSel = phase1Data?.eventSelection || '';
   const catSel = phase1Data?.categorySelection || '';
-  const isFree = eventSel === 'Robot Race' && catSel === 'School Category';
+  const isFree = false; // No free categories anymore
   const paymentAmount = (() => {
-    if (eventSel === 'Robot Battles' && catSel === 'Heavy Weight') return 'Rs. 1,000';
-    if (eventSel === 'Robot Battles' && catSel === 'Light Weight') return 'Rs. 500';
-    if (eventSel === 'Robot Race' && catSel === 'University Category') return 'Rs. 500';
-    if (eventSel === 'Robot Race' && catSel === 'School Category') return 'FREE';
+    if (eventSel === 'Robot Battles' && catSel === 'Heavy Weight') return 'Rs. 1,500';
+    if (eventSel === 'Robot Battles' && catSel === 'Light Weight') return 'Rs. 1,000';
+    if (eventSel === 'Robot Race' && catSel === 'University Category') return 'Rs. 1,000';
+    if (eventSel === 'Robot Race' && catSel === 'School Category') return 'Rs. 500';
     return null;
   })();
 
