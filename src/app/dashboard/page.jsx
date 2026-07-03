@@ -790,12 +790,15 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
 }
 
 /* ─── Phase 3: Organization Details ─── */
-function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, completing }) {
+function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, completing, team }) {
   const [teamType, setTeamType] = useState("");
   const [orgName, setOrgName] = useState("");
 
   const savedData = phaseData?.data || null;
   const isCompleted = displayStatus === "completed";
+
+  // Determine selected event from Phase 1
+  const selectedEvent = team?.phases?.['1']?.data?.eventSelection || '';
 
   // Completed — read-only summary
   if (isCompleted && savedData) {
@@ -817,11 +820,17 @@ function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, comple
   }
 
   // Active — form
-  const teamTypes = [
+  // For Robot Race: only School Team & University Team
+  // For Robot Battles: all three options including Public Team
+  const allTeamTypes = [
     { value: "School Team", icon: "school" },
     { value: "University Team", icon: "account_balance" },
     { value: "Public Team", icon: "public" },
   ];
+
+  const teamTypes = selectedEvent === 'Robot Race'
+    ? allTeamTypes.filter(t => t.value !== 'Public Team')
+    : allTeamTypes;
 
   const canSubmit = teamType && orgName.trim();
 
@@ -839,7 +848,7 @@ function Phase3OrgDetails({ phaseData, displayStatus, accent, onComplete, comple
         <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-4">Team Type</p>
         <p className="text-zinc-600 text-[10px] mb-4">Select the type that best describes your team</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className={`grid grid-cols-1 ${teamTypes.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'} gap-3`}>
           {teamTypes.map((t) => (
             <button
               key={t.value}
@@ -1513,6 +1522,7 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
           accent={meta.accent}
           onComplete={handleCompletePhase}
           completing={completing}
+          team={team}
         />
       );
     }
