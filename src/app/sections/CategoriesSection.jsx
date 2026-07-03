@@ -7,7 +7,7 @@ const categories = [
       {
         icon: "fitness_center",
         title: "Weight Divisions",
-        desc: "Heavy-Weight (20KG) & Light-Weight (2.5KG)",
+        desc: "Heavy-Weight (20KG) & Light-Weight (3KG)", // 2.5KG to 3KG
       },
       {
         icon: "local_fire_department",
