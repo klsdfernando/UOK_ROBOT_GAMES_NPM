@@ -1437,26 +1437,7 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
     phaseData['6'] = { completed: false, unlockedAt: null, devLocked: true };
   }
 
-  // Auto-complete Phase 4 for free registrations (Robot Race School Category)
-  useEffect(() => {
-    const p1 = phaseData['1'];
-    const p3 = phaseData['3'];
-    const p4 = phaseData['4'];
-    const isFree = p1?.data?.eventSelection === 'Robot Race' && p1?.data?.categorySelection === 'School Category';
-    if (isFree && p3?.completed && !p4?.completed) {
-      fetch("/api/team/complete-free", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.phases) {
-            onTeamUpdate({ ...team, phases: data.phases });
-          }
-        })
-        .catch(err => console.error("Auto-complete free registration error:", err));
-    }
-  }, [phaseData['3']?.completed]);
+
 
   const handleCompletePhase = async (phaseId, phaseData = null) => {
     setCompleting(true);
