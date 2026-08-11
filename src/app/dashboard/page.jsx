@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
 
 /* ─── Sidebar Nav Items ─── */
 const sidebarItems = [
@@ -623,22 +624,42 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
 }
 
 /* ─── Phase 2: Members Details ─── */
-function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComplete, completing }) {
+function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComplete, completing, membersEditEnabled }) {
   const [memberCount, setMemberCount] = useState(1);
   const [members, setMembers] = useState([{ fullName: team.leaderName || "", contactNumber: "" }]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const savedData = phaseData?.data || null;
   const isCompleted = displayStatus === "completed";
 
-  // Completed — read-only roster
-  if (isCompleted && savedData) {
+  const startEditing = () => {
+    if (!savedData?.members?.length) return;
+    setMemberCount(savedData.memberCount || savedData.members.length);
+    setMembers(savedData.members.map((m) => ({ fullName: m.fullName || "", contactNumber: m.contactNumber || "" })));
+    setIsEditing(true);
+  };
+
+  // Completed — read-only roster (unless editing)
+  if (isCompleted && savedData && !isEditing) {
     return (
       <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: '#10b981' }} />
 
-        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-5">
-          Team Roster · {savedData.memberCount} {savedData.memberCount === 1 ? "Member" : "Members"}
-        </p>
+        <div className="flex items-center justify-between gap-3 mb-5">
+          <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">
+            Team Roster · {savedData.memberCount} {savedData.memberCount === 1 ? "Member" : "Members"}
+          </p>
+          {membersEditEnabled && (
+            <button
+              type="button"
+              onClick={startEditing}
+              className="px-3 py-1.5 text-[10px] uppercase tracking-widest font-bold border border-outline-variant text-zinc-300 hover:text-white hover:border-[#004491] hover:bg-[#004491]/10 transition-all flex items-center gap-1.5"
+            >
+              <span className="material-symbols-outlined text-sm">edit</span>
+              Edit
+            </button>
+          )}
+        </div>
 
         <div className="space-y-3">
           {savedData.members.map((m, i) => (
@@ -666,20 +687,23 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
     );
   }
 
-  // Active — form
+  // Active / editing — form
   const handleCountChange = (count) => {
     const c = Number(count);
     setMemberCount(c);
-    // Build array: index 0 = leader (pre-filled), rest = empty
-    const arr = [];
-    for (let i = 0; i < c; i++) {
-      if (i === 0) {
-        arr.push({ fullName: team.leaderName, contactNumber: "" });
-      } else {
-        arr.push({ fullName: "", contactNumber: "" });
+    setMembers((prev) => {
+      const arr = [];
+      for (let i = 0; i < c; i++) {
+        if (prev[i]) {
+          arr.push(prev[i]);
+        } else if (i === 0) {
+          arr.push({ fullName: team.leaderName || "", contactNumber: "" });
+        } else {
+          arr.push({ fullName: "", contactNumber: "" });
+        }
       }
-    }
-    setMembers(arr);
+      return arr;
+    });
   };
 
   const updateMember = (index, field, value) => {
@@ -693,14 +717,15 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
   // Validate: all members must have name and contact
   const allFilled = members.length > 0 && members.every((m) => m.fullName.trim() && m.contactNumber.trim());
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!allFilled) return;
-    onComplete(2, { memberCount, members });
+    const ok = await onComplete(2, { memberCount, members });
+    if (ok) setIsEditing(false);
   };
 
   return (
     <div className="relative bg-[#080808] border border-outline-variant p-5 sm:p-7">
-      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: isEditing ? '#10b981' : accent }} />
 
       {/* Dropdown */}
       <div className="mb-6">
@@ -765,25 +790,37 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
         </div>
       )}
 
-      {/* Submit */}
+      {/* Submit / Cancel */}
       {members.length > 0 && (
-        <button
-          onClick={handleSubmit}
-          disabled={!allFilled || completing}
-          className="mt-6 px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          {completing ? (
-            <>
-              <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <span className="material-symbols-outlined text-sm">check_circle</span>
-              Confirm Members
-            </>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <button
+            onClick={handleSubmit}
+            disabled={!allFilled || completing}
+            className="px-5 py-2.5 bg-[#004491] text-white text-[10px] uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_15px_rgba(0,68,145,0.3)] transition-all duration-300 flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            {completing ? (
+              <>
+                <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-sm">check_circle</span>
+                {isEditing ? "Save Changes" : "Confirm Members"}
+              </>
+            )}
+          </button>
+          {isEditing && (
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              disabled={completing}
+              className="px-5 py-2.5 text-[10px] uppercase tracking-widest font-bold border border-outline-variant text-zinc-400 hover:text-zinc-200 hover:border-zinc-500 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
           )}
-        </button>
+        </div>
       )}
     </div>
   );
@@ -1412,6 +1449,7 @@ function Phase5WhatsAppGroup({ team, phaseData, displayStatus, accent, onComplet
 /* ─── Team Details Section ─── */
 function TeamDetailsSection({ team, onTeamUpdate }) {
   const [completing, setCompleting] = useState(false);
+  const { isMembersEditEnabled } = useRegistrationConfig();
 
   // Phase data from Firestore (defaults for legacy teams)
   const rawPhaseData = team.phases || {
@@ -1454,9 +1492,12 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
 
       if (data.success && data.phases) {
         onTeamUpdate({ ...team, phases: data.phases });
+        return true;
       }
+      return false;
     } catch (err) {
       console.error("Phase completion error:", err);
+      return false;
     } finally {
       setCompleting(false);
     }
@@ -1491,6 +1532,7 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
           accent={meta.accent}
           onComplete={handleCompletePhase}
           completing={completing}
+          membersEditEnabled={isMembersEditEnabled}
         />
       );
     }

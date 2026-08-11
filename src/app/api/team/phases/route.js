@@ -58,6 +58,8 @@ export async function POST(req) {
     }
 
     const currentPhase = phases[String(phaseId)] || {};
+    const membersEditEnabled =
+      (process.env.NEXT_PUBLIC_MEMBERS_EDIT_ENABLED || '0') === '1';
 
     // Backward compatibility for legacy teams completing Phase 5
     if (phaseId === 5 && currentPhase.devLocked && phases['4']?.completed) {
@@ -79,6 +81,39 @@ export async function POST(req) {
     if (currentPhase.devLocked) {
       return NextResponse.json(
         { success: false, message: 'This phase is locked by the organizers.' },
+        { status: 403 }
+      );
+    }
+
+    // Allow re-saving Phase 2 member details only when edit flag is enabled
+    if (currentPhase.completed) {
+      if (phaseId === 2 && membersEditEnabled) {
+        if (!phaseData || typeof phaseData !== 'object') {
+          return NextResponse.json(
+            { success: false, message: 'Member details are required.' },
+            { status: 400 }
+          );
+        }
+
+        const now = new Date().toISOString();
+        await teamRef.update({
+          [`phases.${phaseId}.data`]: phaseData,
+          [`phases.${phaseId}.updatedAt`]: now,
+        });
+
+        const updatedDoc = await teamRef.get();
+        return NextResponse.json(
+          {
+            success: true,
+            message: 'Member details updated.',
+            phases: updatedDoc.data().phases,
+          },
+          { status: 200 }
+        );
+      }
+
+      return NextResponse.json(
+        { success: false, message: 'This phase is already completed.' },
         { status: 403 }
       );
     }

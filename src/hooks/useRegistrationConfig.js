@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
  * Returns:
  *   - isBeforeOpenDate: true if current time is before the opening date
  *   - isRegistrationClosed: true if REGISTRATION_CLOSED=1
+ *   - isMembersEditEnabled: true if MEMBERS_EDIT_ENABLED=1
  *   - openDate: the Date object for the opening date
  *   - loading: true while computing (first render)
  */
@@ -14,6 +15,7 @@ export function useRegistrationConfig() {
   const [state, setState] = useState({
     isBeforeOpenDate: false,
     isRegistrationClosed: false,
+    isMembersEditEnabled: false,
     openDate: null,
     loading: true,
   });
@@ -22,6 +24,7 @@ export function useRegistrationConfig() {
     const openDateStr =
       process.env.NEXT_PUBLIC_REGISTRATION_OPEN_DATE || "2026-06-22T00:00:00+05:30";
     const closedFlag = process.env.NEXT_PUBLIC_REGISTRATION_CLOSED || "0";
+    const membersEditFlag = process.env.NEXT_PUBLIC_MEMBERS_EDIT_ENABLED || "0";
 
     const openDate = new Date(openDateStr);
     const now = new Date();
@@ -29,6 +32,7 @@ export function useRegistrationConfig() {
     setState({
       isBeforeOpenDate: now < openDate,
       isRegistrationClosed: closedFlag === "1",
+      isMembersEditEnabled: membersEditFlag === "1",
       openDate,
       loading: false,
     });
