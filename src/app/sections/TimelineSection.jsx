@@ -23,7 +23,7 @@ const timelineStages = [
   {
     phase: "PHASE_02 // DEADLINE",
     title: "REGISTRATION CLOSING",
-    date: "20TH OF AUGUST",
+    date: "05TH OF SEPTEMBER",
     side: "right",
     active: false,
     content: { type: "info", text: "SUBMISSIONS LOCKED" },
