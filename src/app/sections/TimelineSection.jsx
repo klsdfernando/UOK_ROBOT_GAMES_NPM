@@ -23,7 +23,7 @@ const timelineStages = [
   {
     phase: "PHASE_02 // DEADLINE",
     title: "REGISTRATION CLOSING",
-    date: "05TH OF SEPTEMBER",
+    date: "12TH OF SEPTEMBER",
     side: "right",
     active: false,
     content: { type: "info", text: "SUBMISSIONS LOCKED" },
@@ -31,7 +31,7 @@ const timelineStages = [
   {
     phase: "PHASE_03 // TRAINING",
     title: "ROBOT BATTLE WORKSHOP",
-    date: "29TH OF AUGUST",
+    date: "19TH OF SEPTEMBER",
     side: "left",
     active: false,
     content: { type: "locked", text: "ZOOM LINK LOCKED", icon: "link_off" },

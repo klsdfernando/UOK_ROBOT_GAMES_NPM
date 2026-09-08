@@ -371,11 +371,11 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
     );
   }
 
-  // Active / unlocked — show selection form
-  const canSubmit = (selectedEvent === "Robot Battles" || selectedEvent === "Robot Race") && selectedCategory;
+  // Active / unlocked — show selection form (Robot Race registrations are closed)
+  const canSubmit = selectedEvent === "Robot Battles" && selectedCategory;
 
   const handleSubmit = () => {
-    if (!canSubmit) return;
+    if (!canSubmit || selectedEvent !== "Robot Battles") return;
     const data = {
       eventSelection: selectedEvent,
       categorySelection: selectedCategory,
@@ -446,36 +446,33 @@ function Phase1EventDetails({ team, phaseData, displayStatus, accent, onComplete
             )}
           </button>
 
-          {/* Option 2: Robot Race */}
-          <button
-            type="button"
-            onClick={() => { setSelectedEvent("Robot Race"); setSelectedCategory(""); }}
-            className={`relative text-left p-4 border transition-all duration-200 group ${
-              selectedEvent === "Robot Race"
-                ? "bg-[#004491]/10 border-[#004491] shadow-[0_0_15px_rgba(0,68,145,0.15)]"
-                : "bg-[#0b0c16] border-outline-variant hover:border-zinc-600"
-            }`}
+          {/* Option 2: Robot Race (Registrations Closed) */}
+          <div
+            className="relative text-left p-4 border border-zinc-800/80 bg-zinc-900/20 opacity-75 cursor-not-allowed select-none transition-all duration-200"
+            aria-disabled="true"
           >
+            {/* Closed badge */}
+            <div className="absolute top-3 right-3">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/30 rounded">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                Registrations Closed
+              </span>
+            </div>
+
             <div className="flex items-center gap-3 mb-1">
-              <span className={`material-symbols-outlined text-xl ${selectedEvent === "Robot Race" ? "text-[#004491]" : "text-zinc-600"}`}>
+              <span className="material-symbols-outlined text-xl text-zinc-600">
                 directions_car
               </span>
-              <span className={`text-sm font-black uppercase tracking-widest ${selectedEvent === "Robot Race" ? "text-white" : "text-zinc-400"}`}>
+              <span className="text-sm font-black uppercase tracking-widest text-zinc-500">
                 Robot Race
               </span>
             </div>
             <p className="text-zinc-600 text-[10px] ml-9">Speed circuit challenge</p>
-            {selectedEvent === "Robot Race" && (
-              <div className="absolute top-3 right-3">
-                <span className="material-symbols-outlined text-[#004491] text-lg">radio_button_checked</span>
-              </div>
-            )}
-            {selectedEvent !== "Robot Race" && (
-              <div className="absolute top-3 right-3">
-                <span className="material-symbols-outlined text-zinc-700 text-lg">radio_button_unchecked</span>
-              </div>
-            )}
-          </button>
+            <p className="text-red-400/90 text-[10px] ml-9 mt-1.5 flex items-center gap-1 font-medium">
+              <span className="material-symbols-outlined text-xs">block</span>
+              Registrations are closed for Robot Race
+            </p>
+          </div>
         </div>
       </div>
 

@@ -118,6 +118,14 @@ export async function POST(req) {
       );
     }
 
+    // Registrations for Robot Race are closed
+    if (phaseId === 1 && phaseData?.eventSelection === 'Robot Race') {
+      return NextResponse.json(
+        { success: false, message: 'Registrations for Robot Race are now closed.' },
+        { status: 400 }
+      );
+    }
+
     // Mark phase as completed
     const now = new Date().toISOString();
     const updates = {};
