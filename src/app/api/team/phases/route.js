@@ -96,17 +96,24 @@ export async function POST(req) {
         }
 
         const now = new Date().toISOString();
-        await teamRef.update({
+        const editUpdates = {
           [`phases.${phaseId}.data`]: phaseData,
           [`phases.${phaseId}.updatedAt`]: now,
-        });
+        };
+        const updatedLeaderName = phaseData.members?.[0]?.fullName?.trim();
+        if (updatedLeaderName) {
+          editUpdates.leaderName = updatedLeaderName;
+        }
+        await teamRef.update(editUpdates);
 
         const updatedDoc = await teamRef.get();
+        const updatedTeamData = updatedDoc.data();
         return NextResponse.json(
           {
             success: true,
             message: 'Member details updated.',
-            phases: updatedDoc.data().phases,
+            phases: updatedTeamData.phases,
+            leaderName: updatedTeamData.leaderName,
           },
           { status: 200 }
         );
@@ -135,6 +142,9 @@ export async function POST(req) {
     // Save any additional phase data (e.g., event selection)
     if (phaseData && typeof phaseData === 'object') {
       updates[`phases.${phaseId}.data`] = phaseData;
+      if (phaseId === 2 && phaseData.members?.[0]?.fullName?.trim()) {
+        updates.leaderName = phaseData.members[0].fullName.trim();
+      }
     }
 
     // Unlock the next phase if it exists and is not dev-locked
@@ -151,13 +161,14 @@ export async function POST(req) {
 
     // Return updated phases
     const updatedDoc = await teamRef.get();
-    const updatedPhases = updatedDoc.data().phases;
+    const updatedTeamData = updatedDoc.data();
 
     return NextResponse.json(
       {
         success: true,
         message: `Phase ${phaseId} completed!`,
-        phases: updatedPhases,
+        phases: updatedTeamData.phases,
+        leaderName: updatedTeamData.leaderName,
       },
       { status: 200 }
     );

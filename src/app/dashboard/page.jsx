@@ -768,7 +768,6 @@ function Phase2MembersDetails({ team, phaseData, displayStatus, accent, onComple
                   value={m.fullName}
                   onChange={(e) => updateMember(i, "fullName", e.target.value)}
                   className="w-full bg-[#080808] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
-                  readOnly={i === 0}
                 />
                 <input
                   type="tel"
@@ -1488,7 +1487,11 @@ function TeamDetailsSection({ team, onTeamUpdate }) {
       const data = await res.json();
 
       if (data.success && data.phases) {
-        onTeamUpdate({ ...team, phases: data.phases });
+        onTeamUpdate({
+          ...team,
+          phases: data.phases,
+          ...(data.leaderName ? { leaderName: data.leaderName } : {}),
+        });
         return true;
       }
       return false;
