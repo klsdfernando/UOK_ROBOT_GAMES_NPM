@@ -41,6 +41,9 @@ const PRICE_PER_SHIRT = 1800; // LKR
 export default function TeamTshirtSection({ team }) {
   // Extract team members from Phase 2 data
   const phase2Members = team.phases?.["2"]?.data?.members || [];
+  const teamMemberCount = Math.max(1, phase2Members.length || team.phases?.["2"]?.data?.memberCount || 1);
+  const MAX_EXTRAS = 3;
+  const maxAllowedShirts = teamMemberCount + MAX_EXTRAS;
 
   // Build initial roster
   const [roster, setRoster] = useState(() => {
@@ -50,6 +53,7 @@ export default function TeamTshirtSection({ team }) {
         name: m.fullName?.trim() || (idx === 0 ? team.leaderName || "Leader" : `Member ${idx + 1}`),
         contact: m.contactNumber || "",
         role: idx === 0 ? "Leader" : "Member",
+        isExtra: false,
         selected: true,
       }));
     }
@@ -60,6 +64,7 @@ export default function TeamTshirtSection({ team }) {
         name: team.leaderName || "Team Leader",
         contact: "",
         role: "Leader",
+        isExtra: false,
         selected: true,
       },
     ];
@@ -78,40 +83,20 @@ export default function TeamTshirtSection({ team }) {
     phase2Members[0]?.contactNumber || ""
   );
 
-  // Shirts configuration mapped to selected students:
-  // [{ memberId, memberName, memberRole, category: "Normal Size", size: "" }]
-  const [shirts, setShirts] = useState(() => {
-    return selectedStudents.map((m) => ({
-      memberId: m.id,
-      memberName: m.name,
-      memberRole: m.role,
-      category: "Normal Size",
-      size: "",
-    }));
-  });
+  // Shirts configuration mapped to selected students
+  // Keyed by student.id -> { category, size }
+  const [shirtPreferences, setShirtPreferences] = useState({});
 
-  // Sync shirts array when selected students change, preserving existing size/category
-  useEffect(() => {
-    setShirts((prev) => {
-      return selectedStudents.map((student) => {
-        const existing = prev.find((p) => p.memberId === student.id);
-        if (existing) {
-          return {
-            ...existing,
-            memberName: student.name,
-            memberRole: student.role,
-          };
-        }
-        return {
-          memberId: student.id,
-          memberName: student.name,
-          memberRole: student.role,
-          category: "Normal Size",
-          size: "",
-        };
-      });
-    });
-  }, [roster]);
+  const shirts = selectedStudents.map((student) => {
+    const pref = shirtPreferences[student.id];
+    return {
+      memberId: student.id,
+      memberName: student.name,
+      memberRole: student.role,
+      category: pref?.category || "Normal Size",
+      size: pref?.size || "",
+    };
+  });
 
   // Mobile active tab: "all" or index string "0", "1"...
   const [activeMobileTab, setActiveMobileTab] = useState("0");
@@ -128,15 +113,17 @@ export default function TeamTshirtSection({ team }) {
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState(false);
 
-  // Past team orders
+  // Past team orders & view mode
   const [pastOrders, setPastOrders] = useState([]);
-  const [loadingPastOrders, setLoadingPastOrders] = useState(false);
-  const [showPastOrders, setShowPastOrders] = useState(false);
+  const [loadingPastOrders, setLoadingPastOrders] = useState(() => Boolean(team?.id));
+  const [showNewOrderForm, setShowNewOrderForm] = useState(false);
+  const [copiedOrderId, setCopiedOrderId] = useState(false);
+  const [justSubmitted, setJustSubmitted] = useState(false);
+  const [showPreviousOrdersList, setShowPreviousOrdersList] = useState(false);
 
-  // Fetch past orders for this team
-  const fetchPastOrders = async () => {
-    if (!team.id) return;
-    setLoadingPastOrders(true);
+  // Refresh past orders after order placement
+  const refreshPastOrders = async () => {
+    if (!team?.id) return;
     try {
       const res = await fetch(`/api/tshirt?teamId=${encodeURIComponent(team.id)}`);
       const data = await res.json();
@@ -145,14 +132,72 @@ export default function TeamTshirtSection({ team }) {
       }
     } catch {
       // Ignore
-    } finally {
-      setLoadingPastOrders(false);
     }
   };
 
   useEffect(() => {
-    fetchPastOrders();
-  }, [team.id]);
+    let active = true;
+    if (!team?.id) {
+      return;
+    }
+    async function loadOrders() {
+      try {
+        const res = await fetch(`/api/tshirt?teamId=${encodeURIComponent(team.id)}`);
+        const data = await res.json();
+        if (active && data.success && data.orders) {
+          setPastOrders(data.orders);
+        }
+      } catch (err) {
+        console.warn("Failed to load past orders:", err);
+      } finally {
+        if (active) {
+          setLoadingPastOrders(false);
+        }
+      }
+    }
+    loadOrders();
+    return () => {
+      active = false;
+    };
+  }, [team?.id]);
+
+  // Helper for measurements
+  const getSizeMeasurement = (category, size) => {
+    if (!size) return "";
+    if (category === "Kids Size") {
+      return KIDS_MEASUREMENTS[size] || "";
+    }
+    return SIZE_MEASUREMENTS[size] || "";
+  };
+
+  // Combine orderResult and pastOrders into unified order list
+  const allOrders = (() => {
+    const list = [...pastOrders];
+    if (orderResult?.order) {
+      const oid = orderResult.order.orderId || orderResult.order.id;
+      const idx = list.findIndex((o) => (o.orderId || o.id) === oid);
+      if (idx >= 0) {
+        list[idx] = { ...list[idx], ...orderResult.order };
+      } else {
+        list.unshift(orderResult.order);
+      }
+    }
+    return list;
+  })();
+
+  const hasExistingOrders = allOrders.length > 0;
+  const primaryOrder = allOrders[0] || null;
+  const totalShirtsOrdered = allOrders.reduce(
+    (sum, o) => sum + (o.shirtCount || (o.shirts?.length || 0)),
+    0
+  );
+  const remainingAllowance = Math.max(0, maxAllowedShirts - totalShirtsOrdered);
+
+  const primaryShirts = primaryOrder?.shirts || [];
+  const primaryNormalCount = primaryShirts.filter((s) => s.category !== "Kids Size").length;
+  const primaryKidsCount = primaryShirts.filter((s) => s.category === "Kids Size").length;
+  const primaryTotalPaid = (primaryOrder?.shirtCount || primaryShirts.length) * PRICE_PER_SHIRT;
+  const previousOrders = allOrders.slice(1);
 
   // Toggle member selection
   const toggleMemberSelection = (id) => {
@@ -161,8 +206,10 @@ export default function TeamTshirtSection({ team }) {
       const currentSelectedCount = prev.filter((m) => m.selected).length;
       return prev.map((m) => {
         if (m.id === id) {
-          if (!m.selected && currentSelectedCount >= 5) {
-            setError("Maximum 5 T-shirts per order. To buy more, place another order.");
+          if (!m.selected && currentSelectedCount >= maxAllowedShirts) {
+            setError(
+              `Maximum ${maxAllowedShirts} T-shirts allowed for your team (${teamMemberCount} members + up to ${MAX_EXTRAS} extras).`
+            );
             return m;
           }
           return { ...m, selected: !m.selected };
@@ -179,15 +226,17 @@ export default function TeamTshirtSection({ team }) {
       setRoster((prev) => {
         let count = 0;
         return prev.map((m) => {
-          if (count < 5) {
+          if (count < maxAllowedShirts) {
             count++;
             return { ...m, selected: true };
           }
           return { ...m, selected: false };
         });
       });
-      if (roster.length > 5) {
-        setError("Selected first 5 members (maximum 5 per order form).");
+      if (roster.length > maxAllowedShirts) {
+        setError(
+          `Selected first ${maxAllowedShirts} shirts (team allowance: ${teamMemberCount} members + ${MAX_EXTRAS} extras = max ${maxAllowedShirts} shirts).`
+        );
       }
     } else {
       setRoster((prev) => prev.map((m) => ({ ...m, selected: false })));
@@ -197,18 +246,20 @@ export default function TeamTshirtSection({ team }) {
   // Add extra student/supporter
   const handleAddExtraStudent = () => {
     if (!extraStudentName.trim()) return;
-    if (roster.length >= 10) {
-      setError("Roster limit reached.");
+    const currentExtras = roster.filter((m) => m.isExtra).length;
+    if (currentExtras >= MAX_EXTRAS) {
+      setError(`Your team can add a maximum of ${MAX_EXTRAS} extra shirts.`);
       return;
     }
     const currentSelected = roster.filter((m) => m.selected).length;
-    const canSelect = currentSelected < 5;
+    const canSelect = currentSelected < maxAllowedShirts;
 
     const newMember = {
       id: `extra-${Date.now()}`,
       name: extraStudentName.trim(),
       contact: "",
       role: "Extra / Supporter",
+      isExtra: true,
       selected: canSelect,
     };
 
@@ -216,28 +267,35 @@ export default function TeamTshirtSection({ team }) {
     setExtraStudentName("");
     setShowAddExtra(false);
     if (!canSelect) {
-      setError("Added to roster. Max 5 shirts can be selected at once.");
+      setError(
+        `Added to roster. Your team already has ${maxAllowedShirts} shirts selected (${teamMemberCount} members + ${MAX_EXTRAS} extras).`
+      );
     }
+  };
+
+  // Remove an added extra student
+  const handleRemoveExtraStudent = (id) => {
+    setRoster((prev) => prev.filter((m) => m.id !== id));
+    setError("");
   };
 
   // Update category for a specific shirt
   const handleCategoryChange = (index, category) => {
-    setShirts((prev) => {
-      const updated = [...prev];
-      const current = updated[index];
-      if (!current) return prev;
-      let newSize = current.size;
+    const shirt = shirts[index];
+    if (!shirt) return;
+    let newSize = shirt.size;
 
-      // Reset size if incompatible with new category
-      if (category === "Normal Size" && current.size === "2XS") {
-        newSize = "";
-      } else if (category === "Kids Size" && current.size === "3XL") {
-        newSize = "";
-      }
+    // Reset size if incompatible with new category
+    if (category === "Normal Size" && shirt.size === "2XS") {
+      newSize = "";
+    } else if (category === "Kids Size" && shirt.size === "3XL") {
+      newSize = "";
+    }
 
-      updated[index] = { ...current, category, size: newSize };
-      return updated;
-    });
+    setShirtPreferences((prev) => ({
+      ...prev,
+      [shirt.memberId]: { category, size: newSize },
+    }));
   };
 
   // Update size for a specific shirt
@@ -252,15 +310,10 @@ export default function TeamTshirtSection({ team }) {
       newCategory = "Normal Size";
     }
 
-    setShirts((prev) => {
-      const updated = [...prev];
-      updated[shirtIndex] = {
-        ...updated[shirtIndex],
-        category: newCategory,
-        size: sizeId,
-      };
-      return updated;
-    });
+    setShirtPreferences((prev) => ({
+      ...prev,
+      [shirt.memberId]: { category: newCategory, size: sizeId },
+    }));
     setError("");
   };
 
@@ -353,7 +406,9 @@ export default function TeamTshirtSection({ team }) {
       const data = await res.json();
       if (data.success) {
         setOrderResult(data);
-        fetchPastOrders();
+        setJustSubmitted(true);
+        setShowNewOrderForm(false);
+        refreshPastOrders();
       } else {
         setError(data.message || "Failed to submit team order. Please try again.");
       }
@@ -364,12 +419,11 @@ export default function TeamTshirtSection({ team }) {
     }
   };
 
-  const resetForm = () => {
+  const resetFormState = () => {
     setPaymentSlip(null);
     setPreview(null);
     setReferenceNumber("");
     setError("");
-    setOrderResult(null);
     setActiveMobileTab("0");
   };
 
@@ -406,6 +460,14 @@ export default function TeamTshirtSection({ team }) {
               <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
                 Team: {team.teamName}
               </span>
+
+              {hasExistingOrders && (
+                <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Order Confirmed ({totalShirtsOrdered} {totalShirtsOrdered === 1 ? "Shirt" : "Shirts"})
+                </span>
+              )}
+
               <button
                 type="button"
                 onClick={() => setShowSizeChart(!showSizeChart)}
@@ -415,14 +477,28 @@ export default function TeamTshirtSection({ team }) {
                 {showSizeChart ? "Hide Size Chart" : "Size Measurements"}
               </button>
 
-              {pastOrders.length > 0 && (
+              {hasExistingOrders && !showNewOrderForm && (
                 <button
                   type="button"
-                  onClick={() => setShowPastOrders(!showPastOrders)}
-                  className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+                  onClick={() => {
+                    resetFormState();
+                    setShowNewOrderForm(true);
+                  }}
+                  className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#004491] hover:bg-[#003570] text-white transition-colors flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,68,145,0.4)]"
                 >
-                  <span className="material-symbols-outlined text-xs">receipt_long</span>
-                  {showPastOrders ? "Hide Orders" : `Past Orders (${pastOrders.length})`}
+                  <span className="material-symbols-outlined text-xs">add_shopping_cart</span>
+                  Order More T-Shirts
+                </button>
+              )}
+
+              {hasExistingOrders && showNewOrderForm && (
+                <button
+                  type="button"
+                  onClick={() => setShowNewOrderForm(false)}
+                  className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded border border-outline-variant hover:border-zinc-500 bg-[#0b0c16] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-xs">arrow_back</span>
+                  View Order Details
                 </button>
               )}
             </div>
@@ -431,13 +507,17 @@ export default function TeamTshirtSection({ team }) {
           {/* Quick Price Card */}
           <div className="bg-[#0b0c16]/80 border border-outline-variant p-4 sm:p-5 rounded-xl text-center shrink-0 w-full sm:w-auto">
             <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
-              Official Arena Jersey
+              {hasExistingOrders ? "Team Order Value" : `Team Allowance: Up to ${maxAllowedShirts} Shirts`}
             </span>
             <span className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
-              LKR {PRICE_PER_SHIRT.toLocaleString()}
+              {hasExistingOrders
+                ? `LKR ${((primaryOrder?.shirtCount || totalShirtsOrdered) * PRICE_PER_SHIRT).toLocaleString()}`
+                : `LKR ${PRICE_PER_SHIRT.toLocaleString()}`}
             </span>
             <span className="text-[10px] text-zinc-400 block mt-0.5">
-              Per T-Shirt · Adults &amp; Kids
+              {hasExistingOrders
+                ? `${totalShirtsOrdered} Shirts Ordered · ${remainingAllowance > 0 ? `${remainingAllowance} More Allowed` : "Allowance Filled"}`
+                : `Per T-Shirt · ${teamMemberCount} Members + ${MAX_EXTRAS} Extras`}
             </span>
           </div>
         </div>
@@ -519,145 +599,462 @@ export default function TeamTshirtSection({ team }) {
         </div>
       )}
 
-      {/* ─── Past Orders Section ─── */}
-      {showPastOrders && pastOrders.length > 0 && (
-        <div className="bg-[#080808] border border-outline-variant p-6 rounded-sm relative overflow-hidden animate-fadeIn">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500" />
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-emerald-400 text-lg">receipt_long</span>
-              Past Orders for {team.teamName}
-            </h3>
-            <button
-              type="button"
-              onClick={() => setShowPastOrders(false)}
-              className="text-zinc-500 hover:text-white"
-            >
-              <span className="material-symbols-outlined text-lg">close</span>
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {pastOrders.map((ord) => (
-              <div
-                key={ord.orderId || ord.id}
-                className="bg-[#0b0c16] border border-outline-variant p-4 rounded-sm"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-3 mb-3">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-widest text-zinc-500 block">Order ID</span>
-                    <span className="text-sm font-mono font-bold text-[#00d2ff]">{ord.orderId || ord.id}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="text-zinc-400">
-                      {ord.createdAt ? new Date(ord.createdAt).toLocaleDateString() : ""}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                      {ord.status || "Received"}
-                    </span>
-                  </div>
+      {/* ─── Loading State ─── */}
+      {loadingPastOrders ? (
+        <div className="bg-[#080808] border border-outline-variant p-12 text-center rounded-xl animate-fadeIn">
+          <div className="w-10 h-10 border-2 border-[#00d2ff] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <h3 className="text-white text-sm font-bold uppercase tracking-wider mb-1">
+            Loading Team Pre-Order Details...
+          </h3>
+          <p className="text-zinc-500 text-xs">
+            Retrieving official order records for {team.teamName}
+          </p>
+        </div>
+      ) : hasExistingOrders && !showNewOrderForm ? (
+        /* ─── Team Order Details View (Receipt & Breakdown) ─── */
+        <div className="space-y-6 animate-fadeIn">
+          {/* Top Just-Submitted Celebration Banner */}
+          {justSubmitted && (
+            <div className="bg-emerald-950/50 border border-emerald-500/60 p-4 sm:p-5 rounded-xl flex items-start justify-between gap-4 animate-fadeIn shadow-[0_0_25px_rgba(16,185,129,0.15)]">
+              <div className="flex items-start gap-3.5">
+                <div className="w-9 h-9 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="material-symbols-outlined text-emerald-400 text-xl">check_circle</span>
                 </div>
-
-                <div className="space-y-1.5 text-xs">
-                  {ord.shirts?.map((s, idx) => (
-                    <div key={idx} className="flex justify-between items-center text-zinc-300">
-                      <span>
-                        {s.memberName ? (
-                          <strong className="text-white">{s.memberName}</strong>
-                        ) : (
-                          `Shirt #${idx + 1}`
-                        )}
-                        <span className="text-zinc-500 ml-1.5 text-[11px]">({s.category})</span>
-                      </span>
-                      <span className="font-mono text-[#00d2ff] bg-[#004491]/20 px-2 py-0.5 rounded border border-[#004491]/30">
-                        Size {s.size}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-3 pt-2 border-t border-zinc-800/60 flex justify-between items-center text-xs font-bold text-white">
-                  <span>Total Paid ({ord.shirtCount} {ord.shirtCount === 1 ? "shirt" : "shirts"})</span>
-                  <span className="text-emerald-400">LKR {(ord.shirtCount * PRICE_PER_SHIRT).toLocaleString()}</span>
+                <div>
+                  <h3 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
+                    Pre-Order Successfully Placed!
+                  </h3>
+                  <p className="text-emerald-300/90 text-xs mt-0.5 leading-relaxed">
+                    Thank you, <strong className="text-white font-semibold">{primaryOrder.name}</strong>. Your team&apos;s T-shirt pre-order has been logged with Reference ID{" "}
+                    <strong className="text-white font-mono">{primaryOrder.orderId || primaryOrder.id}</strong>.
+                    Your complete order receipt and member sizes are confirmed below.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <button
+                type="button"
+                onClick={() => setJustSubmitted(false)}
+                className="text-emerald-400/60 hover:text-emerald-300 text-xs shrink-0 cursor-pointer p-1"
+                title="Dismiss"
+              >
+                <span className="material-symbols-outlined text-base">close</span>
+              </button>
+            </div>
+          )}
 
-      {/* ─── Order Result Screen ─── */}
-      {orderResult ? (
-        <div className="relative bg-[#080808] border border-outline-variant p-8 sm:p-12 text-center rounded-sm">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500" />
-          <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
-            <span className="material-symbols-outlined text-emerald-400 text-3xl">check_circle</span>
-          </div>
+          {/* Main Order Details Card */}
+          <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8 rounded-xl overflow-hidden shadow-2xl">
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#10b981]" />
 
-          <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider mb-2">
-            Team Order Placed!
-          </h2>
-          <p className="text-zinc-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-            Thank you, <strong className="text-white">{contactName}</strong>. Your team&apos;s T-shirt pre-order has been registered with Order ID:
-          </p>
-
-          <div className="inline-block bg-[#0b0c16] border border-[#004491]/40 px-6 py-3 rounded mb-8">
-            <p className="text-xs uppercase tracking-widest text-zinc-500 mb-1">Order Reference ID</p>
-            <p className="text-lg font-mono font-bold text-[#00d2ff]">{orderResult.orderId}</p>
-          </div>
-
-          <div className="bg-[#0b0c16] border border-outline-variant p-5 max-w-lg mx-auto text-left mb-8">
-            <p className="text-xs uppercase tracking-widest font-bold text-zinc-400 mb-3 border-b border-zinc-800 pb-2">
-              Team Order Breakdown ({orderResult.order?.shirtCount} {orderResult.order?.shirtCount === 1 ? "Shirt" : "Shirts"})
-            </p>
-            <div className="space-y-2 text-xs">
-              {orderResult.order?.shirts?.map((s, i) => (
-                <div key={i} className="flex justify-between items-center py-1">
-                  <div>
-                    <span className="text-white font-semibold">
-                      {s.memberName || `Shirt #${i + 1}`}
-                    </span>
-                    {s.memberRole && (
-                      <span className="text-zinc-500 text-[10px] ml-1.5">({s.memberRole})</span>
-                    )}
-                  </div>
-                  <span className="text-[#00d2ff] font-mono bg-[#004491]/15 px-2 py-0.5 rounded border border-[#004491]/30">
-                    {s.category} · Size {s.size}
+            {/* Card Header */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6 mb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    {primaryOrder.status === 'verified' ? 'Order Verified & Approved' : 'Order Confirmed · Slip Received'}
                   </span>
                 </div>
-              ))}
-              <div className="border-t border-zinc-800 pt-2 flex justify-between items-center text-sm font-bold text-white mt-2">
-                <span>Total Amount</span>
-                <span className="text-emerald-400">
-                  LKR {(orderResult.order?.shirtCount * PRICE_PER_SHIRT).toLocaleString()}
-                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                  Official Team Pre-Order Details
+                </h2>
+                <p className="text-zinc-400 text-xs mt-1">
+                  Submitted on {primaryOrder.createdAt ? new Date(primaryOrder.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently'}
+                  {" · "}Team: <strong className="text-white">{team.teamName}</strong>
+                </p>
+              </div>
+
+              {/* Order ID & Copy */}
+              <div className="flex items-center gap-2 self-start lg:self-auto">
+                <div className="bg-[#0b0c16] border border-[#004491]/50 px-4 py-2.5 rounded-lg flex items-center gap-3">
+                  <div>
+                    <span className="text-[9px] uppercase tracking-widest text-zinc-500 block">Order ID</span>
+                    <span className="text-sm sm:text-base font-mono font-bold text-[#00d2ff]">
+                      {primaryOrder.orderId || primaryOrder.id}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard?.writeText(primaryOrder.orderId || primaryOrder.id || "");
+                      setCopiedOrderId(true);
+                      setTimeout(() => setCopiedOrderId(false), 2000);
+                    }}
+                    className="p-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                    title="Copy Order ID"
+                  >
+                    <span className="material-symbols-outlined text-sm">
+                      {copiedOrderId ? "done" : "content_copy"}
+                    </span>
+                    <span className="text-[10px] font-bold">{copiedOrderId ? "Copied" : "Copy"}</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={resetForm}
-              className="px-6 py-3 bg-[#004491] text-white text-xs uppercase tracking-widest font-bold hover:bg-[#002d5e] border border-[#004491] transition-all cursor-pointer"
-            >
-              Place Another Order
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                resetForm();
-                setShowPastOrders(true);
-              }}
-              className="px-6 py-3 border border-outline-variant text-zinc-300 hover:text-white hover:border-zinc-500 text-xs uppercase tracking-widest font-bold transition-all cursor-pointer"
-            >
-              View Order History
-            </button>
+            {/* 4 Overview Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-1 text-[#00d2ff]">
+                  <span className="material-symbols-outlined text-base">apparel</span>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Total Shirts</span>
+                </div>
+                <p className="text-xl sm:text-2xl font-black text-white font-mono">
+                  {primaryOrder.shirtCount || primaryShirts.length}
+                </p>
+                <p className="text-[10px] text-zinc-500 mt-0.5">
+                  {primaryNormalCount} Normal · {primaryKidsCount} Kids
+                </p>
+              </div>
+
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-1 text-emerald-400">
+                  <span className="material-symbols-outlined text-base">payments</span>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Total Amount</span>
+                </div>
+                <p className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
+                  LKR {primaryTotalPaid.toLocaleString()}
+                </p>
+                <p className="text-[10px] text-zinc-500 mt-0.5">
+                  LKR {PRICE_PER_SHIRT.toLocaleString()} × {primaryOrder.shirtCount || primaryShirts.length}
+                </p>
+              </div>
+
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-1 text-[#5b9aff]">
+                  <span className="material-symbols-outlined text-base">person</span>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Contact Person</span>
+                </div>
+                <p className="text-sm sm:text-base font-bold text-white truncate">
+                  {primaryOrder.name}
+                </p>
+                <p className="text-[10px] text-zinc-400 font-mono mt-0.5 truncate">
+                  {primaryOrder.whatsappNumber}
+                </p>
+              </div>
+
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-1 text-amber-400">
+                  <span className="material-symbols-outlined text-base">storefront</span>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Collection</span>
+                </div>
+                <p className="text-sm sm:text-base font-bold text-white">
+                  Arena Desk
+                </p>
+                <p className="text-[10px] text-zinc-400 mt-0.5">
+                  On Event Day
+                </p>
+              </div>
+            </div>
+
+            {/* Roster & Size Breakdown */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#00d2ff] text-base">groups</span>
+                  <h3 className="text-white text-xs sm:text-sm font-bold uppercase tracking-wider">
+                    Team Member & Size Allocation
+                  </h3>
+                </div>
+                <span className="text-[10px] text-zinc-500 uppercase tracking-widest">
+                  {primaryShirts.length} {primaryShirts.length === 1 ? "Jersey" : "Jerseys"} Assigned
+                </span>
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden sm:block overflow-x-auto border border-zinc-800 rounded-lg">
+                <table className="w-full text-xs text-left">
+                  <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px] border-b border-zinc-800">
+                    <tr>
+                      <th className="p-3 w-12 text-center">#</th>
+                      <th className="p-3">Team Member / Supporter</th>
+                      <th className="p-3">Role</th>
+                      <th className="p-3">Category</th>
+                      <th className="p-3">Assigned Size</th>
+                      <th className="p-3 text-right">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-800/60 bg-[#080808]">
+                    {primaryShirts.map((s, idx) => {
+                      const measurement = getSizeMeasurement(s.category, s.size);
+                      return (
+                        <tr key={idx} className="hover:bg-zinc-900/40 transition-colors">
+                          <td className="p-3 text-center text-zinc-500 font-mono text-[11px]">{idx + 1}</td>
+                          <td className="p-3 font-semibold text-white">
+                            {s.memberName || `Shirt #${idx + 1}`}
+                          </td>
+                          <td className="p-3">
+                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                              s.memberRole === 'Leader'
+                                ? 'bg-[#004491]/30 text-[#00d2ff] border border-[#004491]/50'
+                                : s.memberRole === 'Extra / Supporter'
+                                ? 'bg-purple-950/40 text-purple-300 border border-purple-800/40'
+                                : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
+                            }`}>
+                              {s.memberRole || 'Member'}
+                            </span>
+                          </td>
+                          <td className="p-3 text-zinc-300">
+                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium ${
+                              s.category === 'Kids Size'
+                                ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
+                                : 'bg-zinc-800/60 text-zinc-300'
+                            }`}>
+                              {s.category || 'Normal Size'}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono font-bold text-[#00d2ff] bg-[#004491]/20 px-2.5 py-0.5 rounded border border-[#004491]/40">
+                                {s.size}
+                              </span>
+                              {measurement && (
+                                <span className="text-[11px] text-zinc-500 font-mono">
+                                  ({measurement})
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-3 text-right font-mono font-bold text-emerald-400">
+                            LKR {PRICE_PER_SHIRT.toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="sm:hidden space-y-2.5">
+                {primaryShirts.map((s, idx) => {
+                  const measurement = getSizeMeasurement(s.category, s.size);
+                  return (
+                    <div key={idx} className="bg-[#0b0c16] border border-outline-variant p-3.5 rounded-lg">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-zinc-800 text-zinc-400 text-[10px] font-mono flex items-center justify-center">
+                            {idx + 1}
+                          </span>
+                          <span className="text-white text-xs font-bold">
+                            {s.memberName || `Shirt #${idx + 1}`}
+                          </span>
+                        </div>
+                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                          s.memberRole === 'Leader'
+                            ? 'bg-[#004491]/30 text-[#00d2ff] border border-[#004491]/50'
+                            : s.memberRole === 'Extra / Supporter'
+                            ? 'bg-purple-950/40 text-purple-300 border border-purple-800/40'
+                            : 'bg-zinc-800 text-zinc-300'
+                        }`}>
+                          {s.memberRole || 'Member'}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs pt-2 border-t border-zinc-800/80">
+                        <span className="text-zinc-400 text-[11px]">{s.category || 'Normal Size'}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-bold text-[#00d2ff] bg-[#004491]/20 px-2 py-0.5 rounded border border-[#004491]/40 text-[11px]">
+                            Size {s.size}
+                          </span>
+                          {measurement && (
+                            <span className="text-[10px] text-zinc-500 font-mono">
+                              {measurement}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Payment Verification & Bank Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {/* Slip Verification Box */}
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-lg">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="material-symbols-outlined text-emerald-400 text-base">verified</span>
+                  <h4 className="text-white text-xs font-bold uppercase tracking-wider">
+                    Payment Slip & Verification
+                  </h4>
+                </div>
+
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center py-1 border-b border-zinc-800/60">
+                    <span className="text-zinc-400">Payment Slip</span>
+                    <span className="text-emerald-400 font-medium flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm">check</span>
+                      Attached & Logged
+                    </span>
+                  </div>
+
+                  {primaryOrder.slipName && (
+                    <div className="flex justify-between items-center py-1 border-b border-zinc-800/60">
+                      <span className="text-zinc-400">File Name</span>
+                      <span className="text-zinc-300 font-mono truncate max-w-[200px]">{primaryOrder.slipName}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center py-1 border-b border-zinc-800/60">
+                    <span className="text-zinc-400">Reference / Txn ID</span>
+                    <span className="text-white font-mono">{primaryOrder.referenceNumber || "Submitted via Slip"}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-zinc-400">Payment Status</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      {primaryOrder.status || "Received"}
+                    </span>
+                  </div>
+
+                  {preview && (
+                    <div className="mt-3 pt-3 border-t border-zinc-800">
+                      <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-2">Slip Thumbnail</span>
+                      <div className="max-w-[160px] max-h-32 overflow-hidden rounded border border-zinc-800 bg-black">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={preview} alt="Uploaded Slip" className="w-full h-auto object-contain" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Official Tournament Bank Info */}
+              <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-lg">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="material-symbols-outlined text-[#00d2ff] text-base">account_balance</span>
+                  <h4 className="text-white text-xs font-bold uppercase tracking-wider">
+                    Official Account Credited
+                  </h4>
+                </div>
+
+                <div className="space-y-2 text-xs text-zinc-400">
+                  <div className="flex justify-between py-1 border-b border-zinc-800/60">
+                    <span>Bank</span>
+                    <span className="text-white font-medium">People&apos;s Bank</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-zinc-800/60">
+                    <span>Branch</span>
+                    <span className="text-white font-medium">Kelaniya Branch</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-zinc-800/60">
+                    <span>Account Name</span>
+                    <span className="text-white font-medium">UOK Robot Games 2K26</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span>Account Number</span>
+                    <span className="text-[#00d2ff] font-mono font-bold">000812345678</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Previous Orders History (if multiple orders exist) */}
+            {previousOrders.length > 0 && (
+              <div className="border border-zinc-800 rounded-lg p-4 bg-[#0b0c16]/60 mb-8">
+                <button
+                  type="button"
+                  onClick={() => setShowPreviousOrdersList(!showPreviousOrdersList)}
+                  className="w-full flex items-center justify-between text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-emerald-400 text-base">history</span>
+                    <span className="text-white text-xs font-bold uppercase tracking-wider">
+                      Previous Orders Placed by Your Team ({previousOrders.length})
+                    </span>
+                  </div>
+                  <span className="material-symbols-outlined text-zinc-400 text-base">
+                    {showPreviousOrdersList ? "expand_less" : "expand_more"}
+                  </span>
+                </button>
+
+                {showPreviousOrdersList && (
+                  <div className="mt-4 space-y-3 pt-3 border-t border-zinc-800">
+                    {previousOrders.map((ord) => (
+                      <div key={ord.orderId || ord.id} className="bg-[#080808] border border-zinc-800 p-3.5 rounded">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                          <span className="font-mono text-xs font-bold text-[#00d2ff]">{ord.orderId || ord.id}</span>
+                          <div className="flex items-center gap-2 text-[11px] text-zinc-400">
+                            <span>{ord.createdAt ? new Date(ord.createdAt).toLocaleDateString() : ""}</span>
+                            <span className="text-emerald-400 font-bold">
+                              {ord.shirtCount || ord.shirts?.length} Shirts · LKR {((ord.shirtCount || ord.shirts?.length || 0) * PRICE_PER_SHIRT).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {ord.shirts?.map((s, idx) => (
+                            <span key={idx} className="text-[10px] bg-zinc-800/80 text-zinc-300 px-2 py-0.5 rounded border border-zinc-700">
+                              {s.memberName}: {s.size} ({s.category})
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Action Controls & Contact */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-zinc-800/80">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetFormState();
+                    setShowNewOrderForm(true);
+                  }}
+                  className="w-full sm:w-auto px-6 py-3 bg-[#004491] hover:bg-[#003570] text-white text-xs uppercase tracking-widest font-black transition-all rounded shadow-[0_0_15px_rgba(0,68,145,0.4)] flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-base">add_shopping_cart</span>
+                  <span>Order More T-Shirts {remainingAllowance > 0 ? `(${remainingAllowance} Extras Remaining)` : ""}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowSizeChart(!showSizeChart)}
+                  className="w-full sm:w-auto px-4 py-3 border border-outline-variant hover:border-[#00d2ff] text-zinc-300 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors rounded flex items-center justify-center gap-2 cursor-pointer bg-[#0b0c16]"
+                >
+                  <span className="material-symbols-outlined text-base">straighten</span>
+                  <span>Measurements Guide</span>
+                </button>
+              </div>
+
+              <p className="text-[11px] text-zinc-500 text-center sm:text-right">
+                Jerseys issued at Registration Desk on Event Day · Need changes? WhatsApp Committee
+              </p>
+            </div>
           </div>
         </div>
       ) : (
         /* ─── Order Form ─── */
         <form onSubmit={handleSubmit} className="space-y-8">
+          {hasExistingOrders && (
+            <div className="bg-[#0b0c16] border border-[#004491]/50 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#004491]/20 flex items-center justify-center shrink-0 border border-[#004491]/40">
+                  <span className="material-symbols-outlined text-[#00d2ff] text-base">receipt_long</span>
+                </div>
+                <div>
+                  <span className="text-white text-xs font-bold block">
+                    Existing Order Active ({primaryOrder.orderId || primaryOrder.id})
+                  </span>
+                  <span className="text-zinc-400 text-[11px]">
+                    You already placed an order for {totalShirtsOrdered} {totalShirtsOrdered === 1 ? "shirt" : "shirts"}. You are now placing an additional order.
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowNewOrderForm(false)}
+                className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold rounded flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
+              >
+                <span className="material-symbols-outlined text-sm">arrow_back</span>
+                <span>Back to Order Details</span>
+              </button>
+            </div>
+          )}
           
           {error && (
             <div className="bg-red-950/40 border border-red-500/50 p-4 rounded-sm flex items-start gap-3 animate-fadeIn">
@@ -682,7 +1079,7 @@ export default function TeamTshirtSection({ team }) {
                     Select Which Students Buy
                   </h2>
                   <p className="text-zinc-500 text-xs mt-0.5">
-                    Tick the team members who want to purchase an official jersey (Max 5 per order form)
+                    Tick members who want an official jersey (Your team: {teamMemberCount} members + up to {MAX_EXTRAS} extras = max {maxAllowedShirts} shirts)
                   </p>
                 </div>
               </div>
@@ -738,7 +1135,9 @@ export default function TeamTshirtSection({ team }) {
                         <span className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
                           member.role === "Leader"
                             ? "bg-[#004491]/25 text-[#00d2ff] border border-[#004491]/40"
-                            : "bg-white/[0.04] text-zinc-400 border border-white/[0.08]"
+                            : member.isExtra
+                              ? "bg-purple-500/15 text-purple-300 border border-purple-500/30"
+                              : "bg-white/[0.04] text-zinc-400 border border-white/[0.08]"
                         }`}>
                           {member.role}
                         </span>
@@ -749,7 +1148,7 @@ export default function TeamTshirtSection({ team }) {
                     </div>
                   </div>
 
-                  <div className="text-right shrink-0">
+                  <div className="flex items-center gap-2.5 shrink-0">
                     {member.selected ? (
                       <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded">
                         Purchasing Jersey ✓
@@ -759,6 +1158,20 @@ export default function TeamTshirtSection({ team }) {
                         Not ordering
                       </span>
                     )}
+
+                    {member.isExtra && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveExtraStudent(member.id);
+                        }}
+                        title="Remove extra supporter"
+                        className="p-1 text-zinc-600 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-base">delete</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -766,14 +1179,23 @@ export default function TeamTshirtSection({ team }) {
 
             {/* Add extra student button & inline form */}
             {!showAddExtra ? (
-              <button
-                type="button"
-                onClick={() => setShowAddExtra(true)}
-                className="text-xs uppercase tracking-widest font-bold text-[#5b9aff] hover:text-white flex items-center gap-1.5 border border-[#004491]/30 hover:border-[#004491] bg-[#004491]/10 px-3.5 py-2 rounded transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm">person_add</span>
-                + Add Another Student / Supporter Shirt
-              </button>
+              <div className="flex flex-wrap items-center gap-3">
+                {roster.filter((m) => m.isExtra).length < MAX_EXTRAS ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowAddExtra(true)}
+                    className="text-xs uppercase tracking-widest font-bold text-[#5b9aff] hover:text-white flex items-center gap-1.5 border border-[#004491]/30 hover:border-[#004491] bg-[#004491]/10 px-3.5 py-2 rounded transition-colors cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-sm">person_add</span>
+                    + Add Extra Student / Supporter Shirt ({roster.filter((m) => m.isExtra).length}/{MAX_EXTRAS} Extras Added)
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-xs text-zinc-400 border border-zinc-800 bg-[#0b0c16] px-3 py-2 rounded">
+                    <span className="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+                    <span>Maximum {MAX_EXTRAS} extra shirts reached for this team ({MAX_EXTRAS}/{MAX_EXTRAS})</span>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-sm flex flex-col sm:flex-row items-center gap-3">
                 <input
@@ -807,16 +1229,20 @@ export default function TeamTshirtSection({ team }) {
 
             {/* Selection Summary Pill */}
             <div className="mt-5 pt-4 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">
                   Selected Count:
                 </span>
                 <span className="text-sm font-mono font-bold text-[#00d2ff]">
-                  {selectedStudents.length} {selectedStudents.length === 1 ? "Student" : "Students"}
+                  {selectedStudents.length} of max {maxAllowedShirts} Shirts
                 </span>
                 <span className="text-zinc-500">·</span>
                 <span className="text-zinc-400 text-xs font-semibold">
                   Total: LKR {(selectedStudents.length * PRICE_PER_SHIRT).toLocaleString()}
+                </span>
+                <span className="text-zinc-500">·</span>
+                <span className="text-[11px] text-zinc-400">
+                  ({teamMemberCount} members + {roster.filter((m) => m.isExtra && m.selected).length}/{MAX_EXTRAS} extras)
                 </span>
               </div>
 

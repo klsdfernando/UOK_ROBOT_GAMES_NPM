@@ -57,6 +57,7 @@ export async function POST(req) {
       shirts,
       referenceNumber: referenceNumber.trim(),
       hasPaymentSlip: Boolean(file),
+      slipName: file && typeof file === 'object' && file.name ? file.name : null,
       createdAt: new Date().toISOString(),
       status: 'pending',
       ...(teamId ? { teamId } : {}),
