@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/prizes", label: "Prizes" },
   { href: "/rules", label: "Rules" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/tshirt", label: "Merch" },
 ];
 
 export default function Navbar() {
