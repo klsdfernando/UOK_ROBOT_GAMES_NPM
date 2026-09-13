@@ -349,7 +349,7 @@ export default function TeamTshirtSection({ team }) {
   };
 
   const handleCopyAccount = () => {
-    navigator.clipboard?.writeText("000812345678");
+    navigator.clipboard?.writeText("055200290051008");
     setCopiedAccount(true);
     setTimeout(() => setCopiedAccount(false), 2500);
   };
@@ -477,29 +477,11 @@ export default function TeamTshirtSection({ team }) {
                 {showSizeChart ? "Hide Size Chart" : "Size Measurements"}
               </button>
 
-              {hasExistingOrders && !showNewOrderForm && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetFormState();
-                    setShowNewOrderForm(true);
-                  }}
-                  className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#004491] hover:bg-[#003570] text-white transition-colors flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,68,145,0.4)]"
-                >
-                  <span className="material-symbols-outlined text-xs">add_shopping_cart</span>
-                  Order More T-Shirts
-                </button>
-              )}
-
-              {hasExistingOrders && showNewOrderForm && (
-                <button
-                  type="button"
-                  onClick={() => setShowNewOrderForm(false)}
-                  className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded border border-outline-variant hover:border-zinc-500 bg-[#0b0c16] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xs">arrow_back</span>
-                  View Order Details
-                </button>
+              {hasExistingOrders && (
+                <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#0b0c16] text-zinc-400 border border-zinc-800 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-xs text-[#00d2ff]">lock</span>
+                  Order Locked (Cannot Edit)
+                </span>
               )}
             </div>
           </div>
@@ -610,7 +592,7 @@ export default function TeamTshirtSection({ team }) {
             Retrieving official order records for {team.teamName}
           </p>
         </div>
-      ) : hasExistingOrders && !showNewOrderForm ? (
+      ) : hasExistingOrders ? (
         /* ─── Team Order Details View (Receipt & Breakdown) ─── */
         <div className="space-y-6 animate-fadeIn">
           {/* Top Just-Submitted Celebration Banner */}
@@ -653,6 +635,10 @@ export default function TeamTshirtSection({ team }) {
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     {primaryOrder.status === 'verified' ? 'Order Verified & Approved' : 'Order Confirmed · Slip Received'}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-zinc-900/90 text-zinc-400 border border-zinc-700">
+                    <span className="material-symbols-outlined text-xs text-[#00d2ff]">lock</span>
+                    Order Finalized
                   </span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
@@ -940,11 +926,11 @@ export default function TeamTshirtSection({ team }) {
                   </div>
                   <div className="flex justify-between py-1 border-b border-zinc-800/60">
                     <span>Account Name</span>
-                    <span className="text-white font-medium">UOK Robot Games 2K26</span>
+                    <span className="text-white font-medium">Electronics and Computer Science Student Club</span>
                   </div>
                   <div className="flex justify-between py-1">
                     <span>Account Number</span>
-                    <span className="text-[#00d2ff] font-mono font-bold">000812345678</span>
+                    <span className="text-[#00d2ff] font-mono font-bold">055200290051008</span>
                   </div>
                 </div>
               </div>
@@ -999,30 +985,23 @@ export default function TeamTshirtSection({ team }) {
             {/* Action Controls & Contact */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-zinc-800/80">
               <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetFormState();
-                    setShowNewOrderForm(true);
-                  }}
-                  className="w-full sm:w-auto px-6 py-3 bg-[#004491] hover:bg-[#003570] text-white text-xs uppercase tracking-widest font-black transition-all rounded shadow-[0_0_15px_rgba(0,68,145,0.4)] flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-base">add_shopping_cart</span>
-                  <span>Order More T-Shirts {remainingAllowance > 0 ? `(${remainingAllowance} Extras Remaining)` : ""}</span>
-                </button>
+                <div className="px-4 py-2.5 bg-zinc-900 border border-zinc-700/70 text-zinc-300 text-xs uppercase tracking-wider font-bold rounded flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base text-[#00d2ff]">lock</span>
+                  <span>Order Finalized &amp; Locked</span>
+                </div>
 
                 <button
                   type="button"
                   onClick={() => setShowSizeChart(!showSizeChart)}
-                  className="w-full sm:w-auto px-4 py-3 border border-outline-variant hover:border-[#00d2ff] text-zinc-300 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors rounded flex items-center justify-center gap-2 cursor-pointer bg-[#0b0c16]"
+                  className="w-full sm:w-auto px-4 py-2.5 border border-outline-variant hover:border-[#00d2ff] text-zinc-300 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors rounded flex items-center justify-center gap-2 cursor-pointer bg-[#0b0c16]"
                 >
                   <span className="material-symbols-outlined text-base">straighten</span>
                   <span>Measurements Guide</span>
                 </button>
               </div>
 
-              <p className="text-[11px] text-zinc-500 text-center sm:text-right">
-                Jerseys issued at Registration Desk on Event Day · Need changes? WhatsApp Committee
+              <p className="text-[11px] text-zinc-400 text-center sm:text-right">
+                Orders cannot be edited once placed · Jerseys issued at Registration Desk on Event Day
               </p>
             </div>
           </div>
@@ -1969,7 +1948,7 @@ export default function TeamTshirtSection({ team }) {
                     <p className="text-[10px] uppercase tracking-widest text-[#5b9aff] font-bold">
                       Direct Bank Transfer / Deposit
                     </p>
-                    <h3 className="text-white text-base font-bold mt-0.5">Bank of Ceylon (BOC)</h3>
+                    <h3 className="text-white text-base font-bold mt-0.5">People&apos;s Bank</h3>
                   </div>
                   <div className="text-left sm:text-right">
                     <p className="text-[10px] uppercase tracking-widest text-zinc-500">Total Payable</p>
@@ -1985,12 +1964,12 @@ export default function TeamTshirtSection({ team }) {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div>
                     <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Name</p>
-                    <p className="text-zinc-200 font-semibold">ECSC - University of Kelaniya</p>
+                    <p className="text-zinc-200 font-semibold">Electronics and Computer Science Student Club</p>
                   </div>
                   <div>
                     <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Number</p>
                     <div className="flex items-center gap-2">
-                      <p className="text-zinc-200 font-mono font-bold">000812345678</p>
+                      <p className="text-zinc-200 font-mono font-bold text-sm">055200290051008</p>
                       <button
                         type="button"
                         onClick={handleCopyAccount}
@@ -2002,7 +1981,7 @@ export default function TeamTshirtSection({ team }) {
                   </div>
                   <div>
                     <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Branch</p>
-                    <p className="text-zinc-200 font-semibold">Kelaniya Branch (BOC)</p>
+                    <p className="text-zinc-200 font-semibold">Kelaniya Branch</p>
                   </div>
                 </div>
               </div>

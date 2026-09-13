@@ -12,6 +12,33 @@ export async function POST(req) {
     const referenceNumber = formData.get('referenceNumber') || '';
     const file = formData.get('paymentSlip');
 
+    // If this is a team order, check if team already placed an order (teams can only make one order)
+    if (teamId) {
+      try {
+        const dbModule = await import('@/lib/firebase');
+        const db = dbModule.default;
+        if (db) {
+          const existingSnap = await db
+            .collection('tshirt_orders')
+            .where('teamId', '==', teamId)
+            .limit(1)
+            .get();
+
+          if (!existingSnap.empty) {
+            return NextResponse.json(
+              {
+                success: false,
+                message: 'Your team has already submitted a T-shirt order. Orders cannot be edited or submitted again once placed.',
+              },
+              { status: 400 }
+            );
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Error checking existing team order:', checkErr?.message);
+      }
+    }
+
     if (!name || !whatsappNumber || !shirtCount || !shirtsRaw) {
       return NextResponse.json(
         { success: false, message: 'Please fill in all required fields.' },

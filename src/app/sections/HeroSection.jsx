@@ -79,23 +79,32 @@ export default function HeroSection() {
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500">
               In Association With
             </span>
-            <div className="flex items-stretch gap-5 w-full max-w-[500px] justify-center">
-              <div className="bg-white rounded-xl px-5 py-4 shadow-lg w-1/2 flex items-center justify-center">
+            <div className="flex items-stretch gap-4 sm:gap-5 w-full max-w-[720px] justify-center flex-wrap sm:flex-nowrap">
+              <div className="bg-white rounded-xl px-4 sm:px-5 py-3 sm:py-4 shadow-lg flex-1 min-w-[140px] max-w-[220px] flex items-center justify-center">
                 <Image
                   src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-05-16%20at%202.44.03%20PM.jpeg"
                   alt="Collaboration Partner 1"
                   width={200}
                   height={80}
-                  className="w-full h-auto object-contain max-h-20"
+                  className="w-full h-auto object-contain max-h-16 sm:max-h-20"
                 />
               </div>
-              <div className="bg-white rounded-xl px-5 py-4 shadow-lg w-1/2 flex items-center justify-center">
+              <div className="bg-white rounded-xl px-4 sm:px-5 py-3 sm:py-4 shadow-lg flex-1 min-w-[140px] max-w-[220px] flex items-center justify-center">
                 <Image
                   src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-06-09%20at%203.26.17%20PM.jpeg"
                   alt="Collaboration Partner 2"
                   width={200}
                   height={80}
-                  className="w-full h-auto object-contain max-h-20"
+                  className="w-full h-auto object-contain max-h-16 sm:max-h-20"
+                />
+              </div>
+              <div className="bg-white rounded-xl px-4 sm:px-5 py-3 sm:py-4 shadow-lg flex-1 min-w-[140px] max-w-[220px] flex items-center justify-center">
+                <Image
+                  src="https://ik.imagekit.io/wfnazmyxh/New%20Folder/WhatsApp%20Image%202026-09-10%20at%202.23.43%20PM.jpeg"
+                  alt="Collaboration Partner 3"
+                  width={200}
+                  height={80}
+                  className="w-full h-auto object-contain max-h-16 sm:max-h-20"
                 />
               </div>
             </div>

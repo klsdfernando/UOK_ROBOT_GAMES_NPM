@@ -159,7 +159,7 @@ export default function TshirtPage() {
   };
 
   const handleCopyAccount = () => {
-    navigator.clipboard?.writeText("000812345678");
+    navigator.clipboard?.writeText("055200290051008");
     setCopiedAccount(true);
     setTimeout(() => setCopiedAccount(false), 2500);
   };
@@ -1231,7 +1231,7 @@ export default function TshirtPage() {
                       <p className="text-[10px] uppercase tracking-widest text-[#5b9aff] font-bold">
                         Direct Bank Transfer / Deposit
                       </p>
-                      <h3 className="text-white text-base font-bold mt-0.5">Bank of Ceylon (BOC)</h3>
+                      <h3 className="text-white text-base font-bold mt-0.5">People&apos;s Bank</h3>
                     </div>
                     <div className="text-left sm:text-right">
                       <p className="text-[10px] uppercase tracking-widest text-zinc-500">Total Payable</p>
@@ -1245,12 +1245,12 @@ export default function TshirtPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                     <div>
                       <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Name</p>
-                      <p className="text-zinc-200 font-semibold">ECSC - University of Kelaniya</p>
+                      <p className="text-zinc-200 font-semibold">Electronics and Computer Science Student Club</p>
                     </div>
                     <div>
                       <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Number</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-zinc-200 font-mono font-bold">000812345678</p>
+                        <p className="text-zinc-200 font-mono font-bold text-sm">055200290051008</p>
                         <button
                           type="button"
                           onClick={handleCopyAccount}
