@@ -198,3 +198,19 @@ textarea {
 .animate-fade-slide {
   animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* === Marquee / Ticker Animation === */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 24s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

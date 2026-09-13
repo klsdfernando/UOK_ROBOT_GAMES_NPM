@@ -9,6 +9,7 @@ import TimelineSection from "./sections/TimelineSection";
 import AnnouncementsSection from "./sections/AnnouncementsSection";
 import CommitteeSection from "./sections/CommitteeSection";
 import FadeIn from "@/components/FadeIn";
+import MerchMarqueeTicker from "@/components/MerchMarqueeTicker";
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
         <FadeIn direction="up" delay={0.1}>
           <HeroSection />
         </FadeIn>
+        
+        {/* Animated Merch Ticker */}
+        <MerchMarqueeTicker />
         
         <FadeIn direction="up" delay={0.2} viewAmount={0.1}>
           <AboutSection />

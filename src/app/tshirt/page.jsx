@@ -6,19 +6,17 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Size definitions per user instructions
-const NORMAL_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
-const KIDS_SIZES = ["2XS", "XS", "S", "M", "L", "XL", "2XL"];
+const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
-// All unique rows shown in the table matrix (matching the provided image)
+// All unique rows shown in the table matrix
 const TABLE_SIZE_ROWS = [
-  { id: "2XS", label: "2XS (KIDS)", isKidsOnly: true },
-  { id: "XS", label: "XS", isKidsOnly: false },
-  { id: "S", label: "S", isKidsOnly: false },
-  { id: "M", label: "M", isKidsOnly: false },
-  { id: "L", label: "L", isKidsOnly: false },
-  { id: "XL", label: "XL", isKidsOnly: false },
-  { id: "2XL", label: "2XL", isKidsOnly: false },
-  { id: "3XL", label: "3XL", isNormalOnly: true },
+  { id: "XS", label: "XS" },
+  { id: "S", label: "S" },
+  { id: "M", label: "M" },
+  { id: "L", label: "L" },
+  { id: "XL", label: "XL" },
+  { id: "2XL", label: "2XL" },
+  { id: "3XL", label: "3XL" },
 ];
 
 const SIZE_MEASUREMENTS = {
@@ -31,17 +29,7 @@ const SIZE_MEASUREMENTS = {
   "3XL": 'Chest 48" · L 32"',
 };
 
-const KIDS_MEASUREMENTS = {
-  "2XS": 'Chest 26" · L 18"',
-  "XS": 'Chest 28" · L 20"',
-  "S": 'Chest 30" · L 22"',
-  "M": 'Chest 32" · L 23"',
-  "L": 'Chest 34" · L 24"',
-  "XL": 'Chest 35" · L 25"',
-  "2XL": 'Chest 36" · L 26"',
-};
-
-const PRICE_PER_SHIRT = 1800; // LKR
+const PRICE_PER_SHIRT = 1900; // LKR
 
 export default function TshirtPage() {
   const [name, setName] = useState("");
@@ -92,17 +80,7 @@ export default function TshirtPage() {
   const handleCategoryChange = (index, category) => {
     setShirts((prev) => {
       const updated = [...prev];
-      const current = updated[index];
-      let newSize = current.size;
-
-      // Reset size if incompatible with the new category
-      if (category === "Normal Size" && current.size === "2XS") {
-        newSize = "";
-      } else if (category === "Kids Size" && current.size === "3XL") {
-        newSize = "";
-      }
-
-      updated[index] = { ...current, category, size: newSize };
+      updated[index] = { ...updated[index], category: "Adult Size" };
       return updated;
     });
   };
@@ -112,16 +90,9 @@ export default function TshirtPage() {
     const shirt = shirts[shirtIndex];
     if (!shirt) return;
 
-    let newCategory = shirt.category;
-    if (sizeId === "2XS" && shirt.category !== "Kids Size") {
-      newCategory = "Kids Size";
-    } else if (sizeId === "3XL" && shirt.category !== "Normal Size") {
-      newCategory = "Normal Size";
-    }
-
     setShirts((prev) => {
       const updated = [...prev];
-      updated[shirtIndex] = { ...updated[shirtIndex], category: newCategory, size: sizeId };
+      updated[shirtIndex] = { ...updated[shirtIndex], category: "Adult Size", size: sizeId };
       return updated;
     });
     setError("");
@@ -250,7 +221,7 @@ export default function TshirtPage() {
               UOK Robot Games <span className="text-[#00d2ff]">2K26</span> T-Shirt
             </h1>
             <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-              Gear up with the official arena jersey. Complete your details below to order up to 5 shirts per form with custom sizing for adults and kids.
+              Gear up with the official arena jersey. Complete your details below to order up to 5 shirts per form with custom sizing.
             </p>
 
             <div className="mt-4 flex items-center justify-center gap-4">
@@ -283,53 +254,27 @@ export default function TshirtPage() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2">Normal / Adult Sizes</p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                      <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
-                        <tr>
-                          <th className="p-2.5 border-b border-zinc-800">Size</th>
-                          <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                          <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-800/60">
-                        <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-[#5b9aff] text-xs font-bold uppercase tracking-widest mb-2">Kids Sizes</p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                      <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
-                        <tr>
-                          <th className="p-2.5 border-b border-zinc-800">Size</th>
-                          <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                          <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-800/60">
-                        <tr><td className="p-2 font-bold text-[#00d2ff]">2XS (Kids)</td><td className="p-2">26&quot;</td><td className="p-2">18&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">28&quot;</td><td className="p-2">20&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">30&quot;</td><td className="p-2">22&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">32&quot;</td><td className="p-2">23&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">34&quot;</td><td className="p-2">24&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">35&quot;</td><td className="p-2">25&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="max-w-md mx-auto">
+                <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2 text-center">Size Measurements (Inches)</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
+                    <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
+                      <tr>
+                        <th className="p-2.5 border-b border-zinc-800">Size</th>
+                        <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
+                        <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-800/60">
+                      <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -635,9 +580,6 @@ export default function TshirtPage() {
 
                       {/* Stacked Shirt Cards */}
                       {shirts.map((shirt, idx) => {
-                        const sizes = shirt.category === "Normal Size" ? NORMAL_SIZES : KIDS_SIZES;
-                        const measurements = shirt.category === "Normal Size" ? SIZE_MEASUREMENTS : KIDS_MEASUREMENTS;
-
                         return (
                           <div
                             key={idx}
@@ -655,9 +597,6 @@ export default function TshirtPage() {
                                 <span className="text-white text-sm font-black uppercase tracking-wide">
                                   Shirt #{idx + 1}
                                 </span>
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                  {shirt.category}
-                                </span>
                               </div>
 
                               {shirt.size ? (
@@ -671,52 +610,21 @@ export default function TshirtPage() {
                               )}
                             </div>
 
-                            {/* Category Switcher */}
-                            <div className="mb-3">
-                              <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1.5">
-                                1. Category
-                              </p>
-                              <div className="grid grid-cols-2 gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(idx, "Normal Size")}
-                                  className={`py-2 px-2 text-center rounded text-xs font-bold uppercase border transition-all cursor-pointer ${
-                                    shirt.category === "Normal Size"
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_8px_rgba(0,210,255,0.3)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  Normal Size (Adult)
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(idx, "Kids Size")}
-                                  className={`py-2 px-2 text-center rounded text-xs font-bold uppercase border transition-all cursor-pointer ${
-                                    shirt.category === "Kids Size"
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_8px_rgba(0,210,255,0.3)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  Kids Size (Youth)
-                                </button>
-                              </div>
-                            </div>
-
                             {/* Size Selection Pills */}
                             <div>
                               <div className="flex items-center justify-between mb-1.5">
                                 <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold">
-                                  2. Choose Size
+                                  Choose Size
                                 </p>
                                 {shirt.size && (
                                   <span className="text-[10px] text-zinc-400 font-mono">
-                                    {measurements[shirt.size]}
+                                    {SIZE_MEASUREMENTS[shirt.size]}
                                   </span>
                                 )}
                               </div>
 
                               <div className="grid grid-cols-4 gap-1.5">
-                                {sizes.map((sizeId) => {
+                                {SIZES.map((sizeId) => {
                                   const isSelected = shirt.size === sizeId;
                                   return (
                                     <button
@@ -749,9 +657,6 @@ export default function TshirtPage() {
                         const shirt = shirts[targetIdx];
                         if (!shirt) return null;
 
-                        const sizes = shirt.category === "Normal Size" ? NORMAL_SIZES : KIDS_SIZES;
-                        const measurements = shirt.category === "Normal Size" ? SIZE_MEASUREMENTS : KIDS_MEASUREMENTS;
-
                         return (
                           <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 mb-5 relative overflow-hidden rounded-sm">
                             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
@@ -762,12 +667,9 @@ export default function TshirtPage() {
                                   <h3 className="text-white text-base font-black uppercase tracking-wider">
                                     Shirt #{targetIdx + 1}
                                   </h3>
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                    {shirt.category}
-                                  </span>
                                 </div>
                                 <p className="text-zinc-500 text-xs mt-0.5">
-                                  Step 1: Category · Step 2: Size
+                                  Select T-Shirt Size
                                 </p>
                               </div>
 
@@ -781,45 +683,11 @@ export default function TshirtPage() {
                               )}
                             </div>
 
-                            {/* 1. Category Switcher */}
-                            <div className="mb-5">
-                              <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
-                                1. Select Category
-                              </p>
-                              <div className="grid grid-cols-2 gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(targetIdx, "Normal Size")}
-                                  className={`py-3 px-3 rounded text-center border transition-all cursor-pointer ${
-                                    shirt.category === "Normal Size"
-                                      ? "bg-[#004491]/35 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.4)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  <p className="text-xs font-bold uppercase">Normal Size</p>
-                                  <p className="text-[10px] text-zinc-500 mt-0.5">Adult (XS – 3XL)</p>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(targetIdx, "Kids Size")}
-                                  className={`py-3 px-3 rounded text-center border transition-all cursor-pointer ${
-                                    shirt.category === "Kids Size"
-                                      ? "bg-[#004491]/35 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.4)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  <p className="text-xs font-bold uppercase">Kids Size</p>
-                                  <p className="text-[10px] text-zinc-500 mt-0.5">Youth (2XS – 2XL)</p>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* 2. Size Options Grid */}
+                            {/* Size Options Grid */}
                             <div>
                               <div className="flex items-center justify-between mb-2">
                                 <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold">
-                                  2. Choose Size
+                                  Choose Size
                                 </p>
                                 {shirt.size && (
                                   <span className="text-[11px] font-bold text-emerald-400">
@@ -829,9 +697,9 @@ export default function TshirtPage() {
                               </div>
 
                               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                {sizes.map((sizeId) => {
+                                {SIZES.map((sizeId) => {
                                   const isSelected = shirt.size === sizeId;
-                                  const measurement = measurements[sizeId];
+                                  const measurement = SIZE_MEASUREMENTS[sizeId];
 
                                   return (
                                     <button
@@ -961,121 +829,7 @@ export default function TshirtPage() {
                    ════════════════════════════════════════════════════════════════ */}
                 <div className="hidden md:block">
 
-                  {/* Desktop Legend */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs mb-5 pb-3 border-b border-zinc-800/80">
-                    <span className="flex items-center gap-1.5 text-zinc-400 text-[10px] uppercase font-bold">
-                      <span className="w-2.5 h-2.5 bg-[#00d2ff] rounded-sm inline-block" /> Selected
-                    </span>
-                    <span className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold">
-                      <span className="w-2.5 h-2.5 border border-zinc-700 bg-zinc-900 rounded-sm inline-block" /> Available
-                    </span>
-                    <span className="flex items-center gap-1.5 text-zinc-600 text-[10px] uppercase font-bold">
-                      <span className="text-zinc-600 font-bold">—</span> Inactive
-                    </span>
-                  </div>
-                  
-                  {/* Category Selector Cards */}
-                  <div className="mb-6 bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold">
-                        Tshirt Category (Per Count)
-                      </p>
-                      <span className="text-zinc-500 text-[10px]">
-                        {shirts.length === 1 ? "1 Shirt Configured" : `${shirts.length} Shirts Configured`}
-                      </span>
-                    </div>
-
-                    <div
-                      className={`grid gap-3 transition-all duration-300 ${
-                        shirts.length === 1
-                          ? "grid-cols-1 w-full"
-                          : shirts.length === 2
-                            ? "grid-cols-1 sm:grid-cols-2"
-                            : shirts.length === 3
-                              ? "grid-cols-1 sm:grid-cols-3"
-                              : shirts.length === 4
-                                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-                                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
-                      }`}
-                    >
-                      {shirts.map((shirt, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-[#080808] border border-outline-variant p-4 transition-all duration-200 hover:border-zinc-700 rounded-sm"
-                        >
-                          <div
-                            className={`flex ${
-                              shirts.length === 1
-                                ? "flex-col sm:flex-row sm:items-center justify-between gap-4"
-                                : "flex-col"
-                            }`}
-                          >
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-wider">
-                                  Shirt #{idx + 1}
-                                </p>
-                                <span className="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-[#004491]/15 text-[#5b9aff] border border-[#004491]/30">
-                                  {shirt.category}
-                                </span>
-                              </div>
-                              {shirts.length === 1 && (
-                                <p className="text-zinc-500 text-xs mt-1">
-                                  Choose size type: Normal Size (Adult) or Kids Size
-                                </p>
-                              )}
-                            </div>
-
-                            <div
-                              className={`flex ${
-                                shirts.length === 1
-                                  ? "flex-row flex-wrap gap-3"
-                                  : "flex-col gap-2 mt-3"
-                              }`}
-                            >
-                              <label
-                                className={`flex items-center gap-2.5 px-3 py-2 border rounded cursor-pointer transition-all ${
-                                  shirt.category === "Normal Size"
-                                    ? "bg-[#004491]/25 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.35)]"
-                                    : "border-zinc-800 bg-[#0b0c16] text-zinc-400 hover:text-white hover:border-zinc-700"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name={`desktop-category-shirt-${idx}`}
-                                  value="Normal Size"
-                                  checked={shirt.category === "Normal Size"}
-                                  onChange={() => handleCategoryChange(idx, "Normal Size")}
-                                  className="accent-[#00d2ff] cursor-pointer"
-                                />
-                                <span className="text-xs font-semibold">Normal Size</span>
-                              </label>
-
-                              <label
-                                className={`flex items-center gap-2.5 px-3 py-2 border rounded cursor-pointer transition-all ${
-                                  shirt.category === "Kids Size"
-                                    ? "bg-[#004491]/25 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.35)]"
-                                    : "border-zinc-800 bg-[#0b0c16] text-zinc-400 hover:text-white hover:border-zinc-700"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name={`desktop-category-shirt-${idx}`}
-                                  value="Kids Size"
-                                  checked={shirt.category === "Kids Size"}
-                                  onChange={() => handleCategoryChange(idx, "Kids Size")}
-                                  className="accent-[#00d2ff] cursor-pointer"
-                                />
-                                <span className="text-xs font-semibold">Kids Size</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* MATRIX TABLE (With sticky left column to prevent truncation) */}
+                  {/* Matrix Table with Sticky Size Column */}
                   <div className="overflow-x-auto border border-outline-variant bg-[#0b0c16] rounded-sm">
                     <table className="w-full text-center border-collapse">
                       <thead>
@@ -1087,10 +841,7 @@ export default function TshirtPage() {
                             <th key={idx} className={`p-4 border-l border-outline-variant ${shirts.length === 1 ? 'w-1/2 sm:w-3/5' : 'min-w-[90px]'}`}>
                               <div className="flex flex-col items-center">
                                 <span className="text-white text-base font-black tracking-wide">
-                                  {shirts.length === 1 ? "Shirt #1 Selection" : idx + 1}
-                                </span>
-                                <span className="text-[9px] uppercase tracking-widest text-[#5b9aff] mt-0.5 font-bold">
-                                  {s.category === "Kids Size" ? "Kids Size" : "Normal / Adult"}
+                                  {shirts.length === 1 ? "Shirt #1 Selection" : `Shirt #${idx + 1}`}
                                 </span>
                               </div>
                             </th>
@@ -1103,73 +854,52 @@ export default function TshirtPage() {
                             {/* Sticky Row label on the left */}
                             <td className="p-3.5 text-left text-xs font-bold uppercase tracking-wider text-zinc-200 sticky left-0 bg-[#080808] z-10 border-r border-outline-variant shadow-[4px_0_10px_rgba(0,0,0,0.6)]">
                               <div className="flex items-center justify-between gap-2">
-                                <span className={row.id === "2XS" ? "text-[#00d2ff]" : ""}>
+                                <span>
                                   {row.label}
                                 </span>
-                                {shirts.length === 1 && (
-                                  <span className="text-[10px] text-zinc-600 font-normal normal-case hidden sm:inline">
-                                    {row.isKidsOnly ? "(Kids only)" : row.isNormalOnly ? "(Adult only)" : ""}
-                                  </span>
-                                )}
+                                <span className="text-[10px] text-zinc-500 font-mono font-normal">
+                                  {SIZE_MEASUREMENTS[row.id]}
+                                </span>
                               </div>
                             </td>
 
                             {/* Columns 1..N */}
                             {shirts.map((shirt, idx) => {
-                              const isCompatible =
-                                shirt.category === "Normal Size"
-                                  ? NORMAL_SIZES.includes(row.id)
-                                  : KIDS_SIZES.includes(row.id);
-
                               const isSelected = shirt.size === row.id;
 
                               return (
                                 <td
                                   key={idx}
-                                  title={
-                                    !isCompatible
-                                      ? row.id === "2XS"
-                                        ? "Click to switch this shirt to Kids Size"
-                                        : "Click to switch this shirt to Normal Size"
-                                      : `Select ${row.label} for Shirt #${idx + 1}`
-                                  }
+                                  title={`Select ${row.label} for Shirt #${idx + 1}`}
                                   className={`p-3 border-l border-outline-variant transition-colors ${
-                                    !isCompatible
-                                      ? "bg-black/30 text-zinc-600 hover:bg-[#004491]/10 cursor-pointer group/cell"
-                                      : isSelected
-                                        ? "bg-[#004491]/20 cursor-pointer"
-                                        : "hover:bg-[#004491]/10 cursor-pointer"
+                                    isSelected
+                                      ? "bg-[#004491]/20 cursor-pointer"
+                                      : "hover:bg-[#004491]/10 cursor-pointer"
                                   }`}
                                   onClick={() => {
                                     handleSizeSelect(idx, row.id);
                                   }}
                                 >
-                                  {isCompatible ? (
-                                    <div className="flex items-center justify-center gap-2">
-                                      <div
-                                        className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-all ${
-                                          isSelected
-                                            ? "bg-[#004491] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.6)]"
-                                            : "border-zinc-600 bg-[#080808] hover:border-zinc-400"
-                                        }`}
-                                      >
-                                        {isSelected && (
-                                          <span className="material-symbols-outlined text-white text-sm font-black">
-                                            check
-                                          </span>
-                                        )}
-                                      </div>
-                                      {shirts.length === 1 && isSelected && (
-                                        <span className="text-xs font-bold text-[#00d2ff] hidden sm:inline">
-                                          Selected
+                                  <div className="flex items-center justify-center gap-2">
+                                    <div
+                                      className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-all ${
+                                        isSelected
+                                          ? "bg-[#004491] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.6)]"
+                                          : "border-zinc-600 bg-[#080808] hover:border-zinc-400"
+                                      }`}
+                                    >
+                                      {isSelected && (
+                                        <span className="material-symbols-outlined text-white text-sm font-black">
+                                          check
                                         </span>
                                       )}
                                     </div>
-                                  ) : (
-                                    <span className="text-zinc-600 group-hover/cell:text-zinc-400 text-xs select-none">
-                                      —
-                                    </span>
-                                  )}
+                                    {shirts.length === 1 && isSelected && (
+                                      <span className="text-xs font-bold text-[#00d2ff] hidden sm:inline">
+                                        Selected
+                                      </span>
+                                    )}
+                                  </div>
                                 </td>
                               );
                             })}
@@ -1195,10 +925,8 @@ export default function TshirtPage() {
                           }`}
                         >
                           <span className="font-bold">Shirt #{idx + 1}:</span>
-                          <span className="text-zinc-300">{s.category}</span>
-                          <span className="text-zinc-500">·</span>
                           {s.size ? (
-                            <span className="font-bold text-[#00d2ff] uppercase">{s.size}</span>
+                            <span className="font-bold text-[#00d2ff] uppercase">Size {s.size}</span>
                           ) : (
                             <span className="text-red-400 text-[11px] font-semibold italic">Select size in table</span>
                           )}
