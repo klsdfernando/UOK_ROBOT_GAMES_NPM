@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import MerchMarqueeTicker from "@/components/MerchMarqueeTicker";
 
 export default function HeroSection() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function HeroSection() {
     }
   };
   return (
-    <section className="relative min-h-svh flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-svh flex flex-col justify-between overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
         <Image
           src="https://ik.imagekit.io/wfnazmyxh/images/arena-battle.png?updatedAt=1777697842835"
@@ -38,7 +39,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center justify-center py-24">
+      <div className="relative z-10 w-full flex-grow flex flex-col items-center justify-center pt-20 pb-12">
         {/* Huge Background Text */}
         <div className="absolute inset-0 flex items-center justify-center select-none z-[1] pointer-events-none mt-12">
           <span className="text-[250px] md:text-[480px] font-black text-white/10 tracking-tighter leading-none">
@@ -118,6 +119,11 @@ export default function HeroSection() {
             {checking ? "LOADING..." : "JOIN THE BATTLE"}
           </button>
         </div>
+      </div>
+
+      {/* Merch ticker docked at bottom of Hero section */}
+      <div className="relative z-20 w-full mt-auto">
+        <MerchMarqueeTicker />
       </div>
     </section>
   );
