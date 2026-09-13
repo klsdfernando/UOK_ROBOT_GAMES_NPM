@@ -53,7 +53,6 @@ export default function TshirtPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [orderResult, setOrderResult] = useState(null);
-  const [showSizeChart, setShowSizeChart] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState(false);
 
   // Handle shirt count change (min 1, max 5)
@@ -224,61 +223,7 @@ export default function TshirtPage() {
               Grab the official event t-shirt for <strong>Rs. 1,900</strong>. Pick your sizes, upload your payment slip, and collect your order on competition day.
             </p>
 
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setShowSizeChart(!showSizeChart)}
-                className="text-xs font-medium text-zinc-300 hover:text-white inline-flex items-center gap-1.5 border border-zinc-700/80 hover:border-[#00d2ff]/60 bg-zinc-900/80 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm text-[#00d2ff]">straighten</span>
-                {showSizeChart ? "Hide Size Chart" : "View Size Guide"}
-              </button>
-            </div>
           </div>
-
-          {/* Size Chart Modal / Drawer */}
-          {showSizeChart && (
-            <div className="mb-10 bg-[#080808] border border-outline-variant p-6 relative rounded-sm overflow-hidden animate-fadeIn">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
-                  <h3 className="text-white text-sm font-bold uppercase tracking-wider">T-Shirt Size Chart (Inches)</h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowSizeChart(false)}
-                  className="text-zinc-500 hover:text-white"
-                >
-                  <span className="material-symbols-outlined text-lg">close</span>
-                </button>
-              </div>
-
-              <div className="max-w-md mx-auto">
-                <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2 text-center">Size Measurements (Inches)</p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                    <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
-                      <tr>
-                        <th className="p-2.5 border-b border-zinc-800">Size</th>
-                        <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                        <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-800/60">
-                      <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
-                      <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Success Screen */}
           {orderResult ? (
@@ -338,8 +283,116 @@ export default function TshirtPage() {
               </div>
             </div>
           ) : (
-            /* Order Form */
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <>
+              {/* Official Merchandise Showcase: Flyer & Size Chart (Always Visible) */}
+              <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 shadow-xl mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-center">
+                  
+                  {/* Left Column: Official Event Flyer */}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative group w-full max-w-[340px] sm:max-w-[380px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                        alt="Official UOK Robot Games 2K26 T-Shirt Flyer"
+                        className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                      <a
+                        href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-3 right-3 text-[11px] font-semibold text-white bg-black/75 hover:bg-black px-2.5 py-1 rounded-lg border border-white/20 backdrop-blur-sm flex items-center gap-1 transition-colors"
+                        title="Open flyer in full size"
+                      >
+                        <span className="material-symbols-outlined text-xs text-[#00d2ff]">zoom_in</span>
+                        Full Flyer
+                      </a>
+                    </div>
+                    <div className="mt-3 flex items-center justify-center gap-2 text-xs text-zinc-400">
+                      <span className="font-semibold text-white">Official 2K26 Event Jersey</span>
+                      <span>•</span>
+                      <span className="text-[#00d2ff] font-bold">Rs. 1,900</span>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Size Measurements Table (Always Shown) */}
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
+                        <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
+                          Size Measurements (Inches)
+                        </h2>
+                      </div>
+                      <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#00d2ff] bg-[#004491]/25 border border-[#004491]/50 px-2.5 py-0.5 rounded-full">
+                        Unisex Fit
+                      </span>
+                    </div>
+
+                    <p className="text-zinc-400 text-xs mb-3 leading-relaxed">
+                      Check your measurements below to pick your best fit. All values are in inches:
+                    </p>
+
+                    <div className="border border-zinc-800/90 rounded-xl overflow-hidden shadow-inner">
+                      <table className="w-full text-xs text-left">
+                        <thead className="bg-[#12131f] text-zinc-400 uppercase tracking-wider text-[10px] sm:text-[11px] border-b border-zinc-800">
+                          <tr>
+                            <th className="py-2.5 px-3 sm:px-4 font-bold text-white">Size</th>
+                            <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Chest (in)</th>
+                            <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Length (in)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-800/70 bg-[#07080f]/80 text-zinc-300">
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">XS</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">36&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">26&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">S</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">38&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">27&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">M</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">40&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">28&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">L</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">42&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">29&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">XL</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">44&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">30&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">2XL</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">46&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">31&quot;</td>
+                          </tr>
+                          <tr className="hover:bg-[#12131f]/60 transition-colors">
+                            <td className="py-2 px-3 sm:px-4 font-bold text-white">3XL</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">48&quot;</td>
+                            <td className="py-2 px-3 sm:px-4 font-medium">32&quot;</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <p className="text-[11px] text-zinc-400 mt-2.5 flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-xs text-[#00d2ff]">check_circle</span>
+                      Standard unisex chest circumference and body length.
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Order Form */}
+              <form onSubmit={handleSubmit} className="space-y-8">
               
               {/* Error Message */}
               {error && (
@@ -956,7 +1009,8 @@ export default function TshirtPage() {
                 </button>
               </div>
 
-            </form>
+              </form>
+            </>
           )}
 
         </div>
