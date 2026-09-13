@@ -426,14 +426,16 @@ export default function TeamTshirtSection({ team }) {
                 </span>
               )}
 
-              <button
-                type="button"
-                onClick={() => setShowSizeChart(!showSizeChart)}
-                className="text-xs font-semibold px-3 py-1 rounded-lg border border-zinc-700 hover:border-zinc-500 bg-[#12131f] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-xs">straighten</span>
-                {showSizeChart ? "Hide Size Chart" : "View Size Chart"}
-              </button>
+              {hasExistingOrders && !showNewOrderForm && (
+                <button
+                  type="button"
+                  onClick={() => setShowSizeChart(!showSizeChart)}
+                  className="text-xs font-semibold px-3 py-1 rounded-lg border border-zinc-700 hover:border-zinc-500 bg-[#12131f] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-xs">straighten</span>
+                  {showSizeChart ? "Hide Size Chart" : "View Size Chart"}
+                </button>
+              )}
 
               {hasExistingOrders && (
                 <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#12131f] text-zinc-400 border border-zinc-800 flex items-center gap-1.5">
@@ -463,8 +465,8 @@ export default function TeamTshirtSection({ team }) {
         </div>
       </div>
 
-      {/* ─── Size Chart Drawer / Modal ─── */}
-      {showSizeChart && (
+      {/* ─── Size Chart Drawer / Modal (Only in receipt mode) ─── */}
+      {hasExistingOrders && !showNewOrderForm && showSizeChart && (
         <div className="bg-[#0d0e18] border border-white/[0.08] p-6 rounded-2xl animate-fadeIn">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -932,7 +934,115 @@ export default function TeamTshirtSection({ team }) {
         </div>
       ) : (
         /* ─── Order Form ─── */
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="space-y-8">
+          {/* Official Merchandise Showcase: Flyer & Size Chart (Always Visible) */}
+          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 shadow-xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-center">
+              
+              {/* Left Column: Official Event Flyer */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative group w-full max-w-[340px] sm:max-w-[380px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                    alt="Official UOK Robot Games 2K26 T-Shirt Flyer"
+                    className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  />
+                  <a
+                    href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute bottom-3 right-3 text-[11px] font-semibold text-white bg-black/75 hover:bg-black px-2.5 py-1 rounded-lg border border-white/20 backdrop-blur-sm flex items-center gap-1 transition-colors"
+                    title="Open flyer in full size"
+                  >
+                    <span className="material-symbols-outlined text-xs text-[#00d2ff]">zoom_in</span>
+                    Full Flyer
+                  </a>
+                </div>
+                <div className="mt-3 flex items-center justify-center gap-2 text-xs text-zinc-400">
+                  <span className="font-semibold text-white">Official 2K26 Event Jersey</span>
+                  <span>•</span>
+                  <span className="text-[#00d2ff] font-bold">Rs. 1,900</span>
+                </div>
+              </div>
+
+              {/* Right Column: Size Measurements Table (Always Shown) */}
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
+                    <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
+                      Size Measurements (Inches)
+                    </h2>
+                  </div>
+                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#00d2ff] bg-[#004491]/25 border border-[#004491]/50 px-2.5 py-0.5 rounded-full">
+                    Unisex Fit
+                  </span>
+                </div>
+
+                <p className="text-zinc-400 text-xs mb-3 leading-relaxed">
+                  Check your measurements below to pick your best fit. All values are in inches:
+                </p>
+
+                <div className="border border-zinc-800/90 rounded-xl overflow-hidden shadow-inner">
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-[#12131f] text-zinc-400 uppercase tracking-wider text-[10px] sm:text-[11px] border-b border-zinc-800">
+                      <tr>
+                        <th className="py-2.5 px-3 sm:px-4 font-bold text-white">Size</th>
+                        <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Chest (in)</th>
+                        <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Length (in)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-800/70 bg-[#07080f]/80 text-zinc-300">
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">XS</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">36&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">26&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">S</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">38&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">27&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">M</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">40&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">28&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">L</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">42&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">29&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">XL</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">44&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">30&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">2XL</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">46&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">31&quot;</td>
+                      </tr>
+                      <tr className="hover:bg-[#12131f]/60 transition-colors">
+                        <td className="py-2 px-3 sm:px-4 font-bold text-white">3XL</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">48&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 font-medium">32&quot;</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <p className="text-[11px] text-zinc-400 mt-2.5 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-xs text-[#00d2ff]">check_circle</span>
+                  Standard unisex chest circumference and body length.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-8">
           {hasExistingOrders && (
             <div className="bg-[#0b0c16] border border-[#004491]/50 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
               <div className="flex items-center gap-3">
@@ -1719,7 +1829,8 @@ export default function TeamTshirtSection({ team }) {
               </button>
             </div>
           )}
-        </form>
+          </form>
+        </div>
       )}
 
     </div>
