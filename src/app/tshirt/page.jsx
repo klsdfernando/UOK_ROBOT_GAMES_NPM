@@ -2,23 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Size definitions per user instructions
-const NORMAL_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
-const KIDS_SIZES = ["2XS", "XS", "S", "M", "L", "XL", "2XL"];
+const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
-// All unique rows shown in the table matrix (matching the provided image)
+// All unique rows shown in the table matrix
 const TABLE_SIZE_ROWS = [
-  { id: "2XS", label: "2XS (KIDS)", isKidsOnly: true },
-  { id: "XS", label: "XS", isKidsOnly: false },
-  { id: "S", label: "S", isKidsOnly: false },
-  { id: "M", label: "M", isKidsOnly: false },
-  { id: "L", label: "L", isKidsOnly: false },
-  { id: "XL", label: "XL", isKidsOnly: false },
-  { id: "2XL", label: "2XL", isKidsOnly: false },
-  { id: "3XL", label: "3XL", isNormalOnly: true },
+  { id: "XS", label: "XS" },
+  { id: "S", label: "S" },
+  { id: "M", label: "M" },
+  { id: "L", label: "L" },
+  { id: "XL", label: "XL" },
+  { id: "2XL", label: "2XL" },
+  { id: "3XL", label: "3XL" },
 ];
 
 const SIZE_MEASUREMENTS = {
@@ -31,17 +30,7 @@ const SIZE_MEASUREMENTS = {
   "3XL": 'Chest 48" · L 32"',
 };
 
-const KIDS_MEASUREMENTS = {
-  "2XS": 'Chest 26" · L 18"',
-  "XS": 'Chest 28" · L 20"',
-  "S": 'Chest 30" · L 22"',
-  "M": 'Chest 32" · L 23"',
-  "L": 'Chest 34" · L 24"',
-  "XL": 'Chest 35" · L 25"',
-  "2XL": 'Chest 36" · L 26"',
-};
-
-const PRICE_PER_SHIRT = 1800; // LKR
+const PRICE_PER_SHIRT = 1900; // LKR
 
 export default function TshirtPage() {
   const [name, setName] = useState("");
@@ -92,17 +81,7 @@ export default function TshirtPage() {
   const handleCategoryChange = (index, category) => {
     setShirts((prev) => {
       const updated = [...prev];
-      const current = updated[index];
-      let newSize = current.size;
-
-      // Reset size if incompatible with the new category
-      if (category === "Normal Size" && current.size === "2XS") {
-        newSize = "";
-      } else if (category === "Kids Size" && current.size === "3XL") {
-        newSize = "";
-      }
-
-      updated[index] = { ...current, category, size: newSize };
+      updated[index] = { ...updated[index], category: "Adult Size" };
       return updated;
     });
   };
@@ -112,16 +91,9 @@ export default function TshirtPage() {
     const shirt = shirts[shirtIndex];
     if (!shirt) return;
 
-    let newCategory = shirt.category;
-    if (sizeId === "2XS" && shirt.category !== "Kids Size") {
-      newCategory = "Kids Size";
-    } else if (sizeId === "3XL" && shirt.category !== "Normal Size") {
-      newCategory = "Normal Size";
-    }
-
     setShirts((prev) => {
       const updated = [...prev];
-      updated[shirtIndex] = { ...updated[shirtIndex], category: newCategory, size: sizeId };
+      updated[shirtIndex] = { ...updated[shirtIndex], category: "Adult Size", size: sizeId };
       return updated;
     });
     setError("");
@@ -132,11 +104,11 @@ export default function TshirtPage() {
     if (!file) return;
     const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
     if (!allowed.includes(file.type)) {
-      setError("Only JPG, PNG, WebP, or PDF files are allowed.");
+      setError("Please select a JPG, PNG, WebP, or PDF file.");
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setError("File size must be under 5MB.");
+      setError("File size should be 5MB or less.");
       return;
     }
     setPaymentSlip(file);
@@ -174,20 +146,20 @@ export default function TshirtPage() {
       return;
     }
     if (!whatsappNumber.trim()) {
-      setError("Please enter your WhatsApp number.");
+      setError("Please enter your WhatsApp contact number.");
       return;
     }
 
     // Check all shirts have a size selected
     for (let i = 0; i < shirts.length; i++) {
       if (!shirts[i].size) {
-        setError(`Please select a size for Shirt #${i + 1} in the table.`);
+        setError(`Please pick a size for Shirt ${i + 1}.`);
         return;
       }
     }
 
     if (!paymentSlip) {
-      setError("Please upload your bank transfer or deposit slip.");
+      setError("Please attach your bank transfer receipt or deposit slip.");
       return;
     }
 
@@ -210,10 +182,10 @@ export default function TshirtPage() {
       if (data.success) {
         setOrderResult(data);
       } else {
-        setError(data.message || "Failed to submit order. Please try again.");
+        setError(data.message || "Could not submit your order. Please try again.");
       }
     } catch {
-      setError("An unexpected error occurred. Please try again.");
+      setError("Something went wrong while placing your order. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -233,34 +205,33 @@ export default function TshirtPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-zinc-100 flex flex-col selection:bg-[#004491] selection:text-white">
+    <div className="min-h-screen bg-[#050507] text-zinc-200 flex flex-col selection:bg-[#004491] selection:text-white">
       <Navbar />
 
       <main className="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           
-          {/* Header Badge & Title */}
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#004491]/15 border border-[#004491]/40 rounded-full text-[#5b9aff] text-[11px] uppercase tracking-widest font-bold mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-pulse" />
-              Official Merchandise Pre-Order
-            </div>
+          {/* Header & Intro */}
+          <div className="text-center mb-8 sm:mb-10">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#00d2ff] bg-[#004491]/20 border border-[#004491]/40 px-3 py-1 rounded-full inline-block mb-3">
+              Official Merchandise
+            </span>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-wider mb-4">
-              UOK Robot Games <span className="text-[#00d2ff]">2K26</span> T-Shirt
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight mb-3">
+              Pre-Order Your UOK Robot Games 2K26 T-Shirt
             </h1>
-            <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-              Gear up with the official arena jersey. Complete your details below to order up to 5 shirts per form with custom sizing for adults and kids.
+            <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+              Grab the official event t-shirt for <strong>Rs. 1,900</strong>. Pick your sizes, upload your payment slip, and collect your order on competition day.
             </p>
 
-            <div className="mt-4 flex items-center justify-center gap-4">
+            <div className="mt-4 flex items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={() => setShowSizeChart(!showSizeChart)}
-                className="text-xs uppercase tracking-widest font-bold text-[#5b9aff] hover:text-white flex items-center gap-1.5 border border-[#004491]/30 hover:border-[#004491] bg-[#004491]/10 px-4 py-2 rounded transition-colors"
+                className="text-xs font-medium text-zinc-300 hover:text-white inline-flex items-center gap-1.5 border border-zinc-700/80 hover:border-[#00d2ff]/60 bg-zinc-900/80 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
               >
-                <span className="material-symbols-outlined text-sm">straighten</span>
-                {showSizeChart ? "Hide Size Chart" : "View Size Measurements"}
+                <span className="material-symbols-outlined text-sm text-[#00d2ff]">straighten</span>
+                {showSizeChart ? "Hide Size Chart" : "View Size Guide"}
               </button>
             </div>
           </div>
@@ -283,53 +254,27 @@ export default function TshirtPage() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2">Normal / Adult Sizes</p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                      <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
-                        <tr>
-                          <th className="p-2.5 border-b border-zinc-800">Size</th>
-                          <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                          <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-800/60">
-                        <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-[#5b9aff] text-xs font-bold uppercase tracking-widest mb-2">Kids Sizes</p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                      <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
-                        <tr>
-                          <th className="p-2.5 border-b border-zinc-800">Size</th>
-                          <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                          <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-800/60">
-                        <tr><td className="p-2 font-bold text-[#00d2ff]">2XS (Kids)</td><td className="p-2">26&quot;</td><td className="p-2">18&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">28&quot;</td><td className="p-2">20&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">30&quot;</td><td className="p-2">22&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">32&quot;</td><td className="p-2">23&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">34&quot;</td><td className="p-2">24&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">35&quot;</td><td className="p-2">25&quot;</td></tr>
-                        <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="max-w-md mx-auto">
+                <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2 text-center">Size Measurements (Inches)</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
+                    <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
+                      <tr>
+                        <th className="p-2.5 border-b border-zinc-800">Size</th>
+                        <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
+                        <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-800/60">
+                      <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
+                      <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -405,47 +350,45 @@ export default function TshirtPage() {
               )}
 
               {/* Step 1: Customer Contact Information */}
-              <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-                
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
-                    1
-                  </div>
-                  <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                    Contact Details
+              <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-6 sm:p-7 shadow-lg">
+                <div className="mb-5 pb-3 border-b border-zinc-800/70">
+                  <h2 className="text-white text-base sm:text-lg font-bold">
+                    1. Contact Details
                   </h2>
+                  <p className="text-zinc-400 text-xs mt-0.5">
+                    We will notify you via WhatsApp when your order is ready for pickup.
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div>
-                    <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
+                    <label className="block text-zinc-300 text-xs font-semibold mb-2">
                       Full Name <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Sushan Fernando"
+                      placeholder="e.g. Kasun Fernando"
                       value={name}
                       onChange={(e) => { setName(e.target.value); setError(""); }}
-                      className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+                      className="w-full bg-[#12131f] border border-zinc-700/80 rounded-xl text-zinc-100 text-sm px-4 py-2.5 focus:outline-none focus:border-[#00d2ff] transition-colors placeholder:text-zinc-500"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
+                    <label className="block text-zinc-300 text-xs font-semibold mb-2">
                       WhatsApp Number <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="tel"
-                      placeholder="e.g. +94 7X XXX XXXX"
+                      placeholder="e.g. 077 123 4567"
                       value={whatsappNumber}
                       onChange={(e) => {
                         const val = e.target.value.replace(/[^0-9+ ]/g, "");
                         setWhatsappNumber(val);
                         setError("");
                       }}
-                      className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+                      className="w-full bg-[#12131f] border border-zinc-700/80 rounded-xl text-zinc-100 text-sm px-4 py-2.5 focus:outline-none focus:border-[#00d2ff] transition-colors placeholder:text-zinc-500"
                       required
                     />
                   </div>
@@ -453,41 +396,35 @@ export default function TshirtPage() {
               </div>
 
               {/* Step 2: Shirt Quantity Selection */}
-              <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-                
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
-                      2
-                    </div>
-                    <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                      How Many Shirts Need?
+              <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-6 sm:p-7 shadow-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-zinc-800/70">
+                  <div>
+                    <h2 className="text-white text-base sm:text-lg font-bold">
+                      2. Number of T-Shirts
                     </h2>
+                    <p className="text-zinc-400 text-xs mt-0.5">
+                      How many shirts would you like to order today?
+                    </p>
                   </div>
-                  <span className="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 bg-[#004491]/10 text-[#5b9aff] border border-[#004491]/30">
-                    Max 5 per form
+                  <span className="text-[11px] font-medium text-zinc-400 self-start sm:self-auto bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full">
+                    Up to 5 shirts
                   </span>
                 </div>
 
-                <p className="text-zinc-400 text-xs mb-6">
-                  Select how many shirts you want to order. Changing this count dynamically updates the configuration table below.
-                </p>
-
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
+                <div className="grid grid-cols-5 gap-2 sm:gap-3">
                   {[1, 2, 3, 4, 5].map((cnt) => (
                     <button
                       key={cnt}
                       type="button"
                       onClick={() => handleCountChange(cnt)}
-                      className={`py-2.5 sm:py-3 px-1 text-center border font-bold uppercase transition-all duration-200 rounded-sm cursor-pointer ${
+                      className={`py-3 px-2 text-center rounded-xl font-semibold transition-all duration-150 cursor-pointer ${
                         shirtCount === cnt
-                          ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_15px_rgba(0,68,145,0.4)]"
-                          : "bg-[#0b0c16] border-outline-variant text-zinc-400 hover:text-white hover:border-zinc-600"
+                          ? "bg-[#004491] text-white border border-[#00d2ff]/60 shadow-[0_0_15px_rgba(0,210,255,0.25)]"
+                          : "bg-[#12131f] border border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
                       }`}
                     >
-                      <div className="text-sm sm:text-base font-black">{cnt}</div>
-                      <div className="text-[9px] sm:text-[10px] font-semibold text-zinc-400">
+                      <div className="text-base font-bold">{cnt}</div>
+                      <div className="text-[11px] text-zinc-400 font-normal">
                         {cnt === 1 ? "Shirt" : "Shirts"}
                       </div>
                     </button>
@@ -495,115 +432,64 @@ export default function TshirtPage() {
                 </div>
               </div>
 
-              {/* Step 3: Size & Category Selection Table (Matching Provided Matrix Grid) */}
-              <div className="relative bg-[#080808] border border-outline-variant p-4 sm:p-6 lg:p-8">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00d2ff]" />
-                
+              {/* Step 3: Size Selection */}
+              <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 shadow-lg">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#00d2ff]/20 flex items-center justify-center text-[#00d2ff] text-xs font-black shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
-                        T-Shirt Category &amp; Size Selection
-                      </h2>
-                      <p className="text-zinc-500 text-[11px] mt-0.5">
-                        Configure Category and Size for your {shirtCount} {shirtCount === 1 ? "shirt" : "shirts"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-start sm:self-auto">
-                    <span className="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 bg-[#004491]/15 text-[#5b9aff] border border-[#004491]/30 rounded-sm hidden md:inline-flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff]" />
-                      Matrix View
-                    </span>
-                    <span className="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 bg-[#00d2ff]/10 text-[#00d2ff] border border-[#00d2ff]/30 rounded-sm inline-flex md:hidden items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff]" />
-                      Simple View
-                    </span>
+                <div className="flex items-center justify-between gap-3 mb-5 pb-3 border-b border-zinc-800/70">
+                  <div>
+                    <h2 className="text-white text-base sm:text-lg font-bold">
+                      3. Select Sizes
+                    </h2>
+                    <p className="text-zinc-400 text-xs mt-0.5">
+                      Pick a size for {shirtCount === 1 ? "your t-shirt" : `each of your ${shirtCount} t-shirts`} (XS to 3XL).
+                    </p>
                   </div>
                 </div>
 
                 {/* ════════════════════════════════════════════════════════════════
-                    MOBILE VIEW (Strictly Simple Touch View on Mobile: block md:hidden)
+                    MOBILE VIEW (Touch friendly list of shirts)
                    ════════════════════════════════════════════════════════════════ */}
                 <div className="block md:hidden">
                   
-                  {/* If more than 1 shirt, provide Dropdown Menu & Tab Bar */}
+                  {/* If more than 1 shirt, provide simple tab pills */}
                   {shirtCount > 1 && (
-                    <div className="mb-4 bg-[#0b0c16] border border-outline-variant p-3.5 sm:p-4 rounded-sm">
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">
-                          {activeMobileTab === "all"
-                            ? `All Shirts Overview (${shirtCount} Total)`
-                            : `Configuring Shirt #${Number(activeMobileTab) + 1} of ${shirtCount}`}
-                        </label>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                          shirts.filter((s) => s.size).length === shirtCount
-                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                            : "bg-amber-500/10 border-amber-500/30 text-amber-400"
-                        }`}>
-                          {shirts.filter((s) => s.size).length} of {shirtCount} Sized
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-xs text-zinc-400 mb-2 font-medium">
+                        <span>Select a shirt to configure:</span>
+                        <span className="text-[#00d2ff]">
+                          {shirts.filter((s) => s.size).length} of {shirtCount} chosen
                         </span>
                       </div>
 
-                      {/* Dropdown Menu */}
-                      <div className="relative mb-3">
-                        <select
-                          value={activeMobileTab}
-                          onChange={(e) => setActiveMobileTab(e.target.value)}
-                          className="w-full bg-[#080808] border border-outline-variant text-white text-xs sm:text-sm font-bold px-3.5 py-2.5 appearance-none focus:outline-none focus:border-[#00d2ff] transition-colors cursor-pointer rounded-sm"
-                        >
-                          <option value="all">
-                            Show All Shirts ({shirtCount}) — Tab Overview &amp; Sizing
-                          </option>
-                          {shirts.map((s, idx) => (
-                            <option key={idx} value={idx.toString()}>
-                              Shirt #{idx + 1} — {s.category} {s.size ? `[Size ${s.size}] ✓` : "(Size required)"}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="material-symbols-outlined text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-lg">
-                          expand_more
-                        </span>
-                      </div>
-
-                      {/* Quick Shirt Tabs */}
                       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                        {/* Tab to Show All */}
                         <button
                           type="button"
                           onClick={() => setActiveMobileTab("all")}
-                          className={`py-2 px-3 text-center text-xs font-bold uppercase transition-all rounded-sm border shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                          className={`py-1.5 px-3 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
                             activeMobileTab === "all"
-                              ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.4)]"
-                              : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
+                              ? "bg-[#004491] text-white border-[#00d2ff]/60 shadow-sm"
+                              : "bg-[#12131f] border-zinc-800 text-zinc-400 hover:text-white"
                           }`}
                         >
-                          <span className="material-symbols-outlined text-sm">view_agenda</span>
-                          <span>Show All</span>
+                          All ({shirtCount})
                         </button>
 
-                        {/* Individual Shirt Tabs */}
                         {shirts.map((s, idx) => (
                           <button
                             key={idx}
                             type="button"
                             onClick={() => setActiveMobileTab(idx.toString())}
-                            className={`flex-1 min-w-[62px] py-2 px-1 text-center text-xs font-bold uppercase transition-all rounded-sm border shrink-0 cursor-pointer ${
+                            className={`flex-1 min-w-[70px] py-1.5 px-2 text-center text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
                               activeMobileTab === idx.toString()
-                                ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.4)]"
+                                ? "bg-[#004491] text-white border-[#00d2ff]/60 shadow-sm"
                                 : s.size
-                                  ? "bg-[#080808] border-emerald-500/40 text-emerald-400"
-                                  : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
+                                  ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-300"
+                                  : "bg-[#12131f] border-zinc-800 text-zinc-400 hover:text-white"
                             }`}
                           >
-                            <div>#{idx + 1}</div>
-                            <div className="text-[9px] font-mono mt-0.5 truncate">
-                              {s.size ? s.size : "—"}
+                            <div>Shirt {idx + 1}</div>
+                            <div className="text-[10px] text-zinc-400 font-normal">
+                              {s.size ? s.size : "Pick size"}
                             </div>
                           </button>
                         ))}
@@ -611,129 +497,48 @@ export default function TshirtPage() {
                     </div>
                   )}
 
-                  {/* ── SUB-VIEW 1: SHOW ALL TAB (All shirts stacked in clean cards) ── */}
+                  {/* ── SUB-VIEW 1: SHOW ALL TAB ── */}
                   {shirtCount > 1 && activeMobileTab === "all" ? (
-                    <div className="space-y-4 mb-5">
-                      {/* Overall Progress Banner */}
-                      <div className="bg-[#0b0c16] border border-outline-variant p-3.5 rounded-sm flex items-center justify-between">
-                        <div>
-                          <p className="text-xs font-bold text-white uppercase tracking-wider">
-                            All {shirtCount} Shirts Overview
-                          </p>
-                          <p className="text-[11px] text-zinc-400 mt-0.5">
-                            Configure category &amp; size for each shirt below
-                          </p>
-                        </div>
-                        <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
-                          shirts.filter((s) => s.size).length === shirtCount
-                            ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
-                            : "bg-amber-500/10 border-amber-500/30 text-amber-400"
-                        }`}>
-                          {shirts.filter((s) => s.size).length}/{shirtCount} Sized
-                        </span>
-                      </div>
-
-                      {/* Stacked Shirt Cards */}
+                    <div className="space-y-3 mb-5">
                       {shirts.map((shirt, idx) => {
-                        const sizes = shirt.category === "Normal Size" ? NORMAL_SIZES : KIDS_SIZES;
-                        const measurements = shirt.category === "Normal Size" ? SIZE_MEASUREMENTS : KIDS_MEASUREMENTS;
-
                         return (
                           <div
                             key={idx}
-                            className="bg-[#0b0c16] border border-outline-variant p-4 rounded-sm relative overflow-hidden transition-all"
+                            className="bg-[#12131f] border border-zinc-800/90 p-4 rounded-xl"
                           >
-                            <div
-                              className={`absolute top-0 left-0 right-0 h-[2px] ${
-                                shirt.size ? "bg-emerald-500" : "bg-[#004491]"
-                              }`}
-                            />
-
-                            {/* Shirt Top Row */}
                             <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <span className="text-white text-sm font-black uppercase tracking-wide">
-                                  Shirt #{idx + 1}
-                                </span>
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                  {shirt.category}
-                                </span>
-                              </div>
-
+                              <span className="text-white text-sm font-bold">
+                                Shirt {idx + 1}
+                              </span>
                               {shirt.size ? (
-                                <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded">
-                                  Size {shirt.size} ✓
+                                <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                  Size {shirt.size}
                                 </span>
                               ) : (
-                                <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded animate-pulse">
-                                  Size Required
+                                <span className="text-xs font-medium text-amber-400">
+                                  Select size below
                                 </span>
                               )}
                             </div>
 
-                            {/* Category Switcher */}
-                            <div className="mb-3">
-                              <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold mb-1.5">
-                                1. Category
-                              </p>
-                              <div className="grid grid-cols-2 gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(idx, "Normal Size")}
-                                  className={`py-2 px-2 text-center rounded text-xs font-bold uppercase border transition-all cursor-pointer ${
-                                    shirt.category === "Normal Size"
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_8px_rgba(0,210,255,0.3)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  Normal Size (Adult)
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(idx, "Kids Size")}
-                                  className={`py-2 px-2 text-center rounded text-xs font-bold uppercase border transition-all cursor-pointer ${
-                                    shirt.category === "Kids Size"
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_8px_rgba(0,210,255,0.3)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  Kids Size (Youth)
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Size Selection Pills */}
-                            <div>
-                              <div className="flex items-center justify-between mb-1.5">
-                                <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold">
-                                  2. Choose Size
-                                </p>
-                                {shirt.size && (
-                                  <span className="text-[10px] text-zinc-400 font-mono">
-                                    {measurements[shirt.size]}
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="grid grid-cols-4 gap-1.5">
-                                {sizes.map((sizeId) => {
-                                  const isSelected = shirt.size === sizeId;
-                                  return (
-                                    <button
-                                      key={sizeId}
-                                      type="button"
-                                      onClick={() => handleSizeSelect(idx, sizeId)}
-                                      className={`py-2 px-1 text-center rounded border transition-all cursor-pointer ${
-                                        isSelected
-                                          ? "bg-[#00d2ff] border-[#00d2ff] text-black font-black shadow-[0_0_10px_rgba(0,210,255,0.5)]"
-                                          : "bg-[#080808] border-outline-variant text-zinc-300 hover:border-zinc-500 hover:text-white font-bold"
-                                      }`}
-                                    >
-                                      <div className="text-xs">{sizeId}</div>
-                                    </button>
-                                  );
-                                })}
-                              </div>
+                            <div className="grid grid-cols-4 gap-1.5">
+                              {SIZES.map((sizeId) => {
+                                const isSelected = shirt.size === sizeId;
+                                return (
+                                  <button
+                                    key={sizeId}
+                                    type="button"
+                                    onClick={() => handleSizeSelect(idx, sizeId)}
+                                    className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                                      isSelected
+                                        ? "bg-[#004491] border-[#00d2ff] text-white shadow-sm"
+                                        : "bg-[#0a0b12] border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
+                                    }`}
+                                  >
+                                    {sizeId}
+                                  </button>
+                                );
+                              })}
                             </div>
                           </div>
                         );
@@ -749,462 +554,230 @@ export default function TshirtPage() {
                         const shirt = shirts[targetIdx];
                         if (!shirt) return null;
 
-                        const sizes = shirt.category === "Normal Size" ? NORMAL_SIZES : KIDS_SIZES;
-                        const measurements = shirt.category === "Normal Size" ? SIZE_MEASUREMENTS : KIDS_MEASUREMENTS;
-
                         return (
-                          <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 mb-5 relative overflow-hidden rounded-sm">
-                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
-                            
-                            <div className="flex items-center justify-between mb-4">
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <h3 className="text-white text-base font-black uppercase tracking-wider">
-                                    Shirt #{targetIdx + 1}
-                                  </h3>
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                    {shirt.category}
-                                  </span>
-                                </div>
-                                <p className="text-zinc-500 text-xs mt-0.5">
-                                  Step 1: Category · Step 2: Size
-                                </p>
-                              </div>
-
+                          <div className="bg-[#12131f] border border-zinc-800/90 p-4 sm:p-5 mb-5 rounded-xl">
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className="text-white text-sm sm:text-base font-bold">
+                                Shirt {targetIdx + 1} Size
+                              </h3>
                               {shirt.size && (
-                                <div className="text-right">
-                                  <span className="text-[10px] uppercase tracking-widest text-zinc-500 block">Size</span>
-                                  <span className="text-lg font-black text-[#00d2ff] font-mono">
-                                    {shirt.size}
-                                  </span>
-                                </div>
+                                <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                  Size {shirt.size} selected
+                                </span>
                               )}
                             </div>
 
-                            {/* 1. Category Switcher */}
-                            <div className="mb-5">
-                              <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
-                                1. Select Category
-                              </p>
-                              <div className="grid grid-cols-2 gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(targetIdx, "Normal Size")}
-                                  className={`py-3 px-3 rounded text-center border transition-all cursor-pointer ${
-                                    shirt.category === "Normal Size"
-                                      ? "bg-[#004491]/35 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.4)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  <p className="text-xs font-bold uppercase">Normal Size</p>
-                                  <p className="text-[10px] text-zinc-500 mt-0.5">Adult (XS – 3XL)</p>
-                                </button>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                              {SIZES.map((sizeId) => {
+                                const isSelected = shirt.size === sizeId;
+                                const measurement = SIZE_MEASUREMENTS[sizeId];
 
-                                <button
-                                  type="button"
-                                  onClick={() => handleCategoryChange(targetIdx, "Kids Size")}
-                                  className={`py-3 px-3 rounded text-center border transition-all cursor-pointer ${
-                                    shirt.category === "Kids Size"
-                                      ? "bg-[#004491]/35 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.4)]"
-                                      : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
-                                  }`}
-                                >
-                                  <p className="text-xs font-bold uppercase">Kids Size</p>
-                                  <p className="text-[10px] text-zinc-500 mt-0.5">Youth (2XS – 2XL)</p>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* 2. Size Options Grid */}
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold">
-                                  2. Choose Size
-                                </p>
-                                {shirt.size && (
-                                  <span className="text-[11px] font-bold text-emerald-400">
-                                    Selected: {shirt.size} ✓
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                {sizes.map((sizeId) => {
-                                  const isSelected = shirt.size === sizeId;
-                                  const measurement = measurements[sizeId];
-
-                                  return (
-                                    <button
-                                      key={sizeId}
-                                      type="button"
-                                      onClick={() => {
-                                        handleSizeSelect(targetIdx, sizeId);
-                                        // Auto advance to next shirt if available and not yet set
-                                        if (targetIdx < shirtCount - 1 && !shirts[targetIdx + 1]?.size) {
-                                          setTimeout(() => setActiveMobileTab((targetIdx + 1).toString()), 250);
-                                        }
-                                      }}
-                                      className={`p-3 rounded border text-left flex flex-col justify-between transition-all cursor-pointer ${
-                                        isSelected
-                                          ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,210,255,0.5)]"
-                                          : "bg-[#080808] border-outline-variant text-zinc-300 hover:border-zinc-500 hover:text-white"
-                                      }`}
-                                    >
-                                      <div className="flex items-center justify-between w-full mb-1">
-                                        <span className="text-base font-black tracking-wide">{sizeId}</span>
-                                        {isSelected ? (
-                                          <span className="material-symbols-outlined text-white text-base">check_circle</span>
-                                        ) : (
-                                          <span className="w-3.5 h-3.5 rounded-full border border-zinc-700 inline-block" />
-                                        )}
-                                      </div>
-                                      {measurement && (
-                                        <span className={`text-[10px] font-mono ${isSelected ? "text-zinc-200" : "text-zinc-500"}`}>
-                                          {measurement}
-                                        </span>
+                                return (
+                                  <button
+                                    key={sizeId}
+                                    type="button"
+                                    onClick={() => {
+                                      handleSizeSelect(targetIdx, sizeId);
+                                      if (targetIdx < shirtCount - 1 && !shirts[targetIdx + 1]?.size) {
+                                        setTimeout(() => setActiveMobileTab((targetIdx + 1).toString()), 200);
+                                      }
+                                    }}
+                                    className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                                      isSelected
+                                        ? "bg-[#004491] border-[#00d2ff] text-white shadow-md"
+                                        : "bg-[#0a0b12] border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between w-full mb-1">
+                                      <span className="text-sm font-bold">{sizeId}</span>
+                                      {isSelected ? (
+                                        <span className="material-symbols-outlined text-sm text-[#00d2ff]">check_circle</span>
+                                      ) : (
+                                        <span className="w-3.5 h-3.5 rounded-full border border-zinc-700" />
                                       )}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-
-                              {/* Navigation Buttons for Multiple Shirts */}
-                              {shirtCount > 1 && (
-                                <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between gap-2">
-                                  <button
-                                    type="button"
-                                    disabled={targetIdx === 0}
-                                    onClick={() => setActiveMobileTab((targetIdx - 1).toString())}
-                                    className="px-3 py-1.5 text-xs font-bold uppercase border border-outline-variant text-zinc-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 rounded-sm cursor-pointer"
-                                  >
-                                    <span className="material-symbols-outlined text-sm">arrow_back</span>
-                                    Prev
+                                    </div>
+                                    {measurement && (
+                                      <span className="text-[11px] text-zinc-400">
+                                        {measurement}
+                                      </span>
+                                    )}
                                   </button>
-
-                                  <button
-                                    type="button"
-                                    onClick={() => setActiveMobileTab("all")}
-                                    className="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#00d2ff] bg-[#004491]/15 hover:bg-[#004491]/30 border border-[#004491]/40 rounded-sm flex items-center gap-1 cursor-pointer"
-                                  >
-                                    <span className="material-symbols-outlined text-xs">view_agenda</span>
-                                    Show All
-                                  </button>
-
-                                  <button
-                                    type="button"
-                                    disabled={targetIdx === shirtCount - 1}
-                                    onClick={() => setActiveMobileTab((targetIdx + 1).toString())}
-                                    className="px-3 py-1.5 text-xs font-bold uppercase border border-outline-variant text-zinc-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 rounded-sm cursor-pointer"
-                                  >
-                                    Next
-                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                                  </button>
-                                </div>
-                              )}
+                                );
+                              })}
                             </div>
+
+                            {shirtCount > 1 && (
+                              <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between gap-2">
+                                <button
+                                  type="button"
+                                  disabled={targetIdx === 0}
+                                  onClick={() => setActiveMobileTab((targetIdx - 1).toString())}
+                                  className="px-3 py-1.5 text-xs font-medium border border-zinc-700 rounded-lg text-zinc-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                                >
+                                  ← Previous
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setActiveMobileTab("all")}
+                                  className="px-3 py-1.5 text-xs font-medium text-[#00d2ff] bg-[#004491]/20 hover:bg-[#004491]/40 border border-[#004491]/50 rounded-lg cursor-pointer"
+                                >
+                                  View All Shirts
+                                </button>
+
+                                <button
+                                  type="button"
+                                  disabled={targetIdx === shirtCount - 1}
+                                  onClick={() => setActiveMobileTab((targetIdx + 1).toString())}
+                                  className="px-3 py-1.5 text-xs font-medium border border-zinc-700 rounded-lg text-zinc-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                                >
+                                  Next →
+                                </button>
+                              </div>
+                            )}
                           </div>
                         );
                       })()}
-
-                      {/* Mobile Review Checklist when in focused view */}
-                      {shirtCount > 1 && (
-                        <div className="mb-5 bg-[#080808] border border-outline-variant p-3.5 rounded-sm">
-                          <div className="flex items-center justify-between mb-2">
-                            <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">
-                              Configured Shirts:
-                            </p>
-                            <button
-                              type="button"
-                              onClick={() => setActiveMobileTab("all")}
-                              className="text-[10px] text-[#00d2ff] hover:underline font-bold uppercase"
-                            >
-                              Show All Shirts →
-                            </button>
-                          </div>
-                          <div className="space-y-1.5">
-                            {shirts.map((s, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => setActiveMobileTab(idx.toString())}
-                                className={`w-full text-left p-2.5 rounded text-xs flex items-center justify-between border transition-all cursor-pointer ${
-                                  activeMobileTab === idx.toString()
-                                    ? "border-[#00d2ff]/60 bg-[#004491]/20"
-                                    : "border-zinc-800/80 bg-[#0b0c16] hover:border-zinc-700"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span className="text-zinc-200 font-bold">Shirt #{idx + 1}</span>
-                                  <span className="text-zinc-500 text-[11px]">({s.category})</span>
-                                </div>
-                                {s.size ? (
-                                  <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#004491]/20 px-2 py-0.5 rounded border border-[#004491]/30">
-                                    Size {s.size} ✓
-                                  </span>
-                                ) : (
-                                  <span className="text-[10px] text-amber-400 font-semibold italic">
-                                    Tap to choose size
-                                  </span>
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   )}
 
                 </div>
 
                 {/* ════════════════════════════════════════════════════════════════
-                    DESKTOP MATRIX TABLE VIEW (Strictly hidden on mobile: hidden md:block)
+                    DESKTOP VIEW (Clean, human-crafted sizing layout: hidden md:block)
                    ════════════════════════════════════════════════════════════════ */}
                 <div className="hidden md:block">
 
-                  {/* Desktop Legend */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs mb-5 pb-3 border-b border-zinc-800/80">
-                    <span className="flex items-center gap-1.5 text-zinc-400 text-[10px] uppercase font-bold">
-                      <span className="w-2.5 h-2.5 bg-[#00d2ff] rounded-sm inline-block" /> Selected
-                    </span>
-                    <span className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold">
-                      <span className="w-2.5 h-2.5 border border-zinc-700 bg-zinc-900 rounded-sm inline-block" /> Available
-                    </span>
-                    <span className="flex items-center gap-1.5 text-zinc-600 text-[10px] uppercase font-bold">
-                      <span className="text-zinc-600 font-bold">—</span> Inactive
-                    </span>
-                  </div>
-                  
-                  {/* Category Selector Cards */}
-                  <div className="mb-6 bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold">
-                        Tshirt Category (Per Count)
-                      </p>
-                      <span className="text-zinc-500 text-[10px]">
-                        {shirts.length === 1 ? "1 Shirt Configured" : `${shirts.length} Shirts Configured`}
-                      </span>
-                    </div>
+                  {shirtCount === 1 ? (
+                    /* Single shirt clean selector */
+                    <div className="bg-[#12131f] border border-white/[0.06] rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 className="text-white text-base font-bold">Pick Your Size</h3>
+                          <p className="text-zinc-400 text-xs mt-0.5">
+                            Select one of the standard sizes below (unisex regular fit).
+                          </p>
+                        </div>
+                        {shirts[0]?.size && (
+                          <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs font-semibold">
+                            Selected: Size {shirts[0].size}
+                          </div>
+                        )}
+                      </div>
 
-                    <div
-                      className={`grid gap-3 transition-all duration-300 ${
-                        shirts.length === 1
-                          ? "grid-cols-1 w-full"
-                          : shirts.length === 2
-                            ? "grid-cols-1 sm:grid-cols-2"
-                            : shirts.length === 3
-                              ? "grid-cols-1 sm:grid-cols-3"
-                              : shirts.length === 4
-                                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-                                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
-                      }`}
-                    >
-                      {shirts.map((shirt, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-[#080808] border border-outline-variant p-4 transition-all duration-200 hover:border-zinc-700 rounded-sm"
-                        >
-                          <div
-                            className={`flex ${
-                              shirts.length === 1
-                                ? "flex-col sm:flex-row sm:items-center justify-between gap-4"
-                                : "flex-col"
-                            }`}
-                          >
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-wider">
-                                  Shirt #{idx + 1}
-                                </p>
-                                <span className="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-[#004491]/15 text-[#5b9aff] border border-[#004491]/30">
-                                  {shirt.category}
-                                </span>
-                              </div>
-                              {shirts.length === 1 && (
-                                <p className="text-zinc-500 text-xs mt-1">
-                                  Choose size type: Normal Size (Adult) or Kids Size
-                                </p>
-                              )}
-                            </div>
-
-                            <div
-                              className={`flex ${
-                                shirts.length === 1
-                                  ? "flex-row flex-wrap gap-3"
-                                  : "flex-col gap-2 mt-3"
+                      <div className="grid grid-cols-7 gap-3">
+                        {SIZES.map((sizeId) => {
+                          const isSelected = shirts[0]?.size === sizeId;
+                          const measurement = SIZE_MEASUREMENTS[sizeId];
+                          return (
+                            <button
+                              key={sizeId}
+                              type="button"
+                              onClick={() => handleSizeSelect(0, sizeId)}
+                              className={`p-4 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
+                                isSelected
+                                  ? "bg-[#004491] border-[#00d2ff] text-white shadow-lg shadow-[#004491]/30 scale-[1.02]"
+                                  : "bg-[#0c0d17] border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
                               }`}
                             >
-                              <label
-                                className={`flex items-center gap-2.5 px-3 py-2 border rounded cursor-pointer transition-all ${
-                                  shirt.category === "Normal Size"
-                                    ? "bg-[#004491]/25 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.35)]"
-                                    : "border-zinc-800 bg-[#0b0c16] text-zinc-400 hover:text-white hover:border-zinc-700"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name={`desktop-category-shirt-${idx}`}
-                                  value="Normal Size"
-                                  checked={shirt.category === "Normal Size"}
-                                  onChange={() => handleCategoryChange(idx, "Normal Size")}
-                                  className="accent-[#00d2ff] cursor-pointer"
-                                />
-                                <span className="text-xs font-semibold">Normal Size</span>
-                              </label>
+                              <span className="text-lg font-bold">{sizeId}</span>
+                              {measurement && (
+                                <span className={`text-[10px] ${isSelected ? "text-blue-100" : "text-zinc-400"}`}>
+                                  {measurement}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Multi-shirt clean list */
+                    <div className="border border-white/[0.08] bg-[#12131f] rounded-xl overflow-hidden shadow-sm">
+                      <div className="p-4 border-b border-zinc-800 bg-[#0c0d17] flex items-center justify-between">
+                        <div>
+                          <h3 className="text-white text-sm font-bold">Configure All {shirtCount} T-Shirts</h3>
+                          <p className="text-zinc-400 text-xs">
+                            Select a size for each shirt in the list below.
+                          </p>
+                        </div>
+                        <div className="text-xs text-zinc-400 font-medium">
+                          <span className="text-white font-bold">{shirts.filter((s) => s.size).length}</span> of {shirtCount} sized
+                        </div>
+                      </div>
 
-                              <label
-                                className={`flex items-center gap-2.5 px-3 py-2 border rounded cursor-pointer transition-all ${
-                                  shirt.category === "Kids Size"
-                                    ? "bg-[#004491]/25 border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,68,145,0.35)]"
-                                    : "border-zinc-800 bg-[#0b0c16] text-zinc-400 hover:text-white hover:border-zinc-700"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name={`desktop-category-shirt-${idx}`}
-                                  value="Kids Size"
-                                  checked={shirt.category === "Kids Size"}
-                                  onChange={() => handleCategoryChange(idx, "Kids Size")}
-                                  className="accent-[#00d2ff] cursor-pointer"
-                                />
-                                <span className="text-xs font-semibold">Kids Size</span>
-                              </label>
+                      <div className="divide-y divide-zinc-800/80">
+                        {shirts.map((shirt, idx) => (
+                          <div
+                            key={idx}
+                            className="p-4 flex items-center justify-between gap-4 hover:bg-white/[0.015] transition-colors"
+                          >
+                            <div className="flex items-center gap-3 min-w-[140px]">
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${
+                                shirt.size
+                                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                  : "bg-zinc-800 text-zinc-400"
+                              }`}>
+                                #{idx + 1}
+                              </div>
+                              <div>
+                                <p className="text-white text-sm font-semibold">Shirt {idx + 1}</p>
+                                <p className="text-zinc-400 text-xs">
+                                  {shirt.size ? `Size ${shirt.size}` : "No size picked yet"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              {SIZES.map((sizeId) => {
+                                const isSelected = shirt.size === sizeId;
+                                return (
+                                  <button
+                                    key={sizeId}
+                                    type="button"
+                                    title={`${sizeId} (${SIZE_MEASUREMENTS[sizeId]})`}
+                                    onClick={() => handleSizeSelect(idx, sizeId)}
+                                    className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                                      isSelected
+                                        ? "bg-[#004491] text-white border border-[#00d2ff] shadow-sm"
+                                        : "bg-[#0c0d17] border border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
+                                    }`}
+                                  >
+                                    {sizeId}
+                                  </button>
+                                );
+                              })}
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* MATRIX TABLE (With sticky left column to prevent truncation) */}
-                  <div className="overflow-x-auto border border-outline-variant bg-[#0b0c16] rounded-sm">
-                    <table className="w-full text-center border-collapse">
-                      <thead>
-                        <tr className="border-b border-outline-variant bg-[#080808]">
-                          <th className={`p-4 text-left text-zinc-400 text-xs font-bold uppercase tracking-widest sticky left-0 bg-[#080808] z-10 border-r border-outline-variant shadow-[4px_0_10px_rgba(0,0,0,0.6)] ${shirts.length === 1 ? 'w-1/2 sm:w-2/5 min-w-[160px]' : 'min-w-[140px]'}`}>
-                            Size
-                          </th>
-                          {shirts.map((s, idx) => (
-                            <th key={idx} className={`p-4 border-l border-outline-variant ${shirts.length === 1 ? 'w-1/2 sm:w-3/5' : 'min-w-[90px]'}`}>
-                              <div className="flex flex-col items-center">
-                                <span className="text-white text-base font-black tracking-wide">
-                                  {shirts.length === 1 ? "Shirt #1 Selection" : idx + 1}
-                                </span>
-                                <span className="text-[9px] uppercase tracking-widest text-[#5b9aff] mt-0.5 font-bold">
-                                  {s.category === "Kids Size" ? "Kids Size" : "Normal / Adult"}
-                                </span>
-                              </div>
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-outline-variant/60">
-                        {TABLE_SIZE_ROWS.map((row) => (
-                          <tr key={row.id} className="hover:bg-white/[0.02] transition-colors">
-                            {/* Sticky Row label on the left */}
-                            <td className="p-3.5 text-left text-xs font-bold uppercase tracking-wider text-zinc-200 sticky left-0 bg-[#080808] z-10 border-r border-outline-variant shadow-[4px_0_10px_rgba(0,0,0,0.6)]">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className={row.id === "2XS" ? "text-[#00d2ff]" : ""}>
-                                  {row.label}
-                                </span>
-                                {shirts.length === 1 && (
-                                  <span className="text-[10px] text-zinc-600 font-normal normal-case hidden sm:inline">
-                                    {row.isKidsOnly ? "(Kids only)" : row.isNormalOnly ? "(Adult only)" : ""}
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-
-                            {/* Columns 1..N */}
-                            {shirts.map((shirt, idx) => {
-                              const isCompatible =
-                                shirt.category === "Normal Size"
-                                  ? NORMAL_SIZES.includes(row.id)
-                                  : KIDS_SIZES.includes(row.id);
-
-                              const isSelected = shirt.size === row.id;
-
-                              return (
-                                <td
-                                  key={idx}
-                                  title={
-                                    !isCompatible
-                                      ? row.id === "2XS"
-                                        ? "Click to switch this shirt to Kids Size"
-                                        : "Click to switch this shirt to Normal Size"
-                                      : `Select ${row.label} for Shirt #${idx + 1}`
-                                  }
-                                  className={`p-3 border-l border-outline-variant transition-colors ${
-                                    !isCompatible
-                                      ? "bg-black/30 text-zinc-600 hover:bg-[#004491]/10 cursor-pointer group/cell"
-                                      : isSelected
-                                        ? "bg-[#004491]/20 cursor-pointer"
-                                        : "hover:bg-[#004491]/10 cursor-pointer"
-                                  }`}
-                                  onClick={() => {
-                                    handleSizeSelect(idx, row.id);
-                                  }}
-                                >
-                                  {isCompatible ? (
-                                    <div className="flex items-center justify-center gap-2">
-                                      <div
-                                        className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-all ${
-                                          isSelected
-                                            ? "bg-[#004491] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.6)]"
-                                            : "border-zinc-600 bg-[#080808] hover:border-zinc-400"
-                                        }`}
-                                      >
-                                        {isSelected && (
-                                          <span className="material-symbols-outlined text-white text-sm font-black">
-                                            check
-                                          </span>
-                                        )}
-                                      </div>
-                                      {shirts.length === 1 && isSelected && (
-                                        <span className="text-xs font-bold text-[#00d2ff] hidden sm:inline">
-                                          Selected
-                                        </span>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <span className="text-zinc-600 group-hover/cell:text-zinc-400 text-xs select-none">
-                                      —
-                                    </span>
-                                  )}
-                                </td>
-                              );
-                            })}
-                          </tr>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Desktop Selected Sizes Summary Pills */}
-                  <div className="mt-5 pt-4 border-t border-zinc-800">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mb-2">
-                      Current Selection:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mt-4 pt-3 border-t border-zinc-800/70 flex items-center justify-between">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs text-zinc-400 font-medium">Selected summary:</span>
                       {shirts.map((s, idx) => (
                         <div
                           key={idx}
-                          className={`text-xs px-3 py-1.5 rounded border flex items-center gap-2 ${
+                          className={`text-xs px-2.5 py-1 rounded-md border flex items-center gap-1.5 ${
                             s.size
-                              ? "bg-[#004491]/15 border-[#004491]/50 text-white"
-                              : "bg-red-950/30 border-red-500/40 text-red-300"
+                              ? "bg-[#004491]/20 border-[#004491]/60 text-blue-200"
+                              : "bg-amber-950/20 border-amber-500/30 text-amber-300"
                           }`}
                         >
-                          <span className="font-bold">Shirt #{idx + 1}:</span>
-                          <span className="text-zinc-300">{s.category}</span>
-                          <span className="text-zinc-500">·</span>
-                          {s.size ? (
-                            <span className="font-bold text-[#00d2ff] uppercase">{s.size}</span>
-                          ) : (
-                            <span className="text-red-400 text-[11px] font-semibold italic">Select size in table</span>
-                          )}
+                          <span className="font-semibold">#{idx + 1}:</span>
+                          <span>{s.size ? s.size : "None"}</span>
                         </div>
                       ))}
                     </div>
+                    {shirts.every((s) => s.size) && (
+                      <span className="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">check_circle</span>
+                        All sizes configured
+                      </span>
+                    )}
                   </div>
 
                 </div>
@@ -1212,65 +785,68 @@ export default function TshirtPage() {
               </div>
 
               {/* Step 4: Payment Instructions & File Upload */}
-              <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-                
+              <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
+                  <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
                     4
                   </div>
-                  <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                    Payment Details &amp; Slip Upload
-                  </h2>
+                  <div>
+                    <h2 className="text-white text-base sm:text-lg font-bold">
+                      4. Payment &amp; Slip Upload
+                    </h2>
+                    <p className="text-zinc-400 text-xs mt-0.5">
+                      Transfer the total amount to the official club account and upload your deposit slip or receipt.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Bank Account Info Card */}
-                <div className="mb-6 bg-[#0b0c16] border border-outline-variant p-5 rounded-sm">
+                <div className="mb-6 bg-[#12131f] border border-white/[0.06] p-5 sm:p-6 rounded-xl">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800 mb-4">
                     <div>
-                      <p className="text-[10px] uppercase tracking-widest text-[#5b9aff] font-bold">
-                        Direct Bank Transfer / Deposit
-                      </p>
-                      <h3 className="text-white text-base font-bold mt-0.5">People&apos;s Bank</h3>
+                      <span className="text-xs font-semibold text-[#5b9aff]">
+                        Direct Bank Transfer or Online Deposit
+                      </span>
+                      <h3 className="text-white text-lg font-bold mt-0.5">People&apos;s Bank</h3>
                     </div>
                     <div className="text-left sm:text-right">
-                      <p className="text-[10px] uppercase tracking-widest text-zinc-500">Total Payable</p>
-                      <p className="text-xl font-black text-emerald-400">
+                      <p className="text-xs text-zinc-400">Total Payable</p>
+                      <p className="text-2xl font-bold text-emerald-400 font-mono">
                         LKR {(shirtCount * PRICE_PER_SHIRT).toLocaleString()}
                       </p>
-                      <p className="text-[10px] text-zinc-500">({shirtCount} × LKR {PRICE_PER_SHIRT.toLocaleString()})</p>
+                      <p className="text-[11px] text-zinc-400 font-medium">({shirtCount} × LKR {PRICE_PER_SHIRT.toLocaleString()})</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                     <div>
-                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Name</p>
-                      <p className="text-zinc-200 font-semibold">Electronics and Computer Science Student Club</p>
+                      <p className="text-zinc-400 text-[11px] mb-1">Account Name</p>
+                      <p className="text-zinc-100 font-medium">Electronics and Computer Science Student Club</p>
                     </div>
                     <div>
-                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Number</p>
+                      <p className="text-zinc-400 text-[11px] mb-1">Account Number</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-zinc-200 font-mono font-bold text-sm">055200290051008</p>
+                        <p className="text-white font-mono font-bold text-sm tracking-wide">055200290051008</p>
                         <button
                           type="button"
                           onClick={handleCopyAccount}
-                          className="text-[10px] text-[#5b9aff] hover:text-white underline"
+                          className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-[#5b9aff] hover:text-white text-xs font-medium transition-colors cursor-pointer"
                         >
                           {copiedAccount ? "Copied!" : "Copy"}
                         </button>
                       </div>
                     </div>
                     <div>
-                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Branch</p>
-                      <p className="text-zinc-200 font-semibold">Kelaniya Branch</p>
+                      <p className="text-zinc-400 text-[11px] mb-1">Branch</p>
+                      <p className="text-zinc-100 font-medium">Kelaniya Branch</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Upload Box */}
                 <div className="mb-6">
-                  <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-3">
-                    Upload Payment Slip / Receipt <span className="text-red-400">*</span>
+                  <label className="block text-zinc-300 text-xs font-semibold mb-2.5">
+                    Payment Slip / Receipt <span className="text-red-400">*</span>
                   </label>
 
                   <div
@@ -1278,12 +854,12 @@ export default function TshirtPage() {
                     onDragLeave={() => setDragOver(false)}
                     onDrop={handleDrop}
                     onClick={() => document.getElementById("tshirt-slip-upload")?.click()}
-                    className={`relative cursor-pointer border-2 border-dashed p-8 transition-all duration-200 text-center rounded-sm ${
+                    className={`relative cursor-pointer border-2 border-dashed p-6 sm:p-8 transition-all duration-200 text-center rounded-xl ${
                       dragOver
-                        ? "border-[#00d2ff] bg-[#004491]/10"
+                        ? "border-[#00d2ff] bg-[#004491]/15"
                         : paymentSlip
                           ? "border-emerald-500/50 bg-emerald-500/5"
-                          : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]"
+                          : "border-zinc-700 hover:border-zinc-500 bg-[#12131f]"
                     }`}
                   >
                     <input
@@ -1297,10 +873,11 @@ export default function TshirtPage() {
                     {paymentSlip ? (
                       <div className="flex flex-col items-center gap-3">
                         {preview ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={preview}
                             alt="Payment Slip Preview"
-                            className="max-h-48 max-w-full object-contain border border-outline-variant rounded"
+                            className="max-h-48 max-w-full object-contain border border-zinc-700 rounded-lg shadow-sm"
                           />
                         ) : (
                           <span className="material-symbols-outlined text-emerald-400 text-5xl">
@@ -1309,24 +886,24 @@ export default function TshirtPage() {
                         )}
                         <div>
                           <p className="text-white text-sm font-semibold">{paymentSlip.name}</p>
-                          <p className="text-zinc-500 text-[10px] mt-0.5">
-                            {(paymentSlip.size / 1024).toFixed(1)} KB · Click or drop another to replace
+                          <p className="text-zinc-400 text-xs mt-0.5">
+                            {(paymentSlip.size / 1024).toFixed(1)} KB · Click or drag another file to replace
                           </p>
                         </div>
                       </div>
                     ) : (
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-[#004491]/10 border border-[#004491]/30 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-[#004491]/15 border border-[#004491]/40 flex items-center justify-center">
                           <span className="material-symbols-outlined text-[#5b9aff] text-2xl">
                             cloud_upload
                           </span>
                         </div>
                         <div>
-                          <p className="text-zinc-300 text-sm font-semibold">
-                            Drag &amp; drop your payment receipt here
+                          <p className="text-zinc-200 text-sm font-semibold">
+                            Click to browse or drag &amp; drop your receipt
                           </p>
-                          <p className="text-zinc-500 text-[10px] mt-1">
-                            or click to browse files · JPG, PNG, WebP, PDF (max 5MB)
+                          <p className="text-zinc-400 text-xs mt-1">
+                            Accepted formats: JPG, PNG, WebP, PDF (max 5MB)
                           </p>
                         </div>
                       </div>
@@ -1336,34 +913,34 @@ export default function TshirtPage() {
 
                 {/* Reference Number Field */}
                 <div>
-                  <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
-                    Payment Reference / Transaction ID (Optional)
+                  <label className="block text-zinc-300 text-xs font-semibold mb-2">
+                    Payment Reference / Transaction ID <span className="text-zinc-500 font-normal">(Optional)</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. TXN-984210384 or Deposit Slip Ref"
+                    placeholder="e.g. TXN-984210384 or Deposit Slip Reference"
                     value={referenceNumber}
                     onChange={(e) => setReferenceNumber(e.target.value)}
-                    className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors placeholder:text-zinc-700"
+                    className="w-full bg-[#12131f] border border-zinc-800 rounded-xl text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] focus:ring-1 focus:ring-[#004491] transition-colors placeholder:text-zinc-600"
                   />
                 </div>
               </div>
 
               {/* Submit Button & Summary Bar */}
-              <div className="bg-[#080808] border border-outline-variant p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <p className="text-white text-sm font-bold">
+                  <p className="text-white text-base font-bold">
                     Total: {shirtCount} {shirtCount === 1 ? "T-Shirt" : "T-Shirts"} · LKR {(shirtCount * PRICE_PER_SHIRT).toLocaleString()}
                   </p>
-                  <p className="text-zinc-500 text-xs">
-                    Please verify sizes and contact information before submitting.
+                  <p className="text-zinc-400 text-xs mt-0.5">
+                    Please make sure sizes and WhatsApp contact number are correct before submitting.
                   </p>
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-[#004491] text-white text-xs uppercase tracking-widest font-black hover:bg-[#002d5e] border border-[#004491] hover:shadow-[0_0_20px_rgba(0,68,145,0.4)] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-[#004491] hover:bg-[#003570] text-white text-sm font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-[#004491]/25"
                 >
                   {submitting ? (
                     <>
@@ -1372,7 +949,7 @@ export default function TshirtPage() {
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-sm">shopping_bag</span>
+                      <span className="material-symbols-outlined text-base">shopping_bag</span>
                       Submit T-Shirt Pre-Order
                     </>
                   )}

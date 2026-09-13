@@ -848,7 +848,7 @@ function TeamTshirtOrdersDetail({ teamId }) {
               ))}
             </div>
             <div style={{ fontSize: 11, color: "#71717a", display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #18181b", paddingTop: 6, flexWrap: "wrap", gap: 6 }}>
-              <span>Total: <strong style={{ color: "#10b981" }}>LKR {((o.shirtCount || (o.shirts?.length || 0)) * 1800).toLocaleString()}</strong></span>
+              <span>Total: <strong style={{ color: "#10b981" }}>LKR {((o.shirtCount || (o.shirts?.length || 0)) * 1900).toLocaleString()}</strong></span>
               {o.referenceNumber && <span>Ref: {o.referenceNumber}</span>}
               {o.driveViewUrl ? (
                 <a
@@ -989,7 +989,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
     (sum, o) => sum + (o.shirtCount || (o.shirts?.length || 0)),
     0
   );
-  const totalRevenue = totalShirts * 1800;
+  const totalRevenue = totalShirts * 1900;
   const teamOrdersCount = orders.filter((o) => Boolean(o.teamId)).length;
   const publicOrdersCount = orders.filter((o) => !o.teamId).length;
 
@@ -1250,7 +1250,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
               <tbody>
                 {filtered.map((ord, i) => {
                   const count = ord.shirtCount || (ord.shirts?.length || 0);
-                  const amount = count * 1800;
+                  const amount = count * 1900;
 
                   // Group sizes for compact badge view
                   const sizeMap = {};
@@ -1472,7 +1472,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                               {s.size}
                             </span>
                           </td>
-                          <td style={{ padding: "8px 10px", textAlign: "right", fontFamily: "monospace", color: "#10b981" }}>LKR 1,800</td>
+                          <td style={{ padding: "8px 10px", textAlign: "right", fontFamily: "monospace", color: "#10b981" }}>LKR 1,900</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1482,7 +1482,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, paddingTop: 10, borderTop: "1px solid #18181b" }}>
                   <span style={{ fontSize: 11, color: "#a1a1aa" }}>Total Payable</span>
                   <span style={{ fontSize: 15, fontWeight: 900, color: "#10b981", fontFamily: "monospace" }}>
-                    LKR {((selectedOrder.shirtCount || selectedOrder.shirts?.length || 0) * 1800).toLocaleString()}
+                    LKR {((selectedOrder.shirtCount || selectedOrder.shirts?.length || 0) * 1900).toLocaleString()}
                   </span>
                 </div>
               </DetailSection>

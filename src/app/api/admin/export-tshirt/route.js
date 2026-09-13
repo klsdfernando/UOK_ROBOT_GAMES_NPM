@@ -14,7 +14,7 @@ function isAuthorized(req) {
   return KNOWN_SECRETS.includes(secret);
 }
 
-const PRICE_PER_SHIRT = 1800;
+const PRICE_PER_SHIRT = 1900;
 
 export async function GET(req) {
   try {
