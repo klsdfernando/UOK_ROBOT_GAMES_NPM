@@ -398,39 +398,30 @@ export default function TeamTshirtSection({ team }) {
     <div className="space-y-8 animate-fadeIn">
       
       {/* ─── Hero Header Banner ─── */}
-      <div className="relative rounded-2xl overflow-hidden border border-white/[0.06]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#004491]/25 via-[#080808] to-[#080808]" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#004491]/15 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#00d2ff]/10 rounded-full blur-[80px]" />
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent" />
-
-        <div className="relative z-10 p-6 sm:p-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
-            <div className="flex items-center justify-center lg:justify-start gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-[#004491]/20 flex items-center justify-center border border-[#004491]/30">
-                <span className="material-symbols-outlined text-[#00d2ff] text-xl">apparel</span>
-              </div>
-              <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#5b9aff]">
-                Team Pre-Order Portal
-              </span>
+      <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#004491]/20 border border-[#004491]/40 text-[#5b9aff] text-xs font-semibold mb-3">
+              <span className="material-symbols-outlined text-sm">apparel</span>
+              <span>Team T-Shirt Orders</span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-2 uppercase">
-              UOK Robot Games 2K26 <span className="text-[#00d2ff]">T-Shirts</span>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+              Official T-Shirts for <span className="text-[#00d2ff]">{team.teamName}</span>
             </h1>
 
-            <p className="text-zinc-400 text-xs sm:text-sm max-w-2xl leading-relaxed mx-auto lg:mx-0">
-              Equip <strong className="text-white font-bold">{team.teamName}</strong> with official arena jerseys. Select which students want a shirt, customize sizes, and submit your team&apos;s slip in one unified order.
+            <p className="text-zinc-400 text-xs sm:text-sm max-w-2xl leading-relaxed">
+              Equip your members and mentors with official UOK Robot Games 2K26 arena jerseys. Select who wants a shirt, choose sizes from XS to 3XL, and upload your payment slip in one unified team order.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mt-4">
-              <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                Team: {team.teamName}
+            <div className="flex flex-wrap items-center gap-2.5 mt-4">
+              <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#12131f] text-zinc-300 border border-zinc-800">
+                Team: <strong className="text-white font-medium">{team.teamName}</strong>
               </span>
 
               {hasExistingOrders && (
-                <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Order Confirmed ({totalShirtsOrdered} {totalShirtsOrdered === 1 ? "Shirt" : "Shirts"})
                 </span>
               )}
@@ -438,35 +429,35 @@ export default function TeamTshirtSection({ team }) {
               <button
                 type="button"
                 onClick={() => setShowSizeChart(!showSizeChart)}
-                className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded border border-outline-variant hover:border-[#00d2ff] bg-[#0b0c16] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-xs font-semibold px-3 py-1 rounded-lg border border-zinc-700 hover:border-zinc-500 bg-[#12131f] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-xs">straighten</span>
-                {showSizeChart ? "Hide Size Chart" : "Size Measurements"}
+                {showSizeChart ? "Hide Size Chart" : "View Size Chart"}
               </button>
 
               {hasExistingOrders && (
-                <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded bg-[#0b0c16] text-zinc-400 border border-zinc-800 flex items-center gap-1.5">
+                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#12131f] text-zinc-400 border border-zinc-800 flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-xs text-[#00d2ff]">lock</span>
-                  Order Locked (Cannot Edit)
+                  Locked
                 </span>
               )}
             </div>
           </div>
 
           {/* Quick Price Card */}
-          <div className="bg-[#0b0c16]/80 border border-outline-variant p-4 sm:p-5 rounded-xl text-center shrink-0 w-full sm:w-auto">
-            <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
-              {hasExistingOrders ? "Team Order Value" : `Team Allowance: Up to ${maxAllowedShirts} Shirts`}
+          <div className="bg-[#12131f] border border-white/[0.06] p-5 rounded-xl text-center shrink-0 w-full sm:w-auto">
+            <span className="text-xs text-zinc-400 font-medium block mb-1">
+              {hasExistingOrders ? "Team Order Total" : `Allowance: Up to ${maxAllowedShirts} Shirts`}
             </span>
-            <span className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
+            <span className="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">
               {hasExistingOrders
                 ? `LKR ${((primaryOrder?.shirtCount || totalShirtsOrdered) * PRICE_PER_SHIRT).toLocaleString()}`
                 : `LKR ${PRICE_PER_SHIRT.toLocaleString()}`}
             </span>
-            <span className="text-[10px] text-zinc-400 block mt-0.5">
+            <span className="text-xs text-zinc-400 block mt-1">
               {hasExistingOrders
-                ? `${totalShirtsOrdered} Shirts Ordered · ${remainingAllowance > 0 ? `${remainingAllowance} More Allowed` : "Allowance Filled"}`
-                : `Per T-Shirt · ${teamMemberCount} Members + ${MAX_EXTRAS} Extras`}
+                ? `${totalShirtsOrdered} Shirts Ordered · ${remainingAllowance > 0 ? `${remainingAllowance} More Allowed` : "Max Reached"}`
+                : `Per shirt · ${teamMemberCount} members + ${MAX_EXTRAS} extras`}
             </span>
           </div>
         </div>
@@ -474,45 +465,41 @@ export default function TeamTshirtSection({ team }) {
 
       {/* ─── Size Chart Drawer / Modal ─── */}
       {showSizeChart && (
-        <div className="bg-[#080808] border border-outline-variant p-6 relative rounded-sm overflow-hidden animate-fadeIn">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
+        <div className="bg-[#0d0e18] border border-white/[0.08] p-6 rounded-2xl animate-fadeIn">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
-              <h3 className="text-white text-sm font-bold uppercase tracking-wider">
+              <h3 className="text-white text-sm font-bold">
                 T-Shirt Size Measurements (Inches)
               </h3>
             </div>
             <button
               type="button"
               onClick={() => setShowSizeChart(false)}
-              className="text-zinc-500 hover:text-white cursor-pointer"
+              className="text-zinc-500 hover:text-white cursor-pointer p-1"
             >
               <span className="material-symbols-outlined text-lg">close</span>
             </button>
           </div>
 
           <div className="max-w-md mx-auto">
-            <p className="text-[#00d2ff] text-xs font-bold uppercase tracking-widest mb-2 text-center">
-              Size Measurements (Inches)
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left text-zinc-300 border border-zinc-800">
-                <thead className="bg-[#0b0c16] text-zinc-400 uppercase tracking-wider text-[10px]">
+            <div className="overflow-x-auto border border-zinc-800 rounded-xl overflow-hidden">
+              <table className="w-full text-xs text-left text-zinc-300">
+                <thead className="bg-[#12131f] text-zinc-400 text-xs font-semibold border-b border-zinc-800">
                   <tr>
-                    <th className="p-2.5 border-b border-zinc-800">Size</th>
-                    <th className="p-2.5 border-b border-zinc-800">Chest (in)</th>
-                    <th className="p-2.5 border-b border-zinc-800">Length (in)</th>
+                    <th className="p-3">Size</th>
+                    <th className="p-3">Chest (in)</th>
+                    <th className="p-3">Length (in)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-800/60">
-                  <tr><td className="p-2 font-bold text-white">XS</td><td className="p-2">36&quot;</td><td className="p-2">26&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">S</td><td className="p-2">38&quot;</td><td className="p-2">27&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">M</td><td className="p-2">40&quot;</td><td className="p-2">28&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">L</td><td className="p-2">42&quot;</td><td className="p-2">29&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">XL</td><td className="p-2">44&quot;</td><td className="p-2">30&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">2XL</td><td className="p-2">46&quot;</td><td className="p-2">31&quot;</td></tr>
-                  <tr><td className="p-2 font-bold text-white">3XL</td><td className="p-2">48&quot;</td><td className="p-2">32&quot;</td></tr>
+                <tbody className="divide-y divide-zinc-800 bg-[#080811]">
+                  <tr><td className="p-3 font-bold text-white">XS</td><td className="p-3">36&quot;</td><td className="p-3">26&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">S</td><td className="p-3">38&quot;</td><td className="p-3">27&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">M</td><td className="p-3">40&quot;</td><td className="p-3">28&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">L</td><td className="p-3">42&quot;</td><td className="p-3">29&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">XL</td><td className="p-3">44&quot;</td><td className="p-3">30&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">2XL</td><td className="p-3">46&quot;</td><td className="p-3">31&quot;</td></tr>
+                  <tr><td className="p-3 font-bold text-white">3XL</td><td className="p-3">48&quot;</td><td className="p-3">32&quot;</td></tr>
                 </tbody>
               </table>
             </div>
@@ -564,37 +551,35 @@ export default function TeamTshirtSection({ team }) {
           )}
 
           {/* Main Order Details Card */}
-          <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8 rounded-xl overflow-hidden shadow-2xl">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#10b981]" />
-
+          <div className="bg-[#0d0e18] border border-white/[0.08] p-6 sm:p-8 rounded-2xl">
             {/* Card Header */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6 mb-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     {primaryOrder.status === 'verified' ? 'Order Verified & Approved' : 'Order Confirmed · Slip Received'}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-zinc-900/90 text-zinc-400 border border-zinc-700">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-zinc-800/80 text-zinc-400 border border-zinc-700">
                     <span className="material-symbols-outlined text-xs text-[#00d2ff]">lock</span>
-                    Order Finalized
+                    Locked
                   </span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
-                  Official Team Pre-Order Details
+                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  Team Pre-Order Summary
                 </h2>
                 <p className="text-zinc-400 text-xs mt-1">
                   Submitted on {primaryOrder.createdAt ? new Date(primaryOrder.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently'}
-                  {" · "}Team: <strong className="text-white">{team.teamName}</strong>
+                  {" · "}Team: <strong className="text-white font-medium">{team.teamName}</strong>
                 </p>
               </div>
 
               {/* Order ID & Copy */}
               <div className="flex items-center gap-2 self-start lg:self-auto">
-                <div className="bg-[#0b0c16] border border-[#004491]/50 px-4 py-2.5 rounded-lg flex items-center gap-3">
+                <div className="bg-[#12131f] border border-zinc-800 px-4 py-2.5 rounded-xl flex items-center gap-3">
                   <div>
-                    <span className="text-[9px] uppercase tracking-widest text-zinc-500 block">Order ID</span>
-                    <span className="text-sm sm:text-base font-mono font-bold text-[#00d2ff]">
+                    <span className="text-[10px] text-zinc-400 block font-medium">Order ID</span>
+                    <span className="text-sm font-mono font-bold text-[#00d2ff]">
                       {primaryOrder.orderId || primaryOrder.id}
                     </span>
                   </div>
@@ -605,13 +590,13 @@ export default function TeamTshirtSection({ team }) {
                       setCopiedOrderId(true);
                       setTimeout(() => setCopiedOrderId(false), 2000);
                     }}
-                    className="p-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                    className="p-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer"
                     title="Copy Order ID"
                   >
                     <span className="material-symbols-outlined text-sm">
                       {copiedOrderId ? "done" : "content_copy"}
                     </span>
-                    <span className="text-[10px] font-bold">{copiedOrderId ? "Copied" : "Copy"}</span>
+                    <span className="text-xs font-medium">{copiedOrderId ? "Copied" : "Copy"}</span>
                   </button>
                 </div>
               </div>
@@ -619,55 +604,55 @@ export default function TeamTshirtSection({ team }) {
 
             {/* 4 Overview Metrics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-1 text-[#00d2ff]">
+              <div className="bg-[#12131f] border border-white/[0.06] p-4 rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1 text-[#00d2ff]">
                   <span className="material-symbols-outlined text-base">apparel</span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Total Shirts</span>
+                  <span className="text-xs font-semibold text-zinc-400">Total Shirts</span>
                 </div>
-                <p className="text-xl sm:text-2xl font-black text-white font-mono">
+                <p className="text-xl sm:text-2xl font-bold text-white font-mono">
                   {primaryOrder.shirtCount || primaryShirts.length}
                 </p>
-                <p className="text-[10px] text-zinc-500 mt-0.5">
-                  Official Arena Jerseys
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Official arena jerseys
                 </p>
               </div>
 
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-1 text-emerald-400">
+              <div className="bg-[#12131f] border border-white/[0.06] p-4 rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1 text-emerald-400">
                   <span className="material-symbols-outlined text-base">payments</span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Total Amount</span>
+                  <span className="text-xs font-semibold text-zinc-400">Total Paid</span>
                 </div>
-                <p className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
+                <p className="text-xl sm:text-2xl font-bold text-emerald-400 font-mono">
                   LKR {primaryTotalPaid.toLocaleString()}
                 </p>
-                <p className="text-[10px] text-zinc-500 mt-0.5">
-                  LKR {PRICE_PER_SHIRT.toLocaleString()} × {primaryOrder.shirtCount || primaryShirts.length}
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  {primaryOrder.shirtCount || primaryShirts.length} × LKR {PRICE_PER_SHIRT.toLocaleString()}
                 </p>
               </div>
 
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-1 text-[#5b9aff]">
+              <div className="bg-[#12131f] border border-white/[0.06] p-4 rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1 text-[#5b9aff]">
                   <span className="material-symbols-outlined text-base">person</span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Contact Person</span>
+                  <span className="text-xs font-semibold text-zinc-400">Contact</span>
                 </div>
                 <p className="text-sm sm:text-base font-bold text-white truncate">
                   {primaryOrder.name}
                 </p>
-                <p className="text-[10px] text-zinc-400 font-mono mt-0.5 truncate">
+                <p className="text-xs text-zinc-400 font-mono mt-0.5 truncate">
                   {primaryOrder.whatsappNumber}
                 </p>
               </div>
 
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-1 text-amber-400">
+              <div className="bg-[#12131f] border border-white/[0.06] p-4 rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1 text-amber-400">
                   <span className="material-symbols-outlined text-base">storefront</span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">Collection</span>
+                  <span className="text-xs font-semibold text-zinc-400">Collection</span>
                 </div>
                 <p className="text-sm sm:text-base font-bold text-white">
                   Arena Desk
                 </p>
-                <p className="text-[10px] text-zinc-400 mt-0.5">
-                  On Event Day
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  On event day
                 </p>
               </div>
             </div>
@@ -797,11 +782,11 @@ export default function TeamTshirtSection({ team }) {
             {/* Payment Verification & Bank Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {/* Slip Verification Box */}
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-lg">
+              <div className="bg-[#12131f] border border-white/[0.06] p-5 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="material-symbols-outlined text-emerald-400 text-base">verified</span>
                   <h4 className="text-white text-xs font-bold uppercase tracking-wider">
-                    Payment Slip & Verification
+                    Payment Slip &amp; Verification
                   </h4>
                 </div>
 
@@ -810,7 +795,7 @@ export default function TeamTshirtSection({ team }) {
                     <span className="text-zinc-400">Payment Slip</span>
                     <span className="text-emerald-400 font-medium flex items-center gap-1">
                       <span className="material-symbols-outlined text-sm">check</span>
-                      Attached & Logged
+                      Attached &amp; Logged
                     </span>
                   </div>
 
@@ -835,8 +820,8 @@ export default function TeamTshirtSection({ team }) {
 
                   {preview && (
                     <div className="mt-3 pt-3 border-t border-zinc-800">
-                      <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-2">Slip Thumbnail</span>
-                      <div className="max-w-[160px] max-h-32 overflow-hidden rounded border border-zinc-800 bg-black">
+                      <span className="text-[10px] text-zinc-400 block mb-2 font-medium">Slip Thumbnail</span>
+                      <div className="max-w-[160px] max-h-32 overflow-hidden rounded-lg border border-zinc-700 bg-black">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={preview} alt="Uploaded Slip" className="w-full h-auto object-contain" />
                       </div>
@@ -846,7 +831,7 @@ export default function TeamTshirtSection({ team }) {
               </div>
 
               {/* Official Tournament Bank Info */}
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 rounded-lg">
+              <div className="bg-[#12131f] border border-white/[0.06] p-5 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="material-symbols-outlined text-[#00d2ff] text-base">account_balance</span>
                   <h4 className="text-white text-xs font-bold uppercase tracking-wider">
@@ -877,7 +862,7 @@ export default function TeamTshirtSection({ team }) {
 
             {/* Previous Orders History (if multiple orders exist) */}
             {previousOrders.length > 0 && (
-              <div className="border border-zinc-800 rounded-lg p-4 bg-[#0b0c16]/60 mb-8">
+              <div className="border border-white/[0.06] rounded-xl p-4 bg-[#12131f] mb-8">
                 <button
                   type="button"
                   onClick={() => setShowPreviousOrdersList(!showPreviousOrdersList)}
@@ -897,7 +882,7 @@ export default function TeamTshirtSection({ team }) {
                 {showPreviousOrdersList && (
                   <div className="mt-4 space-y-3 pt-3 border-t border-zinc-800">
                     {previousOrders.map((ord) => (
-                      <div key={ord.orderId || ord.id} className="bg-[#080808] border border-zinc-800 p-3.5 rounded">
+                      <div key={ord.orderId || ord.id} className="bg-[#080811] border border-zinc-800 p-3.5 rounded-xl">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                           <span className="font-mono text-xs font-bold text-[#00d2ff]">{ord.orderId || ord.id}</span>
                           <div className="flex items-center gap-2 text-[11px] text-zinc-400">
@@ -924,7 +909,7 @@ export default function TeamTshirtSection({ team }) {
             {/* Action Controls & Contact */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-zinc-800/80">
               <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                <div className="px-4 py-2.5 bg-zinc-900 border border-zinc-700/70 text-zinc-300 text-xs uppercase tracking-wider font-bold rounded flex items-center gap-2">
+                <div className="px-3.5 py-2 bg-zinc-800/80 border border-zinc-700 text-zinc-300 text-xs font-semibold rounded-lg flex items-center gap-2">
                   <span className="material-symbols-outlined text-base text-[#00d2ff]">lock</span>
                   <span>Order Finalized &amp; Locked</span>
                 </div>
@@ -932,14 +917,14 @@ export default function TeamTshirtSection({ team }) {
                 <button
                   type="button"
                   onClick={() => setShowSizeChart(!showSizeChart)}
-                  className="w-full sm:w-auto px-4 py-2.5 border border-outline-variant hover:border-[#00d2ff] text-zinc-300 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors rounded flex items-center justify-center gap-2 cursor-pointer bg-[#0b0c16]"
+                  className="w-full sm:w-auto px-3.5 py-2 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white text-xs font-semibold transition-colors rounded-lg flex items-center justify-center gap-2 cursor-pointer bg-[#12131f]"
                 >
                   <span className="material-symbols-outlined text-base">straighten</span>
                   <span>Measurements Guide</span>
                 </button>
               </div>
 
-              <p className="text-[11px] text-zinc-400 text-center sm:text-right">
+              <p className="text-xs text-zinc-400 text-center sm:text-right">
                 Orders cannot be edited once placed · Jerseys issued at Registration Desk on Event Day
               </p>
             </div>
@@ -984,20 +969,18 @@ export default function TeamTshirtSection({ team }) {
           {/* ════════════════════════════════════════════════════════════════
               STEP 1: SELECT WHICH STUDENTS BUY T-SHIRTS
              ════════════════════════════════════════════════════════════════ */}
-          <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
               <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
+                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
                   1
                 </div>
                 <div>
-                  <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                    Select Which Students Buy
+                  <h2 className="text-white text-base sm:text-lg font-bold">
+                    1. Select Members for T-Shirts
                   </h2>
-                  <p className="text-zinc-500 text-xs mt-0.5">
-                    Tick members who want an official jersey (Your team: {teamMemberCount} members + up to {MAX_EXTRAS} extras = max {maxAllowedShirts} shirts)
+                  <p className="text-zinc-400 text-xs mt-0.5">
+                    Choose who in your team wants an official jersey ({teamMemberCount} members + up to {MAX_EXTRAS} extra mentors/supporters).
                   </p>
                 </div>
               </div>
@@ -1006,14 +989,14 @@ export default function TeamTshirtSection({ team }) {
                 <button
                   type="button"
                   onClick={() => handleSelectAll(true)}
-                  className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-300 hover:text-white bg-[#0b0c16] hover:bg-[#004491]/20 border border-outline-variant rounded transition-all cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-semibold text-zinc-300 hover:text-white bg-[#12131f] hover:bg-zinc-800 border border-zinc-700 rounded-lg transition-colors cursor-pointer"
                 >
                   Select All
                 </button>
                 <button
                   type="button"
                   onClick={() => handleSelectAll(false)}
-                  className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-200 bg-[#0b0c16] border border-outline-variant rounded transition-all cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-semibold text-zinc-400 hover:text-zinc-200 bg-[#12131f] border border-zinc-800 rounded-lg transition-colors cursor-pointer"
                 >
                   Clear All
                 </button>
@@ -1022,35 +1005,35 @@ export default function TeamTshirtSection({ team }) {
 
             {/* Student Roster Cards */}
             <div className="space-y-2.5 mb-5">
-              {roster.map((member, i) => (
+              {roster.map((member) => (
                 <div
                   key={member.id}
                   onClick={() => toggleMemberSelection(member.id)}
-                  className={`flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded border transition-all cursor-pointer select-none ${
+                  className={`flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer select-none ${
                     member.selected
-                      ? "bg-[#004491]/15 border-[#00d2ff]/60 shadow-[0_0_12px_rgba(0,68,145,0.3)]"
-                      : "bg-[#0b0c16] border-outline-variant text-zinc-500 hover:border-zinc-700"
+                      ? "bg-[#12131f] border-[#004491]/80 shadow-sm"
+                      : "bg-[#080811] border-zinc-800/80 text-zinc-500 hover:border-zinc-700"
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center transition-all shrink-0 ${
+                      className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all shrink-0 ${
                         member.selected
-                          ? "bg-[#00d2ff] border-[#00d2ff] text-black shadow-[0_0_8px_rgba(0,210,255,0.5)]"
-                          : "border-zinc-700 bg-[#080808]"
+                          ? "bg-[#004491] border-[#00d2ff] text-white"
+                          : "border-zinc-700 bg-transparent"
                       }`}
                     >
                       {member.selected && (
-                        <span className="material-symbols-outlined text-sm font-black">check</span>
+                        <span className="material-symbols-outlined text-sm font-bold">check</span>
                       )}
                     </div>
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className={`text-sm font-bold truncate ${member.selected ? "text-white" : "text-zinc-400"}`}>
+                        <p className={`text-sm font-semibold truncate ${member.selected ? "text-white" : "text-zinc-400"}`}>
                           {member.name}
                         </p>
-                        <span className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                           member.role === "Leader"
                             ? "bg-[#004491]/25 text-[#00d2ff] border border-[#004491]/40"
                             : member.isExtra
@@ -1068,12 +1051,12 @@ export default function TeamTshirtSection({ team }) {
 
                   <div className="flex items-center gap-2.5 shrink-0">
                     {member.selected ? (
-                      <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded">
-                        Purchasing Jersey ✓
+                      <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                        Included
                       </span>
                     ) : (
-                      <span className="text-[11px] text-zinc-500 italic">
-                        Not ordering
+                      <span className="text-xs text-zinc-500 font-medium">
+                        Not included
                       </span>
                     )}
 
@@ -1085,7 +1068,7 @@ export default function TeamTshirtSection({ team }) {
                           handleRemoveExtraStudent(member.id);
                         }}
                         title="Remove extra supporter"
-                        className="p-1 text-zinc-600 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                        className="p-1 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                       >
                         <span className="material-symbols-outlined text-base">delete</span>
                       </button>
@@ -1102,34 +1085,34 @@ export default function TeamTshirtSection({ team }) {
                   <button
                     type="button"
                     onClick={() => setShowAddExtra(true)}
-                    className="text-xs uppercase tracking-widest font-bold text-[#5b9aff] hover:text-white flex items-center gap-1.5 border border-[#004491]/30 hover:border-[#004491] bg-[#004491]/10 px-3.5 py-2 rounded transition-colors cursor-pointer"
+                    className="text-xs font-semibold text-[#5b9aff] hover:text-white flex items-center gap-1.5 border border-zinc-700 hover:border-zinc-500 bg-[#12131f] px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-sm">person_add</span>
-                    + Add Extra Student / Supporter Shirt ({roster.filter((m) => m.isExtra).length}/{MAX_EXTRAS} Extras Added)
+                    + Add Mentor or Supporter ({roster.filter((m) => m.isExtra).length}/{MAX_EXTRAS} added)
                   </button>
                 ) : (
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-400 border border-zinc-800 bg-[#0b0c16] px-3 py-2 rounded">
+                  <div className="flex items-center gap-1.5 text-xs text-zinc-400 border border-zinc-800 bg-[#12131f] px-3.5 py-2 rounded-xl">
                     <span className="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
-                    <span>Maximum {MAX_EXTRAS} extra shirts reached for this team ({MAX_EXTRAS}/{MAX_EXTRAS})</span>
+                    <span>Maximum {MAX_EXTRAS} extra supporters reached ({MAX_EXTRAS}/{MAX_EXTRAS})</span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="bg-[#0b0c16] border border-outline-variant p-4 rounded-sm flex flex-col sm:flex-row items-center gap-3">
+              <div className="bg-[#12131f] border border-zinc-800 p-4 rounded-xl flex flex-col sm:flex-row items-center gap-3">
                 <input
                   type="text"
-                  placeholder="Enter Student / Supporter Full Name"
+                  placeholder="Enter mentor or supporter full name"
                   value={extraStudentName}
                   onChange={(e) => setExtraStudentName(e.target.value)}
-                  className="flex-1 bg-[#080808] border border-outline-variant text-zinc-200 text-xs px-3 py-2.5 focus:outline-none focus:border-[#00d2ff]"
+                  className="flex-1 w-full bg-[#080811] border border-zinc-700 rounded-xl text-zinc-200 text-xs px-3.5 py-2.5 focus:outline-none focus:border-[#004491]"
                 />
                 <div className="flex items-center gap-2 self-end sm:self-auto">
                   <button
                     type="button"
                     onClick={handleAddExtraStudent}
-                    className="px-4 py-2 bg-[#004491] hover:bg-[#002d5e] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer rounded-sm"
+                    className="px-4 py-2 bg-[#004491] hover:bg-[#002d5e] text-white text-xs font-semibold transition-colors cursor-pointer rounded-xl"
                   >
-                    Add
+                    Add to List
                   </button>
                   <button
                     type="button"
@@ -1137,7 +1120,7 @@ export default function TeamTshirtSection({ team }) {
                       setShowAddExtra(false);
                       setExtraStudentName("");
                     }}
-                    className="px-3 py-2 text-zinc-400 hover:text-white text-xs font-bold uppercase tracking-wider"
+                    className="px-3 py-2 text-zinc-400 hover:text-white text-xs font-medium"
                   >
                     Cancel
                   </button>
@@ -1148,25 +1131,25 @@ export default function TeamTshirtSection({ team }) {
             {/* Selection Summary Pill */}
             <div className="mt-5 pt-4 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">
-                  Selected Count:
+                <span className="text-zinc-400 font-medium">
+                  Selected shirts:
                 </span>
-                <span className="text-sm font-mono font-bold text-[#00d2ff]">
-                  {selectedStudents.length} of max {maxAllowedShirts} Shirts
+                <span className="text-sm font-bold text-white">
+                  {selectedStudents.length} of max {maxAllowedShirts}
                 </span>
-                <span className="text-zinc-500">·</span>
-                <span className="text-zinc-400 text-xs font-semibold">
-                  Total: LKR {(selectedStudents.length * PRICE_PER_SHIRT).toLocaleString()}
+                <span className="text-zinc-600">·</span>
+                <span className="text-emerald-400 font-semibold font-mono">
+                  LKR {(selectedStudents.length * PRICE_PER_SHIRT).toLocaleString()}
                 </span>
-                <span className="text-zinc-500">·</span>
-                <span className="text-[11px] text-zinc-400">
+                <span className="text-zinc-600">·</span>
+                <span className="text-zinc-400 text-xs">
                   ({teamMemberCount} members + {roster.filter((m) => m.isExtra && m.selected).length}/{MAX_EXTRAS} extras)
                 </span>
               </div>
 
               {selectedStudents.length === 0 && (
-                <span className="text-amber-400 text-xs font-bold animate-pulse">
-                  ⚠ Please select at least one student above to configure sizes
+                <span className="text-amber-400 text-xs font-medium">
+                  Please select at least one member above to configure sizes
                 </span>
               )}
             </div>
@@ -1175,26 +1158,24 @@ export default function TeamTshirtSection({ team }) {
           {/* ════════════════════════════════════════════════════════════════
               STEP 2: CONTACT & PICKUP PERSON
              ════════════════════════════════════════════════════════════════ */}
-          <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-            
+          <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
+              <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
                 2
               </div>
               <div>
-                <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                  Contact &amp; Delivery Lead
+                <h2 className="text-white text-base sm:text-lg font-bold">
+                  2. Team Contact Person
                 </h2>
-                <p className="text-zinc-500 text-xs mt-0.5">
-                  Point of contact for collecting the T-shirts at the competition arena
+                <p className="text-zinc-400 text-xs mt-0.5">
+                  Point of contact for collecting the T-shirts at the competition arena on event day.
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
+                <label className="block text-zinc-300 text-xs font-semibold mb-2">
                   Contact Person / Leader Name <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -1202,25 +1183,25 @@ export default function TeamTshirtSection({ team }) {
                   placeholder="e.g. Sushan Fernando"
                   value={contactName}
                   onChange={(e) => { setContactName(e.target.value); setError(""); }}
-                  className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
+                  className="w-full bg-[#12131f] border border-zinc-800 rounded-xl text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
+                <label className="block text-zinc-300 text-xs font-semibold mb-2">
                   WhatsApp Contact Number <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="tel"
-                  placeholder="e.g. +94 7X XXX XXXX"
+                  placeholder="e.g. 077 123 4567"
                   value={whatsappNumber}
                   onChange={(e) => {
                     const val = e.target.value.replace(/[^0-9+ ]/g, "");
                     setWhatsappNumber(val);
                     setError("");
                   }}
-                  className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
+                  className="w-full bg-[#12131f] border border-zinc-800 rounded-xl text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
                   required
                 />
               </div>
@@ -1231,94 +1212,46 @@ export default function TeamTshirtSection({ team }) {
               STEP 3: SIZE SELECTION FOR SELECTED STUDENTS
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 ? (
-            <div className="relative bg-[#080808] border border-outline-variant p-4 sm:p-6 lg:p-8">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00d2ff]" />
-              
+            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-[#00d2ff]/20 flex items-center justify-center text-[#00d2ff] text-xs font-black shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold shrink-0">
                     3
                   </div>
                   <div>
-                    <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
-                      T-Shirt Sizing for Selected Students
+                    <h2 className="text-white text-base sm:text-lg font-bold">
+                      3. T-Shirt Sizing
                     </h2>
-                    <p className="text-zinc-500 text-[11px] mt-0.5">
-                      Select size (XS to 3XL) for your {shirts.length} selected {shirts.length === 1 ? "student" : "students"}
+                    <p className="text-zinc-400 text-xs mt-0.5">
+                      Select size (XS to 3XL) for your {shirts.length} selected {shirts.length === 1 ? "member" : "members"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span className="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 bg-[#004491]/15 text-[#5b9aff] border border-[#004491]/30 rounded-sm hidden md:inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff]" />
-                    Matrix View
-                  </span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 bg-[#00d2ff]/10 text-[#00d2ff] border border-[#00d2ff]/30 rounded-sm inline-flex md:hidden items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff]" />
-                    Simple View
-                  </span>
+                <div className="text-xs text-zinc-400 font-medium">
+                  <span className="text-white font-bold">{shirts.filter((s) => s.size).length}</span> of {shirts.length} chosen
                 </div>
               </div>
 
               {/* ════════════════════════════════════════════════════════════════
-                  MOBILE VIEW (Simple Touch View strictly on mobile: block md:hidden)
+                  MOBILE VIEW (Touch friendly list of members)
                  ════════════════════════════════════════════════════════════════ */}
               <div className="block md:hidden">
-                
-                {/* Tab Bar & Dropdown Menu if > 1 student */}
+                {/* Tab Bar if > 1 student */}
                 {shirts.length > 1 && (
-                  <div className="mb-4 bg-[#0b0c16] border border-outline-variant p-3.5 rounded-sm">
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">
-                        {activeMobileTab === "all"
-                          ? `All Selected Students (${shirts.length} Total)`
-                          : `Configuring ${shirts[Number(activeMobileTab)]?.memberName || `Student #${Number(activeMobileTab) + 1}`}`}
-                      </label>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                        shirts.filter((s) => s.size).length === shirts.length
-                          ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                          : "bg-amber-500/10 border-amber-500/30 text-amber-400"
-                      }`}>
-                        {shirts.filter((s) => s.size).length} of {shirts.length} Sized
-                      </span>
-                    </div>
-
-                    {/* Mobile Dropdown */}
-                    <div className="relative mb-3">
-                      <select
-                        value={activeMobileTab}
-                        onChange={(e) => setActiveMobileTab(e.target.value)}
-                        className="w-full bg-[#080808] border border-outline-variant text-white text-xs font-bold px-3 py-2 appearance-none focus:outline-none focus:border-[#00d2ff] transition-colors cursor-pointer rounded-sm"
-                      >
-                        <option value="all">
-                          Show All Students ({shirts.length}) — Overview &amp; Sizing
-                        </option>
-                        {shirts.map((s, idx) => (
-                          <option key={s.memberId || idx} value={idx.toString()}>
-                            {s.memberName} ({s.memberRole}) {s.size ? `[Size ${s.size}] ✓` : "(Size required)"}
-                          </option>
-                        ))}
-                      </select>
-                      <span className="material-symbols-outlined text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-lg">
-                        expand_more
-                      </span>
-                    </div>
-
-                    {/* Quick Tabs */}
+                  <div className="mb-4">
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                       <button
                         type="button"
                         onClick={() => setActiveMobileTab("all")}
-                        className={`py-2 px-3 text-center text-xs font-bold uppercase transition-all rounded-sm border shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                        className={`py-1.5 px-3 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
                           activeMobileTab === "all"
-                            ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.4)]"
-                            : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
+                            ? "bg-[#004491] text-white border-[#00d2ff]/60 shadow-sm"
+                            : "bg-[#12131f] border-zinc-800 text-zinc-400 hover:text-white"
                         }`}
                       >
-                        <span className="material-symbols-outlined text-sm">view_agenda</span>
-                        <span>Show All</span>
+                        All ({shirts.length})
                       </button>
 
                       {shirts.map((s, idx) => (
@@ -1326,19 +1259,17 @@ export default function TeamTshirtSection({ team }) {
                           key={s.memberId || idx}
                           type="button"
                           onClick={() => setActiveMobileTab(idx.toString())}
-                          className={`flex-1 min-w-[70px] py-1.5 px-2 text-center rounded-sm border shrink-0 transition-all cursor-pointer ${
+                          className={`flex-1 min-w-[70px] py-1.5 px-2 text-center text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
                             activeMobileTab === idx.toString()
-                              ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.4)]"
+                              ? "bg-[#004491] text-white border-[#00d2ff]/60 shadow-sm"
                               : s.size
-                                ? "bg-[#080808] border-emerald-500/40 text-emerald-400"
-                                : "bg-[#080808] border-outline-variant text-zinc-400 hover:text-white"
+                                ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-300"
+                                : "bg-[#12131f] border-zinc-800 text-zinc-400 hover:text-white"
                           }`}
                         >
-                          <div className="truncate text-[11px] font-bold">
-                            {s.memberName?.split(" ")[0] || `#${idx + 1}`}
-                          </div>
-                          <div className="text-[9px] font-mono mt-0.5 truncate">
-                            {s.size ? s.size : "—"}
+                          <div className="truncate">{s.memberName?.split(" ")[0] || `#${idx + 1}`}</div>
+                          <div className="text-[10px] text-zinc-400 font-normal">
+                            {s.size ? s.size : "Pick"}
                           </div>
                         </button>
                       ))}
@@ -1346,77 +1277,54 @@ export default function TeamTshirtSection({ team }) {
                   </div>
                 )}
 
-                {/* ── SUB-VIEW 1: SHOW ALL TAB ── */}
+                {/* Mobile All View */}
                 {shirts.length > 1 && activeMobileTab === "all" ? (
-                  <div className="space-y-4 mb-5">
+                  <div className="space-y-3 mb-5">
                     {shirts.map((shirt, idx) => {
                       return (
                         <div
                           key={shirt.memberId || idx}
-                          className="bg-[#0b0c16] border border-outline-variant p-4 rounded-sm relative overflow-hidden transition-all"
+                          className="bg-[#12131f] border border-zinc-800/90 p-4 rounded-xl"
                         >
-                          <div
-                            className={`absolute top-0 left-0 right-0 h-[2px] ${
-                              shirt.size ? "bg-emerald-500" : "bg-[#004491]"
-                            }`}
-                          />
-
-                          {/* Student Info Top */}
                           <div className="flex items-center justify-between mb-3">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-white text-sm font-black uppercase tracking-wide">
-                                  {shirt.memberName}
-                                </span>
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                  {shirt.memberRole || `Shirt #${idx + 1}`}
-                                </span>
-                              </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-white text-sm font-bold">
+                                {shirt.memberName}
+                              </span>
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                                {shirt.memberRole}
+                              </span>
                             </div>
 
                             {shirt.size ? (
-                              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded">
-                                Size {shirt.size} ✓
+                              <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                Size {shirt.size}
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded animate-pulse">
-                                Size Required
+                              <span className="text-xs font-medium text-amber-400">
+                                Select size
                               </span>
                             )}
                           </div>
 
-                          {/* Size Selection Grid */}
-                          <div>
-                            <div className="flex items-center justify-between mb-1.5">
-                              <p className="text-zinc-500 text-[9px] uppercase tracking-widest font-bold">
-                                Choose Size
-                              </p>
-                              {shirt.size && (
-                                <span className="text-[10px] text-zinc-400 font-mono">
-                                  {SIZE_MEASUREMENTS[shirt.size]}
-                                </span>
-                              )}
-                            </div>
-
-                            <div className="grid grid-cols-4 gap-1.5">
-                              {SIZES.map((sizeId) => {
-                                const isSelected = shirt.size === sizeId;
-                                return (
-                                  <button
-                                    key={sizeId}
-                                    type="button"
-                                    onClick={() => handleSizeSelect(idx, sizeId)}
-                                    className={`py-2 px-1 text-center rounded border transition-all cursor-pointer ${
-                                      isSelected
-                                        ? "bg-[#00d2ff] border-[#00d2ff] text-black font-black shadow-[0_0_10px_rgba(0,210,255,0.5)]"
-                                        : "bg-[#080808] border-outline-variant text-zinc-300 hover:border-zinc-500 hover:text-white font-bold"
-                                    }`}
-                                  >
-                                    <div className="text-xs">{sizeId}</div>
-                                  </button>
-                                );
-                              })}
-                            </div>
+                          <div className="grid grid-cols-4 gap-1.5">
+                            {SIZES.map((sizeId) => {
+                              const isSelected = shirt.size === sizeId;
+                              return (
+                                <button
+                                  key={sizeId}
+                                  type="button"
+                                  onClick={() => handleSizeSelect(idx, sizeId)}
+                                  className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                                    isSelected
+                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-sm"
+                                      : "bg-[#080811] border-zinc-800 text-zinc-300 hover:text-white"
+                                  }`}
+                                >
+                                  <div>{sizeId}</div>
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       );
@@ -1424,7 +1332,7 @@ export default function TeamTshirtSection({ team }) {
                   </div>
                 ) : null}
 
-                {/* ── SUB-VIEW 2: INDIVIDUAL STUDENT FOCUSED VIEW ── */}
+                {/* Mobile Individual View */}
                 {(shirts.length === 1 || activeMobileTab !== "all") && (
                   <div>
                     {(() => {
@@ -1433,115 +1341,102 @@ export default function TeamTshirtSection({ team }) {
                       if (!shirt) return null;
 
                       return (
-                        <div className="bg-[#0b0c16] border border-outline-variant p-4 sm:p-5 mb-5 relative overflow-hidden rounded-sm">
-                          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
-                          
+                        <div className="bg-[#12131f] border border-zinc-800 p-4 sm:p-5 mb-4 rounded-xl">
                           <div className="flex items-center justify-between mb-4">
                             <div>
                               <div className="flex items-center gap-2">
-                                <h3 className="text-white text-base font-black uppercase tracking-wider">
+                                <h3 className="text-white text-base font-bold">
                                   {shirt.memberName}
                                 </h3>
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#004491]/20 text-[#00d2ff] border border-[#004491]/40">
-                                  {shirt.memberRole || `Shirt #${targetIdx + 1}`}
+                                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                                  {shirt.memberRole}
                                 </span>
                               </div>
-                              <p className="text-zinc-500 text-xs mt-0.5">
+                              <p className="text-zinc-400 text-xs mt-0.5">
                                 Select T-Shirt Size
                               </p>
                             </div>
 
                             {shirt.size && (
                               <div className="text-right">
-                                <span className="text-[10px] uppercase tracking-widest text-zinc-500 block">Size</span>
-                                <span className="text-lg font-black text-[#00d2ff] font-mono">
-                                  {shirt.size}
+                                <span className="text-[11px] text-zinc-400 block">Selected</span>
+                                <span className="text-base font-bold text-[#00d2ff]">
+                                  Size {shirt.size}
                                 </span>
                               </div>
                             )}
                           </div>
 
-                          {/* Size Options Grid */}
-                          <div>
-                            <div className="flex items-center justify-between mb-2">
-                              <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-bold">
-                                Choose Size
-                              </p>
-                              {shirt.size && (
-                                <span className="text-[11px] font-bold text-emerald-400">
-                                  Selected: {shirt.size} ✓
-                                </span>
-                              )}
-                            </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            {SIZES.map((sizeId) => {
+                              const isSelected = shirt.size === sizeId;
+                              const measurement = SIZE_MEASUREMENTS[sizeId];
 
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                              {SIZES.map((sizeId) => {
-                                const isSelected = shirt.size === sizeId;
-                                const measurement = SIZE_MEASUREMENTS[sizeId];
-
-                                return (
-                                  <button
-                                    key={sizeId}
-                                    type="button"
-                                    onClick={() => {
-                                      handleSizeSelect(targetIdx, sizeId);
-                                      if (targetIdx < shirts.length - 1 && !shirts[targetIdx + 1]?.size) {
-                                        setTimeout(() => setActiveMobileTab((targetIdx + 1).toString()), 250);
-                                      }
-                                    }}
-                                    className={`p-3 rounded border text-left flex flex-col justify-between transition-all cursor-pointer ${
-                                      isSelected
-                                        ? "bg-[#004491] border-[#00d2ff] text-white shadow-[0_0_12px_rgba(0,210,255,0.5)]"
-                                        : "bg-[#080808] border-outline-variant text-zinc-300 hover:border-zinc-500 hover:text-white"
-                                    }`}
-                                  >
-                                    <div className="flex items-center justify-between w-full mb-1">
-                                      <span className="text-base font-black tracking-wide">{sizeId}</span>
-                                      {isSelected ? (
-                                        <span className="material-symbols-outlined text-white text-base">check_circle</span>
-                                      ) : (
-                                        <span className="w-3.5 h-3.5 rounded-full border border-zinc-700 inline-block" />
-                                      )}
-                                    </div>
-                                    {measurement && (
-                                      <span className={`text-[10px] font-mono ${isSelected ? "text-zinc-200" : "text-zinc-500"}`}>
-                                        {measurement}
+                              return (
+                                <button
+                                  key={sizeId}
+                                  type="button"
+                                  onClick={() => {
+                                    handleSizeSelect(targetIdx, sizeId);
+                                    if (targetIdx < shirts.length - 1 && !shirts[targetIdx + 1]?.size) {
+                                      setTimeout(() => setActiveMobileTab((targetIdx + 1).toString()), 200);
+                                    }
+                                  }}
+                                  className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                                    isSelected
+                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-md shadow-[#004491]/30"
+                                      : "bg-[#080811] border-zinc-800 text-zinc-300 hover:border-zinc-700 hover:text-white"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between w-full mb-1">
+                                    <span className="text-base font-bold">{sizeId}</span>
+                                    {isSelected ? (
+                                      <span className="material-symbols-outlined text-white text-base">
+                                        check_circle
                                       </span>
+                                    ) : (
+                                      <span className="w-4 h-4 rounded-full border border-zinc-700 inline-block" />
                                     )}
-                                  </button>
-                                );
-                              })}
-                            </div>
-
-                            {/* Nav buttons */}
-                            {shirts.length > 1 && (
-                              <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between gap-2">
-                                <button
-                                  type="button"
-                                  disabled={targetIdx === 0}
-                                  onClick={() => setActiveMobileTab((targetIdx - 1).toString())}
-                                  className="px-3 py-1.5 text-xs font-bold uppercase border border-outline-variant text-zinc-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 rounded-sm cursor-pointer"
-                                >
-                                  <span className="material-symbols-outlined text-sm">arrow_back</span>
-                                  Prev
+                                  </div>
+                                  {measurement && (
+                                    <span className={`text-[11px] ${isSelected ? "text-blue-100" : "text-zinc-400"}`}>
+                                      {measurement}
+                                    </span>
+                                  )}
                                 </button>
-
-                                <span className="text-[11px] text-zinc-500">
-                                  {targetIdx + 1} of {shirts.length}
-                                </span>
-
-                                <button
-                                  type="button"
-                                  disabled={targetIdx === shirts.length - 1}
-                                  onClick={() => setActiveMobileTab((targetIdx + 1).toString())}
-                                  className="px-3 py-1.5 text-xs font-bold uppercase border border-outline-variant text-zinc-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 rounded-sm cursor-pointer"
-                                >
-                                  Next
-                                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                                </button>
-                              </div>
-                            )}
+                              );
+                            })}
                           </div>
+
+                          {shirts.length > 1 && (
+                            <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between gap-2">
+                              <button
+                                type="button"
+                                disabled={targetIdx === 0}
+                                onClick={() => setActiveMobileTab((targetIdx - 1).toString())}
+                                className="px-3 py-1.5 text-xs font-medium border border-zinc-700 rounded-lg text-zinc-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                              >
+                                ← Previous
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setActiveMobileTab("all")}
+                                className="text-xs text-[#00d2ff] hover:underline"
+                              >
+                                View All ({shirts.length})
+                              </button>
+
+                              <button
+                                type="button"
+                                disabled={targetIdx === shirts.length - 1}
+                                onClick={() => setActiveMobileTab((targetIdx + 1).toString())}
+                                className="px-3 py-1.5 text-xs font-medium border border-zinc-700 rounded-lg text-zinc-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                              >
+                                Next →
+                              </button>
+                            </div>
+                          )}
                         </div>
                       );
                     })()}
@@ -1550,120 +1445,98 @@ export default function TeamTshirtSection({ team }) {
               </div>
 
               {/* ════════════════════════════════════════════════════════════════
-                  DESKTOP MATRIX VIEW (hidden md:block)
+                  DESKTOP VIEW (Clean list of members & size chips: hidden md:block)
                  ════════════════════════════════════════════════════════════════ */}
               <div className="hidden md:block">
-                {/* Matrix Table with Sticky Size Column */}
-                <div className="overflow-x-auto border border-outline-variant bg-[#0b0c16] rounded-sm">
-                  <table className="w-full text-center border-collapse">
-                    <thead>
-                      <tr className="border-b border-outline-variant bg-[#080808]">
-                        <th
-                          className={`p-4 text-left text-zinc-400 text-xs font-bold uppercase tracking-widest sticky left-0 bg-[#080808] z-10 border-r border-outline-variant shadow-[4px_0_10px_rgba(0,0,0,0.6)] ${
-                            shirts.length === 1 ? "w-2/5 min-w-[160px]" : "min-w-[140px]"
-                          }`}
-                        >
-                          Size
-                        </th>
-                        {shirts.map((s, idx) => (
-                          <th
-                            key={s.memberId || idx}
-                            className={`p-3 border-l border-outline-variant ${
-                              shirts.length === 1 ? "w-3/5" : "min-w-[120px]"
-                            }`}
-                          >
-                            <div className="flex flex-col items-center">
-                              <span className="text-white text-xs font-black tracking-wide truncate max-w-[140px]">
-                                {s.memberName}
-                              </span>
-                              <span className="text-[9px] uppercase tracking-widest text-[#5b9aff] mt-0.5 font-bold">
-                                {s.memberRole || `Shirt #${idx + 1}`}
+                <div className="border border-white/[0.08] bg-[#12131f] rounded-xl overflow-hidden shadow-sm">
+                  <div className="p-4 border-b border-zinc-800 bg-[#080811] flex items-center justify-between">
+                    <div>
+                      <h3 className="text-white text-sm font-bold">Assign Member Sizes</h3>
+                      <p className="text-zinc-400 text-xs">
+                        Select a size for each member or supporter below.
+                      </p>
+                    </div>
+                    <div className="text-xs text-zinc-400 font-medium">
+                      <span className="text-white font-bold">{shirts.filter((s) => s.size).length}</span> of {shirts.length} chosen
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-zinc-800/80">
+                    {shirts.map((shirt, idx) => (
+                      <div
+                        key={shirt.memberId || idx}
+                        className="p-4 flex items-center justify-between gap-4 hover:bg-white/[0.015] transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-[180px]">
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${
+                            shirt.size
+                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                              : "bg-zinc-800 text-zinc-400"
+                          }`}>
+                            #{idx + 1}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <p className="text-white text-sm font-semibold">{shirt.memberName}</p>
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                                {shirt.memberRole}
                               </span>
                             </div>
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-outline-variant/60">
-                      {TABLE_SIZE_ROWS.map((row) => (
-                        <tr key={row.id} className="hover:bg-white/[0.02] transition-colors">
-                          <td className="p-3.5 text-left text-xs font-bold uppercase tracking-wider text-zinc-200 sticky left-0 bg-[#080808] z-10 border-r border-outline-variant shadow-[4px_0_10px_rgba(0,0,0,0.6)]">
-                            <div className="flex items-center justify-between gap-2">
-                              <span>
-                                {row.label}
-                              </span>
-                              <span className="text-[10px] text-zinc-500 font-mono font-normal">
-                                {SIZE_MEASUREMENTS[row.id]}
-                              </span>
-                            </div>
-                          </td>
+                            <p className="text-zinc-400 text-xs mt-0.5">
+                              {shirt.size ? `Size ${shirt.size}` : "No size selected"}
+                            </p>
+                          </div>
+                        </div>
 
-                          {shirts.map((shirt, idx) => {
-                            const isSelected = shirt.size === row.id;
-
+                        <div className="flex items-center gap-2">
+                          {SIZES.map((sizeId) => {
+                            const isSelected = shirt.size === sizeId;
                             return (
-                              <td
-                                key={shirt.memberId || idx}
-                                className={`p-3 border-l border-outline-variant transition-colors ${
+                              <button
+                                key={sizeId}
+                                type="button"
+                                title={`${sizeId} (${SIZE_MEASUREMENTS[sizeId]})`}
+                                onClick={() => handleSizeSelect(idx, sizeId)}
+                                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                                   isSelected
-                                    ? "bg-[#004491]/20 cursor-pointer"
-                                    : "hover:bg-[#004491]/10 cursor-pointer"
+                                    ? "bg-[#004491] text-white border border-[#00d2ff] shadow-sm"
+                                    : "bg-[#080811] border border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
                                 }`}
-                                onClick={() => handleSizeSelect(idx, row.id)}
                               >
-                                <div className="flex items-center justify-center gap-2">
-                                  <div
-                                    className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-all ${
-                                      isSelected
-                                        ? "bg-[#004491] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.6)]"
-                                        : "border-zinc-600 bg-[#080808] hover:border-zinc-400"
-                                    }`}
-                                  >
-                                    {isSelected && (
-                                      <span className="material-symbols-outlined text-white text-sm font-black">
-                                        check
-                                      </span>
-                                    )}
-                                  </div>
-                                  {shirts.length === 1 && isSelected && (
-                                    <span className="text-xs font-bold text-[#00d2ff] hidden sm:inline">
-                                      Selected
-                                    </span>
-                                  )}
-                                </div>
-                              </td>
+                                {sizeId}
+                              </button>
                             );
                           })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Selected Sizes Summary */}
-                <div className="mt-5 pt-4 border-t border-zinc-800">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mb-2">
-                    Current Selection:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {shirts.map((s, idx) => (
-                      <div
-                        key={s.memberId || idx}
-                        className={`text-xs px-3 py-1.5 rounded border flex items-center gap-2 ${
-                          s.size
-                            ? "bg-[#004491]/15 border-[#004491]/50 text-white"
-                            : "bg-red-950/30 border-red-500/40 text-red-300"
-                        }`}
-                      >
-                        <span className="font-bold">{s.memberName}:</span>
-                        {s.size ? (
-                          <span className="font-bold text-[#00d2ff] uppercase">Size {s.size}</span>
-                        ) : (
-                          <span className="text-red-400 text-[11px] font-semibold italic">Choose size</span>
-                        )}
+                        </div>
                       </div>
                     ))}
                   </div>
+                </div>
+
+                {/* Selected Sizes Summary */}
+                <div className="mt-4 pt-3 border-t border-zinc-800/70 flex items-center justify-between">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-zinc-400 font-medium">Selected summary:</span>
+                    {shirts.map((s, idx) => (
+                      <div
+                        key={s.memberId || idx}
+                        className={`text-xs px-2.5 py-1 rounded-md border flex items-center gap-1.5 ${
+                          s.size
+                            ? "bg-[#004491]/20 border-[#004491]/60 text-blue-200"
+                            : "bg-amber-950/20 border-amber-500/30 text-amber-300"
+                        }`}
+                      >
+                        <span className="font-semibold">{s.memberName?.split(" ")[0]}:</span>
+                        <span>{s.size ? s.size : "None"}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {shirts.every((s) => s.size) && (
+                    <span className="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm">check_circle</span>
+                      All sizes selected
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -1673,33 +1546,36 @@ export default function TeamTshirtSection({ team }) {
               STEP 4: PAYMENT DETAILS & BANK SLIP UPLOAD
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 && (
-            <div className="relative bg-[#080808] border border-outline-variant p-6 sm:p-8">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#004491]" />
-              
+            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-7 h-7 rounded-full bg-[#004491]/20 flex items-center justify-center text-[#5b9aff] text-xs font-black">
+                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
                   4
                 </div>
-                <h2 className="text-white text-base font-bold uppercase tracking-wider">
-                  Payment Details &amp; Slip Upload
-                </h2>
+                <div>
+                  <h2 className="text-white text-base sm:text-lg font-bold">
+                    4. Payment &amp; Slip Upload
+                  </h2>
+                  <p className="text-zinc-400 text-xs mt-0.5">
+                    Transfer the total amount to the official club account and upload your deposit slip or receipt.
+                  </p>
+                </div>
               </div>
 
               {/* Bank Account Details Card */}
-              <div className="mb-6 bg-[#0b0c16] border border-outline-variant p-5 rounded-sm">
+              <div className="mb-6 bg-[#12131f] border border-white/[0.06] p-5 sm:p-6 rounded-xl">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800 mb-4">
                   <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#5b9aff] font-bold">
-                      Direct Bank Transfer / Deposit
-                    </p>
-                    <h3 className="text-white text-base font-bold mt-0.5">People&apos;s Bank</h3>
+                    <span className="text-xs font-semibold text-[#5b9aff]">
+                      Direct Bank Transfer or Online Deposit
+                    </span>
+                    <h3 className="text-white text-lg font-bold mt-0.5">People&apos;s Bank</h3>
                   </div>
                   <div className="text-left sm:text-right">
-                    <p className="text-[10px] uppercase tracking-widest text-zinc-500">Total Payable</p>
-                    <p className="text-xl sm:text-2xl font-black text-emerald-400">
+                    <p className="text-xs text-zinc-400">Total Payable</p>
+                    <p className="text-2xl font-bold text-emerald-400 font-mono">
                       LKR {(shirts.length * PRICE_PER_SHIRT).toLocaleString()}
                     </p>
-                    <p className="text-[10px] text-zinc-500">
+                    <p className="text-[11px] text-zinc-400 font-medium">
                       ({shirts.length} × LKR {PRICE_PER_SHIRT.toLocaleString()})
                     </p>
                   </div>
@@ -1707,58 +1583,58 @@ export default function TeamTshirtSection({ team }) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div>
-                    <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Name</p>
-                    <p className="text-zinc-200 font-semibold">Electronics and Computer Science Student Club</p>
+                    <p className="text-zinc-400 text-[11px] mb-1">Account Name</p>
+                    <p className="text-zinc-100 font-medium">Electronics and Computer Science Student Club</p>
                   </div>
                   <div>
-                    <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Account Number</p>
+                    <p className="text-zinc-400 text-[11px] mb-1">Account Number</p>
                     <div className="flex items-center gap-2">
-                      <p className="text-zinc-200 font-mono font-bold text-sm">055200290051008</p>
+                      <p className="text-white font-mono font-bold text-sm tracking-wide">055200290051008</p>
                       <button
                         type="button"
                         onClick={handleCopyAccount}
-                        className="text-[10px] text-[#5b9aff] hover:text-white underline cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-[#5b9aff] hover:text-white text-xs font-medium transition-colors cursor-pointer"
                       >
                         {copiedAccount ? "Copied!" : "Copy"}
                       </button>
                     </div>
                   </div>
                   <div>
-                    <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-0.5">Branch</p>
-                    <p className="text-zinc-200 font-semibold">Kelaniya Branch</p>
+                    <p className="text-zinc-400 text-[11px] mb-1">Branch</p>
+                    <p className="text-zinc-100 font-medium">Kelaniya Branch</p>
                   </div>
                 </div>
               </div>
 
               {/* Upload Dropzone */}
               <div className="mb-6">
-                <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
-                  Upload Payment Slip <span className="text-red-400">*</span>
+                <label className="block text-zinc-300 text-xs font-semibold mb-2.5">
+                  Payment Slip / Receipt <span className="text-red-400">*</span>
                 </label>
 
                 <div
                   onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                   onDragLeave={() => setDragOver(false)}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed p-6 sm:p-8 text-center rounded-sm transition-all ${
+                  className={`border-2 border-dashed p-6 sm:p-8 text-center rounded-xl transition-all ${
                     dragOver
-                      ? "border-[#00d2ff] bg-[#004491]/20"
+                      ? "border-[#00d2ff] bg-[#004491]/15"
                       : paymentSlip
-                        ? "border-emerald-500/60 bg-emerald-950/20"
-                        : "border-outline-variant hover:border-zinc-500 bg-[#0b0c16]/50"
+                        ? "border-emerald-500/50 bg-emerald-500/5"
+                        : "border-zinc-700 hover:border-zinc-500 bg-[#12131f]"
                   }`}
                 >
                   {paymentSlip ? (
                     <div className="flex flex-col items-center gap-3">
-                      <span className="material-symbols-outlined text-emerald-400 text-3xl">task</span>
+                      <span className="material-symbols-outlined text-emerald-400 text-4xl">task</span>
                       <div>
-                        <p className="text-white text-sm font-bold">{paymentSlip.name}</p>
-                        <p className="text-zinc-500 text-xs">
+                        <p className="text-white text-sm font-semibold">{paymentSlip.name}</p>
+                        <p className="text-zinc-400 text-xs mt-0.5">
                           {(paymentSlip.size / 1024 / 1024).toFixed(2)} MB · Slip attached
                         </p>
                       </div>
                       {preview && (
-                        <div className="mt-2 max-w-xs max-h-48 overflow-hidden rounded border border-zinc-800">
+                        <div className="mt-2 max-w-xs max-h-48 overflow-hidden rounded-lg border border-zinc-700 shadow-sm">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={preview} alt="Slip preview" className="w-full h-auto object-contain" />
                         </div>
@@ -1773,14 +1649,14 @@ export default function TeamTshirtSection({ team }) {
                     </div>
                   ) : (
                     <div>
-                      <span className="material-symbols-outlined text-zinc-500 text-4xl mb-2">cloud_upload</span>
-                      <p className="text-white text-sm font-bold mb-1">
+                      <span className="material-symbols-outlined text-zinc-400 text-4xl mb-2">cloud_upload</span>
+                      <p className="text-zinc-200 text-sm font-semibold mb-1">
                         Drag and drop your slip here, or browse
                       </p>
-                      <p className="text-zinc-500 text-xs mb-4">
-                        Supported: JPG, PNG, WebP, PDF (Max 5MB)
+                      <p className="text-zinc-400 text-xs mb-4">
+                        Supported formats: JPG, PNG, WebP, PDF (Max 5MB)
                       </p>
-                      <label className="inline-block px-5 py-2.5 bg-[#004491] hover:bg-[#002d5e] text-white text-xs uppercase tracking-widest font-bold cursor-pointer transition-colors rounded-sm">
+                      <label className="inline-block px-5 py-2.5 bg-[#004491] hover:bg-[#003570] text-white text-xs font-semibold cursor-pointer transition-colors rounded-xl">
                         Select Payment Slip
                         <input
                           type="file"
@@ -1796,39 +1672,48 @@ export default function TeamTshirtSection({ team }) {
 
               {/* Reference Number */}
               <div>
-                <label className="block text-zinc-400 text-[10px] uppercase tracking-widest font-bold mb-2">
-                  Bank Reference / Transaction ID <span className="text-zinc-600">(Optional)</span>
+                <label className="block text-zinc-300 text-xs font-semibold mb-2">
+                  Bank Reference / Transaction ID <span className="text-zinc-500 font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. TXN987654321 or Deposit Number"
+                  placeholder="e.g. TXN987654321 or Deposit Slip Reference"
                   value={referenceNumber}
                   onChange={(e) => setReferenceNumber(e.target.value)}
-                  className="w-full bg-[#0b0c16] border border-outline-variant text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
+                  className="w-full bg-[#12131f] border border-zinc-800 rounded-xl text-zinc-200 text-sm px-4 py-3 focus:outline-none focus:border-[#004491] transition-colors"
                 />
               </div>
             </div>
           )}
 
           {/* ════════════════════════════════════════════════════════════════
-              SUBMIT BUTTON
+              SUBMIT BUTTON & SUMMARY BAR
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 && (
-            <div className="pt-2">
+            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <p className="text-white text-base font-bold">
+                  Total: {shirts.length} {shirts.length === 1 ? "Shirt" : "Shirts"} · LKR {(shirts.length * PRICE_PER_SHIRT).toLocaleString()}
+                </p>
+                <p className="text-zinc-400 text-xs mt-0.5">
+                  Please verify sizes and contact information before submitting.
+                </p>
+              </div>
+
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-4 bg-[#004491] hover:bg-[#003570] active:scale-[0.99] text-white text-sm uppercase tracking-[0.2em] font-black transition-all shadow-[0_0_20px_rgba(0,68,145,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer rounded-sm"
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#004491] hover:bg-[#003570] text-white text-sm font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-[#004491]/25"
               >
                 {submitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Processing Team Order...</span>
+                    <span>Submitting Team Order...</span>
                   </>
                 ) : (
                   <>
-                    <span className="material-symbols-outlined text-lg">check_circle</span>
-                    <span>Submit Team Order ({shirts.length} {shirts.length === 1 ? "Shirt" : "Shirts"} · LKR {(shirts.length * PRICE_PER_SHIRT).toLocaleString()})</span>
+                    <span className="material-symbols-outlined text-base">shopping_bag</span>
+                    <span>Submit Team Order</span>
                   </>
                 )}
               </button>
