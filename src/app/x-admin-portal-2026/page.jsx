@@ -847,10 +847,22 @@ function TeamTshirtOrdersDetail({ teamId }) {
                 </span>
               ))}
             </div>
-            <div style={{ fontSize: 11, color: "#71717a", display: "flex", justifyContent: "space-between", borderTop: "1px solid #18181b", paddingTop: 6 }}>
+            <div style={{ fontSize: 11, color: "#71717a", display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #18181b", paddingTop: 6, flexWrap: "wrap", gap: 6 }}>
               <span>Total: <strong style={{ color: "#10b981" }}>LKR {((o.shirtCount || (o.shirts?.length || 0)) * 1800).toLocaleString()}</strong></span>
               {o.referenceNumber && <span>Ref: {o.referenceNumber}</span>}
-              {o.slipName && <span>Slip: {o.slipName}</span>}
+              {o.driveViewUrl ? (
+                <a
+                  href={o.driveViewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#5b9aff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 700 }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 13 }}>open_in_new</span>
+                  View Slip
+                </a>
+              ) : (
+                o.slipName && <span>Slip: {o.slipName}</span>
+              )}
             </div>
           </div>
         ))}
@@ -1321,9 +1333,21 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                         {ord.referenceNumber ? (
                           <span style={{ color: "white", fontFamily: "monospace", display: "block" }}>Ref: {ord.referenceNumber}</span>
                         ) : null}
-                        <span style={{ color: ord.hasPaymentSlip ? "#10b981" : "#71717a", fontSize: 10 }}>
-                          {ord.hasPaymentSlip ? "Slip Attached" : "No Slip"}
-                        </span>
+                        {ord.driveViewUrl ? (
+                          <a
+                            href={ord.driveViewUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "#10b981", fontSize: 10, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 3, marginTop: 2 }}
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: 12 }}>visibility</span>
+                            View Slip
+                          </a>
+                        ) : (
+                          <span style={{ color: ord.hasPaymentSlip ? "#10b981" : "#71717a", fontSize: 10 }}>
+                            {ord.hasPaymentSlip ? "Slip Attached" : "No Slip"}
+                          </span>
+                        )}
                       </td>
 
                       {/* Status Toggle */}
@@ -1469,6 +1493,49 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                   <DetailItem label="Bank Reference / Txn ID" value={selectedOrder.referenceNumber || "Not specified"} highlight={Boolean(selectedOrder.referenceNumber)} />
                   <DetailItem label="Slip File" value={selectedOrder.slipName || (selectedOrder.hasPaymentSlip ? "Slip Attached" : "No Slip")} />
                 </DetailGrid>
+
+                {/* Slip Preview & Google Drive View */}
+                {selectedOrder.driveViewUrl ? (
+                  <div style={{ marginTop: 14 }}>
+                    <p style={{ margin: "0 0 8px 0", fontSize: 9, color: "#52525b", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                      Bank Slip Preview
+                    </p>
+                    {(() => {
+                      const match = selectedOrder.driveViewUrl?.match(/\/d\/([^/]+)/);
+                      const fileId = selectedOrder.driveFileId || match?.[1] || (selectedOrder.driveThumbnailUrl?.match(/[?&]id=([^&]+)/)?.[1]);
+                      if (fileId) {
+                        return (
+                          <div style={{ border: "1px solid #27272a", overflow: "hidden", marginBottom: 10, borderRadius: 8, background: "#111" }}>
+                            <img
+                              src={`https://lh3.googleusercontent.com/d/${fileId}=w600`}
+                              alt="Payment Slip"
+                              style={{ maxWidth: "100%", height: "auto", display: "block", maxHeight: 300, objectFit: "contain", margin: "0 auto" }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.parentElement.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        );
+                      }
+                      return null;
+                    })()}
+                    <a
+                      href={selectedOrder.driveViewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", padding: "8px 14px", background: "#00449115", color: "#5b9aff", border: "1px solid #00449130", textDecoration: "none", cursor: "pointer", borderRadius: 8 }}
+                    >
+                      <span className="material-symbols-outlined" style={{ fontSize: 14 }}>open_in_new</span>
+                      View Slip on Google Drive
+                    </a>
+                  </div>
+                ) : selectedOrder.hasPaymentSlip ? (
+                  <div style={{ marginTop: 12, padding: "10px 14px", background: "#18181b50", border: "1px solid #27272a", borderRadius: 8, fontSize: 11, color: "#a1a1aa" }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14, verticalAlign: "middle", marginRight: 6, color: "#f59e0b" }}>info</span>
+                    Payment slip was submitted with this order ({selectedOrder.slipName || 'slip file'}).
+                  </div>
+                ) : null}
 
                 {/* Status Toggle Actions */}
                 <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid #18181b", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>

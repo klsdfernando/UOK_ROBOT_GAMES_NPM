@@ -49,6 +49,47 @@ export async function POST(req) {
     }
 
     const orderId = `TSH-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+
+    // Upload slip to Google Drive via APPS_SCRIPT_URL if file is provided
+    let driveFileId = null;
+    let driveViewUrl = null;
+    let driveThumbnailUrl = null;
+
+    if (file && typeof file === 'object' && typeof file.arrayBuffer === 'function') {
+      const APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL;
+      if (APPS_SCRIPT_URL) {
+        try {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const fileBase64 = buffer.toString('base64');
+          const originalName = file.name || 'slip.jpg';
+          const ext = originalName.split('.').pop() || 'jpg';
+          const prefix = teamName ? `${teamName.replace(/[^a-zA-Z0-9_-]/g, '_')}_tshirt` : `${name.replace(/[^a-zA-Z0-9_-]/g, '_')}_tshirt`;
+          const fileName = `${prefix}_${orderId}.${ext}`;
+
+          const driveRes = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fileBase64,
+              mimeType: file.type || 'image/jpeg',
+              fileName,
+            }),
+          });
+
+          const driveData = await driveRes.json();
+          if (driveData?.success) {
+            driveFileId = driveData.fileId || null;
+            driveViewUrl = driveData.viewUrl || null;
+            driveThumbnailUrl = driveData.thumbnailUrl || null;
+          } else {
+            console.warn('Google Drive tshirt slip upload error:', driveData?.error);
+          }
+        } catch (uploadErr) {
+          console.error('Failed to upload tshirt slip to Drive:', uploadErr);
+        }
+      }
+    }
+
     const orderData = {
       orderId,
       name: name.trim(),
@@ -58,6 +99,9 @@ export async function POST(req) {
       referenceNumber: referenceNumber.trim(),
       hasPaymentSlip: Boolean(file),
       slipName: file && typeof file === 'object' && file.name ? file.name : null,
+      driveFileId,
+      driveViewUrl,
+      driveThumbnailUrl,
       createdAt: new Date().toISOString(),
       status: 'pending',
       ...(teamId ? { teamId } : {}),

@@ -64,6 +64,7 @@ export async function GET(req) {
         'Payment Ref / Txn': o.referenceNumber || '—',
         'Slip Uploaded': o.hasPaymentSlip ? 'Yes' : 'No',
         'Slip File Name': o.slipName || '—',
+        'Drive Slip Link': o.driveViewUrl || '—',
         'Order Status': (o.status || 'pending').toUpperCase(),
         'Order Date': o.createdAt
           ? new Date(o.createdAt).toLocaleString('en-LK', {
