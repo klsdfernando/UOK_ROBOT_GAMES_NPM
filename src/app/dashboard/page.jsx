@@ -5,15 +5,17 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useRegistrationConfig } from "@/hooks/useRegistrationConfig";
+import TeamTshirtSection from "@/components/TeamTshirtSection";
 
 /* ─── Sidebar Nav Items ─── */
 const sidebarItems = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
   { id: "team", label: "Team Details", icon: "group" },
+  { id: "tshirt", label: "T-Shirt Order", icon: "apparel" },
 ];
 
 /* ─── Dashboard Overview Section ─── */
-function DashboardSection({ team }) {
+function DashboardSection({ team, onNavigateToTshirt }) {
   const phases = team.phases || {};
   const completedCount = Object.values(phases).filter(p => p?.completed).length;
   const totalPhases = Object.keys(phases).length || 5;
@@ -175,6 +177,40 @@ function DashboardSection({ team }) {
             {new Date(team.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
+      </div>
+
+      {/* Team Merchandise Quick Banner */}
+      <div className="mt-6 relative bg-gradient-to-r from-[#004491]/20 via-[#080808] to-[#0b0c16] border border-[#004491]/30 rounded-xl p-5 sm:p-6 overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#004491] via-[#00d2ff] to-[#004491]" />
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#004491]/25 border border-[#004491]/40 flex items-center justify-center shrink-0">
+            <span className="material-symbols-outlined text-[#00d2ff] text-2xl">apparel</span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-white font-bold text-sm uppercase tracking-wider">
+                Official Team T-Shirt Pre-Order
+              </h3>
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Live
+              </span>
+            </div>
+            <p className="text-zinc-400 text-xs mt-1">
+              Select which students in your team want jerseys and order them directly with your team details.
+            </p>
+          </div>
+        </div>
+
+        {onNavigateToTshirt && (
+          <button
+            type="button"
+            onClick={onNavigateToTshirt}
+            className="px-5 py-2.5 bg-[#004491] hover:bg-[#003570] text-white text-xs font-bold uppercase tracking-widest transition-all rounded shrink-0 flex items-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(0,68,145,0.4)]"
+          >
+            <span>Order T-Shirts</span>
+            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        )}
       </div>
     </>
   );
@@ -1684,11 +1720,13 @@ export default function DashboardPage() {
   const renderSection = () => {
     switch (activeSection) {
       case "dashboard":
-        return <DashboardSection team={team} />;
+        return <DashboardSection team={team} onNavigateToTshirt={() => setActiveSection("tshirt")} />;
       case "team":
         return <TeamDetailsSection team={team} onTeamUpdate={setTeam} />;
+      case "tshirt":
+        return <TeamTshirtSection team={team} />;
       default:
-        return <DashboardSection team={team} />;
+        return <DashboardSection team={team} onNavigateToTshirt={() => setActiveSection("tshirt")} />;
     }
   };
 
