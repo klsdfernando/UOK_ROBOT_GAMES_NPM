@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import TshirtCountdownBanner from "@/components/TshirtCountdownBanner";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
@@ -396,9 +397,11 @@ export default function TeamTshirtSection({ team }) {
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      
+      {/* ─── Top Live Countdown Banner ─── */}
+      <TshirtCountdownBanner />
+
       {/* ─── Hero Header Banner ─── */}
-      <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
+      <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-xl">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#004491]/20 border border-[#004491]/40 text-[#5b9aff] text-xs font-semibold mb-3">
@@ -414,7 +417,7 @@ export default function TeamTshirtSection({ team }) {
               Equip your members and mentors with official UOK Robot Games 2K26 arena jerseys. Select who wants a shirt, choose sizes from XS to 3XL, and upload your payment slip in one unified team order.
             </p>
 
-            <div className="flex flex-wrap items-center gap-2.5 mt-4">
+            <div className="flex flex-wrap items-center gap-2 mt-4">
               <span className="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#12131f] text-zinc-300 border border-zinc-800">
                 Team: <strong className="text-white font-medium ml-1">{team.teamName}</strong>
               </span>
@@ -447,7 +450,7 @@ export default function TeamTshirtSection({ team }) {
           </div>
 
           {/* Quick Price Card */}
-          <div className="bg-[#12131f] border border-white/[0.06] p-5 rounded-xl text-center shrink-0 w-full sm:w-auto">
+          <div className="bg-[#12131f] border border-zinc-800/90 p-4 sm:p-5 rounded-xl text-center shrink-0 w-full sm:w-auto">
             <span className="text-xs text-zinc-400 font-medium block mb-1">
               {hasExistingOrders ? "Team Order Total" : `Allowance: Up to ${maxAllowedShirts} Shirts`}
             </span>
@@ -467,7 +470,7 @@ export default function TeamTshirtSection({ team }) {
 
       {/* ─── Size Chart Drawer / Modal (Only in receipt mode) ─── */}
       {hasExistingOrders && !showNewOrderForm && showSizeChart && (
-        <div className="bg-[#0d0e18] border border-white/[0.08] p-6 rounded-2xl animate-fadeIn">
+        <div className="bg-[#0b0c16]/90 border border-zinc-800/80 p-4 sm:p-6 rounded-2xl animate-fadeIn">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
@@ -489,19 +492,19 @@ export default function TeamTshirtSection({ team }) {
               <table className="w-full text-xs text-left text-zinc-300">
                 <thead className="bg-[#12131f] text-zinc-400 text-xs font-semibold border-b border-zinc-800">
                   <tr>
-                    <th className="p-3">Size</th>
-                    <th className="p-3">Chest (in)</th>
-                    <th className="p-3">Length (in)</th>
+                    <th className="py-2.5 px-3">Size</th>
+                    <th className="py-2.5 px-3">Chest (in)</th>
+                    <th className="py-2.5 px-3">Length (in)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800 bg-[#080811]">
-                  <tr><td className="p-3 font-bold text-white">XS</td><td className="p-3">36&quot;</td><td className="p-3">26&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">S</td><td className="p-3">38&quot;</td><td className="p-3">27&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">M</td><td className="p-3">40&quot;</td><td className="p-3">28&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">L</td><td className="p-3">42&quot;</td><td className="p-3">29&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">XL</td><td className="p-3">44&quot;</td><td className="p-3">30&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">2XL</td><td className="p-3">46&quot;</td><td className="p-3">31&quot;</td></tr>
-                  <tr><td className="p-3 font-bold text-white">3XL</td><td className="p-3">48&quot;</td><td className="p-3">32&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">XS</td><td className="py-2 px-3">36&quot;</td><td className="py-2 px-3">26&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">S</td><td className="py-2 px-3">38&quot;</td><td className="py-2 px-3">27&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">M</td><td className="py-2 px-3">40&quot;</td><td className="py-2 px-3">28&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">L</td><td className="py-2 px-3">42&quot;</td><td className="py-2 px-3">29&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">XL</td><td className="py-2 px-3">44&quot;</td><td className="py-2 px-3">30&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">2XL</td><td className="py-2 px-3">46&quot;</td><td className="py-2 px-3">31&quot;</td></tr>
+                  <tr><td className="py-2 px-3 font-bold text-white">3XL</td><td className="py-2 px-3">48&quot;</td><td className="py-2 px-3">32&quot;</td></tr>
                 </tbody>
               </table>
             </div>
@@ -539,6 +542,20 @@ export default function TeamTshirtSection({ team }) {
                     <strong className="text-white font-mono">{primaryOrder.orderId || primaryOrder.id}</strong>.
                     Your complete order receipt and member sizes are confirmed below.
                   </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                    <a
+                      href="https://chat.whatsapp.com/FE5230pvNjY6avaOxpfdkL?s=cl&p=i&mlu=4&ilr=4"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-[#075E54] font-black text-xs uppercase tracking-wider rounded-lg transition-all shadow-[0_0_12px_rgba(37,211,102,0.35)]"
+                    >
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.588-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.146-.527-1.745-.722-2.871-2.493-2.958-2.608-.087-.116-.708-.94-.708-1.793s.448-1.272.607-1.446c.159-.175.346-.219.462-.219.116 0 .232.001.332.006.106.005.249-.04.39.298.144.347.491 1.2.535 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.073.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.12.553 4.109 1.523 5.839l-1.616 5.905 6.059-1.589c1.67.91 3.578 1.439 5.61 1.439 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                      <span>Join WhatsApp Group</span>
+                      <span className="material-symbols-outlined text-xs">open_in_new</span>
+                    </a>
+                  </div>
                 </div>
               </div>
               <button
@@ -553,7 +570,7 @@ export default function TeamTshirtSection({ team }) {
           )}
 
           {/* Main Order Details Card */}
-          <div className="bg-[#0d0e18] border border-white/[0.08] p-6 sm:p-8 rounded-2xl">
+          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 p-4 sm:p-6 lg:p-8 rounded-2xl shadow-xl">
             {/* Card Header */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6 mb-6">
               <div>
@@ -656,6 +673,38 @@ export default function TeamTshirtSection({ team }) {
                 <p className="text-xs text-zinc-400 mt-0.5">
                   On event day
                 </p>
+              </div>
+            </div>
+
+            {/* Official WhatsApp Group Card for Teams */}
+            <div className="bg-gradient-to-r from-[#075E54]/25 via-[#128C7E]/20 to-[#25D366]/10 border border-[#25D366]/30 p-4 sm:p-5 rounded-xl text-left mb-8 shadow-[0_0_25px_rgba(37,211,102,0.12)]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                    <svg className="w-6 h-6 text-[#25D366] fill-current" viewBox="0 0 24 24">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.588-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.146-.527-1.745-.722-2.871-2.493-2.958-2.608-.087-.116-.708-.94-.708-1.793s.448-1.272.607-1.446c.159-.175.346-.219.462-.219.116 0 .232.001.332.006.106.005.249-.04.39.298.144.347.491 1.2.535 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.073.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.12.553 4.109 1.523 5.839l-1.616 5.905 6.059-1.589c1.67.91 3.578 1.439 5.61 1.439 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-white text-sm font-bold flex items-center gap-1.5">
+                      Official T-Shirt Updates WhatsApp Group
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+                    </h4>
+                    <p className="text-zinc-300 text-xs mt-0.5 leading-relaxed">
+                      Team leaders & coordinators: Join the group for slip verification status, batch production updates, and bulk arena desk collection.
+                    </p>
+                  </div>
+                </div>
+
+                <a
+                  href="https://chat.whatsapp.com/FE5230pvNjY6avaOxpfdkL?s=cl&p=i&mlu=4&ilr=4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto shrink-0 px-5 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-[#075E54] font-black text-xs uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.35)] hover:shadow-[0_0_25px_rgba(37,211,102,0.6)]"
+                >
+                  <span>Join Group</span>
+                  <span className="material-symbols-outlined text-sm">open_in_new</span>
+                </a>
               </div>
             </div>
 
@@ -936,12 +985,12 @@ export default function TeamTshirtSection({ team }) {
         /* ─── Order Form ─── */
         <div className="space-y-8">
           {/* Official Merchandise Showcase: Flyer & Size Chart (Always Visible) */}
-          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 shadow-xl">
+          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-xl">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center">
               
               {/* Left Column: Official Event Flyer */}
               <div className="md:col-span-5 flex flex-col items-center">
-                <div className="relative group w-full max-w-[320px] sm:max-w-[360px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
+                <div className="relative group w-full max-w-[280px] sm:max-w-[340px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
@@ -963,7 +1012,7 @@ export default function TeamTshirtSection({ team }) {
                 </div>
 
                 {/* Sub-bar below flyer: Price & Aligned Full Flyer Button */}
-                <div className="mt-3 w-full max-w-[320px] sm:max-w-[360px] flex items-center justify-between gap-2 px-0.5">
+                <div className="mt-3 w-full max-w-[280px] sm:max-w-[340px] flex items-center justify-between gap-2 px-0.5">
                   <div className="inline-flex items-center gap-1.5 text-xs">
                     <span className="font-semibold text-white">Event Jersey</span>
                     <span className="font-bold text-[#00d2ff] bg-[#004491]/20 border border-[#004491]/40 px-2 py-0.5 rounded-md">
@@ -1003,49 +1052,49 @@ export default function TeamTshirtSection({ team }) {
                   Check your measurements below to pick your best fit. All values are in inches:
                 </p>
 
-                <div className="border border-zinc-800/90 rounded-xl overflow-hidden shadow-inner">
+                <div className="border border-zinc-800/90 rounded-xl overflow-x-auto shadow-inner">
                   <table className="w-full text-xs">
                     <thead className="bg-[#12131f] text-zinc-400 uppercase tracking-wider text-[10px] sm:text-[11px] border-b border-zinc-800">
                       <tr>
-                        <th className="py-2.5 px-4 text-left font-bold text-white">Size</th>
-                        <th className="py-2.5 px-4 text-center font-semibold text-zinc-300">Chest (in)</th>
-                        <th className="py-2.5 px-4 text-center font-semibold text-zinc-300">Length (in)</th>
+                        <th className="py-2.5 px-3 sm:px-4 text-left font-bold text-white">Size</th>
+                        <th className="py-2.5 px-3 sm:px-4 text-center font-semibold text-zinc-300">Chest (in)</th>
+                        <th className="py-2.5 px-3 sm:px-4 text-center font-semibold text-zinc-300">Length (in)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-800/70 bg-[#07080f]/80 text-zinc-300">
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">XS</td>
-                        <td className="py-2 px-4 text-center font-medium">36&quot;</td>
-                        <td className="py-2 px-4 text-center font-medium">26&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">XS</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">36&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">26&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">S</td>
-                        <td className="py-2 px-4 text-center font-medium">38&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">S</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">38&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">27&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">M</td>
-                        <td className="py-2 px-4 text-center font-medium">40&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">M</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">40&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">28&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">L</td>
-                        <td className="py-2 px-4 text-center font-medium">42&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">L</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">42&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">29&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">XL</td>
-                        <td className="py-2 px-4 text-center font-medium">44&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">XL</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">44&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">30&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">2XL</td>
-                        <td className="py-2 px-4 text-center font-medium">46&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">2XL</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">46&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">31&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-4 text-left font-bold text-white">3XL</td>
-                        <td className="py-2 px-4 text-center font-medium">48&quot;</td>
+                        <td className="py-2 px-3 sm:px-4 text-left font-bold text-white">3XL</td>
+                        <td className="py-2 px-3 sm:px-4 text-center font-medium">48&quot;</td>
                         <td className="py-2 px-4 text-center font-medium">32&quot;</td>
                       </tr>
                     </tbody>
@@ -1098,10 +1147,10 @@ export default function TeamTshirtSection({ team }) {
           {/* ════════════════════════════════════════════════════════════════
               STEP 1: SELECT WHICH STUDENTS BUY T-SHIRTS
              ════════════════════════════════════════════════════════════════ */}
-          <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-zinc-800/70">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
+                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold shrink-0">
                   1
                 </div>
                 <div>
@@ -1114,7 +1163,7 @@ export default function TeamTshirtSection({ team }) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 self-start sm:self-auto">
+              <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
                 <button
                   type="button"
                   onClick={() => handleSelectAll(true)}
@@ -1138,13 +1187,13 @@ export default function TeamTshirtSection({ team }) {
                 <div
                   key={member.id}
                   onClick={() => toggleMemberSelection(member.id)}
-                  className={`flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer select-none ${
+                  className={`flex items-center justify-between gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-xl border transition-all cursor-pointer select-none ${
                     member.selected
                       ? "bg-[#12131f] border-[#004491]/80 shadow-sm"
                       : "bg-[#080811] border-zinc-800/80 text-zinc-500 hover:border-zinc-700"
                   }`}
                 >
-                  <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
                     <div
                       className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all shrink-0 ${
                         member.selected
@@ -1158,11 +1207,11 @@ export default function TeamTshirtSection({ team }) {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className={`text-sm font-semibold truncate ${member.selected ? "text-white" : "text-zinc-400"}`}>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className={`text-xs sm:text-sm font-semibold truncate ${member.selected ? "text-white" : "text-zinc-400"}`}>
                           {member.name}
                         </p>
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
+                        <span className={`text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-md shrink-0 ${
                           member.role === "Leader"
                             ? "bg-[#004491]/25 text-[#00d2ff] border border-[#004491]/40"
                             : member.isExtra
@@ -1173,19 +1222,19 @@ export default function TeamTshirtSection({ team }) {
                         </span>
                       </div>
                       {member.contact && (
-                        <p className="text-zinc-500 text-xs font-mono mt-0.5">{member.contact}</p>
+                        <p className="text-zinc-500 text-[11px] sm:text-xs font-mono mt-0.5">{member.contact}</p>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     {member.selected ? (
-                      <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                      <span className="text-[11px] sm:text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg">
                         Included
                       </span>
                     ) : (
-                      <span className="text-xs text-zinc-500 font-medium">
-                        Not included
+                      <span className="text-[11px] sm:text-xs text-zinc-500 font-medium">
+                        Excluded
                       </span>
                     )}
 
@@ -1287,9 +1336,9 @@ export default function TeamTshirtSection({ team }) {
           {/* ════════════════════════════════════════════════════════════════
               STEP 2: CONTACT & PICKUP PERSON
              ════════════════════════════════════════════════════════════════ */}
-          <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
+          <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-lg">
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b border-zinc-800/70">
+              <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold shrink-0">
                 2
               </div>
               <div>
@@ -1302,7 +1351,7 @@ export default function TeamTshirtSection({ team }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
                 <label className="block text-zinc-300 text-xs font-semibold mb-2">
                   Contact Person / Leader Name <span className="text-red-400">*</span>
@@ -1341,25 +1390,25 @@ export default function TeamTshirtSection({ team }) {
               STEP 3: SIZE SELECTION FOR SELECTED STUDENTS
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 ? (
-            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
+            <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-lg">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <div className="flex items-center justify-between gap-3 mb-5 pb-3 border-b border-zinc-800/70">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold shrink-0">
                     3
                   </div>
                   <div>
                     <h2 className="text-white text-base sm:text-lg font-bold">
-                      3. T-Shirt Sizing
+                      3. Select Sizes
                     </h2>
                     <p className="text-zinc-400 text-xs mt-0.5">
-                      Select size (XS to 3XL) for your {shirts.length} selected {shirts.length === 1 ? "member" : "members"}
+                      Pick a size for each of your {shirts.length} selected {shirts.length === 1 ? "member" : "members"} (XS to 3XL).
                     </p>
                   </div>
                 </div>
 
-                <div className="text-xs text-zinc-400 font-medium">
-                  <span className="text-white font-bold">{shirts.filter((s) => s.size).length}</span> of {shirts.length} chosen
+                <div className="text-xs text-zinc-400 font-medium shrink-0">
+                  <span className="text-[#00d2ff] font-bold">{shirts.filter((s) => s.size).length}</span> of {shirts.length} sized
                 </div>
               </div>
 
@@ -1370,6 +1419,13 @@ export default function TeamTshirtSection({ team }) {
                 {/* Tab Bar if > 1 student */}
                 {shirts.length > 1 && (
                   <div className="mb-4">
+                    <div className="flex items-center justify-between text-xs text-zinc-400 mb-2 font-medium">
+                      <span>Select a member to configure:</span>
+                      <span className="text-[#00d2ff]">
+                        {shirts.filter((s) => s.size).length} of {shirts.length} chosen
+                      </span>
+                    </div>
+
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                       <button
                         type="button"
@@ -1398,7 +1454,7 @@ export default function TeamTshirtSection({ team }) {
                         >
                           <div className="truncate">{s.memberName?.split(" ")[0] || `#${idx + 1}`}</div>
                           <div className="text-[10px] text-zinc-400 font-normal">
-                            {s.size ? s.size : "Pick"}
+                            {s.size ? s.size : "Pick size"}
                           </div>
                         </button>
                       ))}
@@ -1408,7 +1464,7 @@ export default function TeamTshirtSection({ team }) {
 
                 {/* Mobile All View */}
                 {shirts.length > 1 && activeMobileTab === "all" ? (
-                  <div className="space-y-3 mb-5">
+                  <div className="space-y-4 mb-5">
                     {shirts.map((shirt, idx) => {
                       return (
                         <div
@@ -1431,26 +1487,39 @@ export default function TeamTshirtSection({ team }) {
                               </span>
                             ) : (
                               <span className="text-xs font-medium text-amber-400">
-                                Select size
+                                Select size below
                               </span>
                             )}
                           </div>
 
-                          <div className="grid grid-cols-4 gap-1.5">
+                          <div className="grid grid-cols-2 gap-2">
                             {SIZES.map((sizeId) => {
                               const isSelected = shirt.size === sizeId;
+                              const measurement = SIZE_MEASUREMENTS[sizeId];
                               return (
                                 <button
                                   key={sizeId}
                                   type="button"
                                   onClick={() => handleSizeSelect(idx, sizeId)}
-                                  className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                                  className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                                     isSelected
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-sm"
-                                      : "bg-[#080811] border-zinc-800 text-zinc-300 hover:text-white"
+                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-md"
+                                      : "bg-[#0a0b12] border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
                                   }`}
                                 >
-                                  <div>{sizeId}</div>
+                                  <div className="flex items-center justify-between w-full mb-1">
+                                    <span className="text-sm font-bold">{sizeId}</span>
+                                    {isSelected ? (
+                                      <span className="material-symbols-outlined text-sm text-[#00d2ff]">check_circle</span>
+                                    ) : (
+                                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-700" />
+                                    )}
+                                  </div>
+                                  {measurement && (
+                                    <span className="text-[11px] text-zinc-400">
+                                      {measurement}
+                                    </span>
+                                  )}
                                 </button>
                               );
                             })}
@@ -1470,29 +1539,21 @@ export default function TeamTshirtSection({ team }) {
                       if (!shirt) return null;
 
                       return (
-                        <div className="bg-[#12131f] border border-zinc-800 p-4 sm:p-5 mb-4 rounded-xl">
-                          <div className="flex items-center justify-between mb-4">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-white text-base font-bold">
-                                  {shirt.memberName}
-                                </h3>
-                                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
-                                  {shirt.memberRole}
-                                </span>
-                              </div>
-                              <p className="text-zinc-400 text-xs mt-0.5">
-                                Select T-Shirt Size
-                              </p>
+                        <div className="bg-[#12131f] border border-zinc-800/90 p-4 sm:p-5 mb-5 rounded-xl">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-white text-sm sm:text-base font-bold">
+                                {shirt.memberName} Size
+                              </h3>
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                                {shirt.memberRole}
+                              </span>
                             </div>
 
                             {shirt.size && (
-                              <div className="text-right">
-                                <span className="text-[11px] text-zinc-400 block">Selected</span>
-                                <span className="text-base font-bold text-[#00d2ff]">
-                                  Size {shirt.size}
-                                </span>
-                              </div>
+                              <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                Size {shirt.size} selected
+                              </span>
                             )}
                           </div>
 
@@ -1513,22 +1574,20 @@ export default function TeamTshirtSection({ team }) {
                                   }}
                                   className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                                     isSelected
-                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-md shadow-[#004491]/30"
-                                      : "bg-[#080811] border-zinc-800 text-zinc-300 hover:border-zinc-700 hover:text-white"
+                                      ? "bg-[#004491] border-[#00d2ff] text-white shadow-md"
+                                      : "bg-[#0a0b12] border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:text-white"
                                   }`}
                                 >
                                   <div className="flex items-center justify-between w-full mb-1">
-                                    <span className="text-base font-bold">{sizeId}</span>
+                                    <span className="text-sm font-bold">{sizeId}</span>
                                     {isSelected ? (
-                                      <span className="material-symbols-outlined text-white text-base">
-                                        check_circle
-                                      </span>
+                                      <span className="material-symbols-outlined text-sm text-[#00d2ff]">check_circle</span>
                                     ) : (
-                                      <span className="w-4 h-4 rounded-full border border-zinc-700 inline-block" />
+                                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-700" />
                                     )}
                                   </div>
                                   {measurement && (
-                                    <span className={`text-[11px] ${isSelected ? "text-blue-100" : "text-zinc-400"}`}>
+                                    <span className="text-[11px] text-zinc-400">
                                       {measurement}
                                     </span>
                                   )}
@@ -1551,9 +1610,9 @@ export default function TeamTshirtSection({ team }) {
                               <button
                                 type="button"
                                 onClick={() => setActiveMobileTab("all")}
-                                className="text-xs text-[#00d2ff] hover:underline"
+                                className="px-3 py-1.5 text-xs font-medium text-[#00d2ff] bg-[#004491]/20 hover:bg-[#004491]/40 border border-[#004491]/50 rounded-lg cursor-pointer"
                               >
-                                View All ({shirts.length})
+                                View All Members
                               </button>
 
                               <button
@@ -1675,9 +1734,9 @@ export default function TeamTshirtSection({ team }) {
               STEP 4: PAYMENT DETAILS & BANK SLIP UPLOAD
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 && (
-            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 sm:p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold">
+            <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 lg:p-7 shadow-lg">
+              <div className="flex items-center gap-3 mb-5 pb-3 border-b border-zinc-800/70">
+                <div className="w-8 h-8 rounded-full bg-[#004491]/30 border border-[#004491]/50 flex items-center justify-center text-[#5b9aff] text-xs font-bold shrink-0">
                   4
                 </div>
                 <div>
@@ -1691,8 +1750,8 @@ export default function TeamTshirtSection({ team }) {
               </div>
 
               {/* Bank Account Details Card */}
-              <div className="mb-6 bg-[#12131f] border border-white/[0.06] p-5 sm:p-6 rounded-xl">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800 mb-4">
+              <div className="mb-6 bg-[#12131f] border border-zinc-800/90 p-4 sm:p-6 rounded-xl">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-zinc-800 mb-4">
                   <div>
                     <span className="text-xs font-semibold text-[#5b9aff]">
                       Direct Bank Transfer or Online Deposit
@@ -1710,7 +1769,7 @@ export default function TeamTshirtSection({ team }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 text-xs">
                   <div>
                     <p className="text-zinc-400 text-[11px] mb-1">Account Name</p>
                     <p className="text-zinc-100 font-medium">Electronics and Computer Science Student Club</p>
@@ -1745,7 +1804,7 @@ export default function TeamTshirtSection({ team }) {
                   onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                   onDragLeave={() => setDragOver(false)}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed p-6 sm:p-8 text-center rounded-xl transition-all ${
+                  className={`border-2 border-dashed p-5 sm:p-8 text-center rounded-xl transition-all ${
                     dragOver
                       ? "border-[#00d2ff] bg-[#004491]/15"
                       : paymentSlip
@@ -1819,7 +1878,7 @@ export default function TeamTshirtSection({ team }) {
               SUBMIT BUTTON & SUMMARY BAR
              ════════════════════════════════════════════════════════════════ */}
           {selectedStudents.length > 0 && (
-            <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 shadow-lg flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
               <div>
                 <p className="text-white text-base font-bold">
                   Total: {shirts.length} {shirts.length === 1 ? "Shirt" : "Shirts"} · LKR {(shirts.length * PRICE_PER_SHIRT).toLocaleString()}

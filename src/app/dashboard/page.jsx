@@ -1199,7 +1199,7 @@ function Phase4PaymentSlip({ phaseData, displayStatus, accent, onTeamUpdate, tea
             <div className="space-y-2">
               <div className="flex items-start sm:items-center gap-2">
                 <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">account_balance_wallet</span>
-                <p className="text-zinc-400 text-xs">Bank: <span className="text-white font-semibold">People's Bank</span></p>
+                <p className="text-zinc-400 text-xs">Bank: <span className="text-white font-semibold">People&apos;s Bank</span></p>
               </div>
               <div className="flex items-start sm:items-center gap-2">
                 <span className="material-symbols-outlined text-zinc-500 text-sm shrink-0">location_on</span>
@@ -1404,7 +1404,7 @@ function Phase5WhatsAppGroup({ team, phaseData, displayStatus, accent, onComplet
       {/* Info text */}
       <div className="mb-6">
         <p className="text-zinc-400 text-sm leading-relaxed">
-          Join your category's official WhatsApp group to receive updates, announcements, and communicate with the organizers.
+          Join your category&apos;s official WhatsApp group to receive updates, announcements, and communicate with the organizers.
         </p>
       </div>
 
@@ -1867,7 +1867,7 @@ export default function DashboardPage() {
         )}
 
         {/* ─── Main Content ─── */}
-        <main className="flex-1 md:ml-56 lg:ml-64 p-6 sm:p-8 lg:p-10">
+        <main className="flex-1 md:ml-56 lg:ml-64 px-4 py-6 sm:p-8 lg:p-10">
           {renderSection()}
         </main>
       </div>
