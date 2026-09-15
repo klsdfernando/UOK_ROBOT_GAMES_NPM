@@ -51,267 +51,288 @@ export default function MerchCountdownSection() {
     <section
       id="merchandise"
       aria-label="Official Merchandise 2K26 Pre-Order"
-      className="relative py-20 sm:py-28 overflow-hidden bg-black text-white"
+      className="relative py-24 sm:py-32 overflow-hidden bg-black text-white"
     >
-      {/* Subtle atmospheric ambient glow */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#004491]/20 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#00d2ff]/12 rounded-full blur-[150px] pointer-events-none" />
+      {/* Background Stage Lighting: Deep atmospheric arena spotlights */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-[radial-gradient(ellipse_at_center,_rgba(0,68,145,0.22)_0%,_rgba(0,210,255,0.08)_40%,_transparent_75%)] pointer-events-none blur-3xl" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
         
-        {/* Clean Header (No redundant text or clutter) */}
-        <div className="pb-8 sm:pb-12 border-b border-white/[0.08]">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="h-[2px] w-8 bg-[#00d2ff]" />
-            <p className="text-[11px] sm:text-xs font-bold tracking-[0.25em] text-[#00d2ff] uppercase font-mono">
-              OFFICIAL MERCHANDISE 2K26
-            </p>
+        {/* ════════════════════════════════════════════════════════════════
+            1. CENTERED EDITORIAL HEADER
+           ════════════════════════════════════════════════════════════════ */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#004491]/20 border border-[#004491]/40 text-[#5b9aff] text-xs font-semibold mb-5">
+            <span className="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse" />
+            <span className="tracking-[0.2em] uppercase font-mono">Official Merchandise 2K26</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.08]">
+
+          {/* Main Title */}
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.08]">
             The Official Merch 2K26{" "}
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#529dff] to-[#004491]">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#60a5fa] to-[#0055cc] mt-1.5">
               Now Available For Pre-Order
             </span>
           </h2>
+
+          <p className="mt-5 text-zinc-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Step into the arena wearing the official tournament jersey. Crafted with athletic honeycomb mesh for maximum comfort and thermal control.
+          </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 pt-10 sm:pt-14 items-center">
-          
-          {/* ════════════════════════════════════════════════════════════════
-              LEFT: Pure Apparel Showcase (Zero Clutter)
-             ════════════════════════════════════════════════════════════════ */}
-          <div className="lg:col-span-7 flex flex-col items-center">
-            
-            {/* Minimal View Selector */}
-            <div className="flex items-center gap-6 mb-6 text-xs font-mono tracking-widest uppercase">
-              <button
-                type="button"
-                onClick={() => setActiveView("both")}
-                className={`pb-1.5 border-b-2 transition-all cursor-pointer ${
-                  activeView === "both"
-                    ? "text-[#00d2ff] border-[#00d2ff] font-bold"
-                    : "text-zinc-500 border-transparent hover:text-zinc-300"
-                }`}
-              >
-                Dual View
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("front")}
-                className={`pb-1.5 border-b-2 transition-all cursor-pointer ${
-                  activeView === "front"
-                    ? "text-[#00d2ff] border-[#00d2ff] font-bold"
-                    : "text-zinc-500 border-transparent hover:text-zinc-300"
-                }`}
-              >
-                Front
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("back")}
-                className={`pb-1.5 border-b-2 transition-all cursor-pointer ${
-                  activeView === "back"
-                    ? "text-[#00d2ff] border-[#00d2ff] font-bold"
-                    : "text-zinc-500 border-transparent hover:text-zinc-300"
-                }`}
-              >
-                Back
-              </button>
+        {/* ════════════════════════════════════════════════════════════════
+            2. CENTERED COUNTDOWN STRIP
+           ════════════════════════════════════════════════════════════════ */}
+        <div className="flex flex-col items-center justify-center mb-10 sm:mb-14">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            <span className="text-xs font-mono uppercase tracking-[0.22em] text-rose-400 font-semibold">
+              Pre-Orders Close September 18, 2026
+            </span>
+          </div>
+
+          {/* Large Authoritative Digital Numerals */}
+          <div className="flex items-baseline gap-3 sm:gap-6 md:gap-8 select-none">
+            <div className="flex flex-col items-center min-w-[50px] sm:min-w-[70px]">
+              <span className="text-4xl sm:text-6xl lg:text-7xl font-black font-mono tracking-tight text-white leading-none">
+                {formatUnit(timeLeft.days)}
+              </span>
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-zinc-500 uppercase mt-2 font-mono">
+                DAYS
+              </span>
             </div>
 
-            {/* Garment Stage */}
-            <div className="relative w-full flex items-center justify-center min-h-[380px] sm:min-h-[460px]">
-              
-              {/* Floor ambient reflection spotlight */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-gradient-to-r from-transparent via-[#00d2ff]/20 to-transparent blur-2xl rounded-full pointer-events-none" />
+            <span className="text-2xl sm:text-4xl lg:text-5xl font-extralight text-zinc-700 leading-none pb-2 select-none">:</span>
 
-              {/* DUAL VIEW */}
-              {activeView === "both" && (
-                <div className="grid grid-cols-2 gap-4 sm:gap-8 w-full max-w-2xl items-end">
-                  <div
-                    onClick={() => setActiveView("front")}
-                    className="group cursor-pointer flex flex-col items-center"
-                    title="Click to focus Front"
-                  >
-                    <div className="relative w-full aspect-[4/5] flex items-center justify-center">
-                      <Image
-                        src={MERCH_ASSETS.front.src}
-                        alt={MERCH_ASSETS.front.alt}
-                        width={640}
-                        height={800}
-                        priority
-                        className="max-h-[360px] sm:max-h-[460px] w-auto object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.9)] group-hover:scale-105 group-hover:-translate-y-2 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
+            <div className="flex flex-col items-center min-w-[50px] sm:min-w-[70px]">
+              <span className="text-4xl sm:text-6xl lg:text-7xl font-black font-mono tracking-tight text-white leading-none">
+                {formatUnit(timeLeft.hours)}
+              </span>
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-zinc-500 uppercase mt-2 font-mono">
+                HOURS
+              </span>
+            </div>
 
-                  <div
-                    onClick={() => setActiveView("back")}
-                    className="group cursor-pointer flex flex-col items-center"
-                    title="Click to focus Back"
-                  >
-                    <div className="relative w-full aspect-[4/5] flex items-center justify-center">
-                      <Image
-                        src={MERCH_ASSETS.back.src}
-                        alt={MERCH_ASSETS.back.alt}
-                        width={640}
-                        height={800}
-                        priority
-                        className="max-h-[360px] sm:max-h-[460px] w-auto object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.9)] group-hover:scale-105 group-hover:-translate-y-2 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
+            <span className="text-2xl sm:text-4xl lg:text-5xl font-extralight text-zinc-700 leading-none pb-2 select-none">:</span>
 
-              {/* SINGLE FRONT VIEW */}
-              {activeView === "front" && (
-                <div className="flex flex-col items-center max-w-md w-full">
-                  <div className="relative w-full aspect-[4/5] flex items-center justify-center">
+            <div className="flex flex-col items-center min-w-[50px] sm:min-w-[70px]">
+              <span className="text-4xl sm:text-6xl lg:text-7xl font-black font-mono tracking-tight text-white leading-none">
+                {formatUnit(timeLeft.minutes)}
+              </span>
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-zinc-500 uppercase mt-2 font-mono">
+                MINS
+              </span>
+            </div>
+
+            <span className="text-2xl sm:text-4xl lg:text-5xl font-extralight text-zinc-700 leading-none pb-2 select-none">:</span>
+
+            <div className="flex flex-col items-center min-w-[50px] sm:min-w-[70px]">
+              <span className="text-4xl sm:text-6xl lg:text-7xl font-black font-mono tracking-tight text-[#00d2ff] leading-none drop-shadow-[0_0_15px_rgba(0,210,255,0.5)]">
+                {formatUnit(timeLeft.seconds)}
+              </span>
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-[#00d2ff]/80 uppercase mt-2 font-mono">
+                SECS
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════
+            3. HERO APPAREL STAGE (Centerpiece with Floor Glow)
+           ════════════════════════════════════════════════════════════════ */}
+        <div className="w-full flex flex-col items-center">
+          
+          {/* Elegant View Selector Switch */}
+          <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md mb-8">
+            <button
+              type="button"
+              onClick={() => setActiveView("both")}
+              className={`px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                activeView === "both"
+                  ? "bg-[#004491] text-white shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Dual View
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView("front")}
+              className={`px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                activeView === "front"
+                  ? "bg-[#004491] text-white shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Front View
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView("back")}
+              className={`px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                activeView === "back"
+                  ? "bg-[#004491] text-white shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Back View
+            </button>
+          </div>
+
+          {/* Garment Presentation Stage */}
+          <div className="relative w-full max-w-4xl flex items-center justify-center min-h-[380px] sm:min-h-[480px]">
+            
+            {/* Ambient floor pedestal lighting */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-4/5 h-16 bg-gradient-to-r from-transparent via-[#00d2ff]/25 to-transparent blur-2xl rounded-full pointer-events-none" />
+
+            {/* DUAL VIEW: Side-by-Side Large Stage */}
+            {activeView === "both" && (
+              <div className="grid grid-cols-2 gap-4 sm:gap-12 w-full max-w-3xl items-end justify-center">
+                <div
+                  onClick={() => setActiveView("front")}
+                  className="group cursor-pointer flex flex-col items-center"
+                  title="Click to zoom Front View"
+                >
+                  <div className="relative w-full aspect-[4/5] max-w-[340px] flex items-center justify-center">
                     <Image
                       src={MERCH_ASSETS.front.src}
                       alt={MERCH_ASSETS.front.alt}
-                      width={700}
-                      height={875}
+                      width={640}
+                      height={800}
                       priority
-                      className="max-h-[420px] sm:max-h-[500px] w-auto object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.95)] hover:scale-105 transition-transform duration-300"
+                      className="max-h-[380px] sm:max-h-[480px] w-auto object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] group-hover:scale-105 group-hover:-translate-y-2 transition-transform duration-300"
                     />
                   </div>
+                  <span className="text-[11px] font-mono tracking-widest uppercase text-zinc-400 mt-3 block">
+                    Front Crest
+                  </span>
                 </div>
-              )}
 
-              {/* SINGLE BACK VIEW */}
-              {activeView === "back" && (
-                <div className="flex flex-col items-center max-w-md w-full">
-                  <div className="relative w-full aspect-[4/5] flex items-center justify-center">
+                <div
+                  onClick={() => setActiveView("back")}
+                  className="group cursor-pointer flex flex-col items-center"
+                  title="Click to zoom Back View"
+                >
+                  <div className="relative w-full aspect-[4/5] max-w-[340px] flex items-center justify-center">
                     <Image
                       src={MERCH_ASSETS.back.src}
                       alt={MERCH_ASSETS.back.alt}
-                      width={700}
-                      height={875}
+                      width={640}
+                      height={800}
                       priority
-                      className="max-h-[420px] sm:max-h-[500px] w-auto object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.95)] hover:scale-105 transition-transform duration-300"
+                      className="max-h-[380px] sm:max-h-[480px] w-auto object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] group-hover:scale-105 group-hover:-translate-y-2 transition-transform duration-300"
                     />
                   </div>
+                  <span className="text-[11px] font-mono tracking-widest uppercase text-zinc-400 mt-3 block">
+                    Back Cyber
+                  </span>
                 </div>
-              )}
+              </div>
+            )}
 
-            </div>
-          </div>
-
-          {/* ════════════════════════════════════════════════════════════════
-              RIGHT: Clean, High-Impact Countdown, Price & Actions
-             ════════════════════════════════════════════════════════════════ */}
-          <div className="lg:col-span-5 flex flex-col space-y-7">
-            
-            {/* Live Countdown */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-                <span className="text-xs font-mono uppercase tracking-[0.2em] text-rose-400 font-semibold">
-                  Pre-Orders Close September 18th
+            {/* SINGLE FRONT VIEW */}
+            {activeView === "front" && (
+              <div className="flex flex-col items-center max-w-lg w-full">
+                <div className="relative w-full aspect-[4/5] flex items-center justify-center">
+                  <Image
+                    src={MERCH_ASSETS.front.src}
+                    alt={MERCH_ASSETS.front.alt}
+                    width={700}
+                    height={875}
+                    priority
+                    className="max-h-[440px] sm:max-h-[540px] w-auto object-contain drop-shadow-[0_30px_55px_rgba(0,0,0,0.95)] hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <span className="text-xs font-mono tracking-widest uppercase text-zinc-400 mt-3 block">
+                  Official Tournament Crest · Sublimated Print
                 </span>
               </div>
+            )}
 
-              {/* Bold Minimalist Digits */}
-              <div className="flex items-baseline gap-2 sm:gap-4 select-none">
-                <div className="flex flex-col">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-white leading-none">
-                    {formatUnit(timeLeft.days)}
-                  </span>
-                  <span className="text-[10px] font-bold tracking-[0.22em] text-zinc-500 uppercase mt-2 font-mono">
-                    DAYS
-                  </span>
+            {/* SINGLE BACK VIEW */}
+            {activeView === "back" && (
+              <div className="flex flex-col items-center max-w-lg w-full">
+                <div className="relative w-full aspect-[4/5] flex items-center justify-center">
+                  <Image
+                    src={MERCH_ASSETS.back.src}
+                    alt={MERCH_ASSETS.back.alt}
+                    width={700}
+                    height={875}
+                    priority
+                    className="max-h-[440px] sm:max-h-[540px] w-auto object-contain drop-shadow-[0_30px_55px_rgba(0,0,0,0.95)] hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-
-                <span className="text-2xl sm:text-4xl font-light text-zinc-600 self-start leading-none pt-1">:</span>
-
-                <div className="flex flex-col">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-white leading-none">
-                    {formatUnit(timeLeft.hours)}
-                  </span>
-                  <span className="text-[10px] font-bold tracking-[0.22em] text-zinc-500 uppercase mt-2 font-mono">
-                    HOURS
-                  </span>
-                </div>
-
-                <span className="text-2xl sm:text-4xl font-light text-zinc-600 self-start leading-none pt-1">:</span>
-
-                <div className="flex flex-col">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-white leading-none">
-                    {formatUnit(timeLeft.minutes)}
-                  </span>
-                  <span className="text-[10px] font-bold tracking-[0.22em] text-zinc-500 uppercase mt-2 font-mono">
-                    MINS
-                  </span>
-                </div>
-
-                <span className="text-2xl sm:text-4xl font-light text-zinc-600 self-start leading-none pt-1">:</span>
-
-                <div className="flex flex-col">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-[#00d2ff] leading-none drop-shadow-[0_0_12px_rgba(0,210,255,0.4)]">
-                    {formatUnit(timeLeft.seconds)}
-                  </span>
-                  <span className="text-[10px] font-bold tracking-[0.22em] text-[#00d2ff]/80 uppercase mt-2 font-mono">
-                    SECS
-                  </span>
-                </div>
+                <span className="text-xs font-mono tracking-widest uppercase text-zinc-400 mt-3 block">
+                  Cyber Arena Back Graphics · Full Sublimation
+                </span>
               </div>
-            </div>
-
-            {/* Quick Specs: 3 clean, quiet chips */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-zinc-300">
-                Athletic Honeycomb Mesh
-              </span>
-              <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-zinc-300">
-                Unisex XS — 3XL
-              </span>
-              <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-zinc-300">
-                Collect at Arena
-              </span>
-            </div>
-
-            {/* Price */}
-            <div>
-              <span className="text-4xl sm:text-5xl font-black font-mono text-white tracking-tight">
-                Rs. 1,900
-              </span>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row items-stretch gap-3">
-                <Link
-                  href="/tshirt"
-                  className="flex-1 py-4 px-6 bg-[#004491] hover:bg-[#003570] text-white text-sm font-bold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,68,145,0.4)] hover:shadow-[0_0_35px_rgba(0,68,145,0.6)] group text-center uppercase tracking-wider"
-                >
-                  <span className="material-symbols-outlined text-lg">shopping_bag</span>
-                  <span>Pre-Order Jersey — Rs. 1,900</span>
-                  <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">
-                    arrow_forward
-                  </span>
-                </Link>
-
-                <Link
-                  href="/tshirt"
-                  className="py-4 px-5 border border-zinc-700 hover:border-zinc-500 bg-white/[0.03] hover:bg-white/[0.08] text-zinc-300 hover:text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 text-center"
-                >
-                  <span className="material-symbols-outlined text-base text-[#00d2ff]">straighten</span>
-                  <span>Size Guide</span>
-                </Link>
-              </div>
-
-              <p className="text-[11px] text-zinc-500">
-                Competing teams: Order for your entire roster inside the{" "}
-                <Link href="/login" className="text-[#00d2ff] hover:underline">
-                  Team Dashboard
-                </Link>.
-              </p>
-            </div>
+            )}
 
           </div>
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════
+            4. CENTERED PRICE, SPECS & ACTIONS
+           ════════════════════════════════════════════════════════════════ */}
+        <div className="flex flex-col items-center text-center mt-12 sm:mt-14 space-y-6 w-full max-w-xl">
+          
+          {/* Price Tag */}
+          <div className="flex items-baseline gap-3">
+            <span className="text-4xl sm:text-6xl font-black font-mono text-white tracking-tight">
+              Rs. 1,900
+            </span>
+            <span className="text-xs sm:text-sm font-mono text-zinc-400 uppercase tracking-widest">
+              / Unit · LKR
+            </span>
+          </div>
+
+          {/* Clean Specification Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs text-zinc-300">
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+              Athletic Honeycomb Mesh
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+              Unisex XS — 3XL
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+              HD Cyber Sublimation
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+              Collect at Arena Desk
+            </span>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full pt-2">
+            <Link
+              href="/tshirt"
+              className="flex-1 py-4 px-8 bg-[#004491] hover:bg-[#003570] text-white text-sm font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2.5 shadow-[0_0_30px_rgba(0,68,145,0.45)] hover:shadow-[0_0_40px_rgba(0,68,145,0.7)] group uppercase tracking-wider text-center"
+            >
+              <span className="material-symbols-outlined text-lg">shopping_bag</span>
+              <span>Pre-Order Jersey — Rs. 1,900</span>
+              <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">
+                arrow_forward
+              </span>
+            </Link>
+
+            <Link
+              href="/tshirt"
+              className="py-4 px-6 border border-zinc-700 hover:border-zinc-500 bg-white/[0.03] hover:bg-white/[0.08] text-zinc-300 hover:text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2 text-center"
+            >
+              <span className="material-symbols-outlined text-base text-[#00d2ff]">straighten</span>
+              <span>Size Guide</span>
+            </Link>
+          </div>
+
+          {/* Competing Teams Helper */}
+          <p className="text-xs text-zinc-500">
+            Competing teams: Order for your entire roster inside the{" "}
+            <Link href="/login" className="text-[#00d2ff] hover:underline font-medium">
+              Team Dashboard
+            </Link>.
+          </p>
 
         </div>
 
