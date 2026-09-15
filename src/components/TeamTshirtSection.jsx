@@ -415,12 +415,12 @@ export default function TeamTshirtSection({ team }) {
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 mt-4">
-              <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#12131f] text-zinc-300 border border-zinc-800">
-                Team: <strong className="text-white font-medium">{team.teamName}</strong>
+              <span className="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#12131f] text-zinc-300 border border-zinc-800">
+                Team: <strong className="text-white font-medium ml-1">{team.teamName}</strong>
               </span>
 
               {hasExistingOrders && (
-                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Order Confirmed ({totalShirtsOrdered} {totalShirtsOrdered === 1 ? "Shirt" : "Shirts"})
                 </span>
@@ -430,17 +430,17 @@ export default function TeamTshirtSection({ team }) {
                 <button
                   type="button"
                   onClick={() => setShowSizeChart(!showSizeChart)}
-                  className="text-xs font-semibold px-3 py-1 rounded-lg border border-zinc-700 hover:border-zinc-500 bg-[#12131f] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-700 hover:border-zinc-500 bg-[#12131f] text-zinc-300 hover:text-white transition-colors cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-xs">straighten</span>
-                  {showSizeChart ? "Hide Size Chart" : "View Size Chart"}
+                  <span>{showSizeChart ? "Hide Size Chart" : "View Size Chart"}</span>
                 </button>
               )}
 
               {hasExistingOrders && (
-                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#12131f] text-zinc-400 border border-zinc-800 flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#12131f] text-zinc-400 border border-zinc-800">
                   <span className="material-symbols-outlined text-xs text-[#00d2ff]">lock</span>
-                  Locked
+                  <span>Locked</span>
                 </span>
               )}
             </div>
@@ -937,11 +937,11 @@ export default function TeamTshirtSection({ team }) {
         <div className="space-y-8">
           {/* Official Merchandise Showcase: Flyer & Size Chart (Always Visible) */}
           <div className="bg-[#0b0c16]/90 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 shadow-xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center">
               
               {/* Left Column: Official Event Flyer */}
-              <div className="flex flex-col items-center text-center">
-                <div className="relative group w-full max-w-[340px] sm:max-w-[380px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
+              <div className="md:col-span-5 flex flex-col items-center">
+                <div className="relative group w-full max-w-[320px] sm:max-w-[360px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
@@ -952,30 +952,49 @@ export default function TeamTshirtSection({ team }) {
                     href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute bottom-3 right-3 text-[11px] font-semibold text-white bg-black/75 hover:bg-black px-2.5 py-1 rounded-lg border border-white/20 backdrop-blur-sm flex items-center gap-1 transition-colors"
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1.5px]"
                     title="Open flyer in full size"
                   >
-                    <span className="material-symbols-outlined text-xs text-[#00d2ff]">zoom_in</span>
-                    Full Flyer
+                    <span className="text-xs font-semibold text-white bg-black/80 hover:bg-black px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-1.5 shadow-xl transition-all">
+                      <span className="material-symbols-outlined text-sm text-[#00d2ff]">zoom_in</span>
+                      <span>View Full Flyer</span>
+                    </span>
                   </a>
                 </div>
-                <div className="mt-3 flex items-center justify-center gap-2 text-xs text-zinc-400">
-                  <span className="font-semibold text-white">Official 2K26 Event Jersey</span>
-                  <span>•</span>
-                  <span className="text-[#00d2ff] font-bold">Rs. 1,900</span>
+
+                {/* Sub-bar below flyer: Price & Aligned Full Flyer Button */}
+                <div className="mt-3 w-full max-w-[320px] sm:max-w-[360px] flex items-center justify-between gap-2 px-0.5">
+                  <div className="inline-flex items-center gap-1.5 text-xs">
+                    <span className="font-semibold text-white">Event Jersey</span>
+                    <span className="font-bold text-[#00d2ff] bg-[#004491]/20 border border-[#004491]/40 px-2 py-0.5 rounded-md">
+                      Rs. 1,900
+                    </span>
+                  </div>
+
+                  <a
+                    href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-medium text-zinc-300 hover:text-white bg-[#12131f] hover:bg-zinc-800 border border-zinc-700/80 hover:border-[#00d2ff]/50 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                    title="Open flyer in high resolution"
+                  >
+                    <span className="material-symbols-outlined text-xs text-[#00d2ff]">open_in_new</span>
+                    <span>Full Flyer</span>
+                  </a>
                 </div>
               </div>
 
               {/* Right Column: Size Measurements Table (Always Shown) */}
-              <div className="flex flex-col">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#00d2ff] text-xl">straighten</span>
-                    <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider">
-                      Size Measurements (Inches)
+              <div className="md:col-span-7 flex flex-col justify-center">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="material-symbols-outlined text-[#00d2ff] text-xl shrink-0">straighten</span>
+                    <h2 className="text-white text-sm sm:text-base font-bold uppercase tracking-wider truncate">
+                      Size Measurements <span className="text-zinc-400 text-xs font-medium lowercase tracking-normal">(inches)</span>
                     </h2>
                   </div>
-                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#00d2ff] bg-[#004491]/25 border border-[#004491]/50 px-2.5 py-0.5 rounded-full">
+                  <span className="shrink-0 whitespace-nowrap text-[11px] font-semibold tracking-wide text-[#00d2ff] bg-[#004491]/25 border border-[#004491]/50 px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff]" />
                     Unisex Fit
                   </span>
                 </div>
@@ -985,58 +1004,58 @@ export default function TeamTshirtSection({ team }) {
                 </p>
 
                 <div className="border border-zinc-800/90 rounded-xl overflow-hidden shadow-inner">
-                  <table className="w-full text-xs text-left">
+                  <table className="w-full text-xs">
                     <thead className="bg-[#12131f] text-zinc-400 uppercase tracking-wider text-[10px] sm:text-[11px] border-b border-zinc-800">
                       <tr>
-                        <th className="py-2.5 px-3 sm:px-4 font-bold text-white">Size</th>
-                        <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Chest (in)</th>
-                        <th className="py-2.5 px-3 sm:px-4 font-semibold text-zinc-300">Length (in)</th>
+                        <th className="py-2.5 px-4 text-left font-bold text-white">Size</th>
+                        <th className="py-2.5 px-4 text-center font-semibold text-zinc-300">Chest (in)</th>
+                        <th className="py-2.5 px-4 text-center font-semibold text-zinc-300">Length (in)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-800/70 bg-[#07080f]/80 text-zinc-300">
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">XS</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">36&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">26&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">XS</td>
+                        <td className="py-2 px-4 text-center font-medium">36&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">26&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">S</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">38&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">27&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">S</td>
+                        <td className="py-2 px-4 text-center font-medium">38&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">27&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">M</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">40&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">28&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">M</td>
+                        <td className="py-2 px-4 text-center font-medium">40&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">28&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">L</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">42&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">29&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">L</td>
+                        <td className="py-2 px-4 text-center font-medium">42&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">29&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">XL</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">44&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">30&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">XL</td>
+                        <td className="py-2 px-4 text-center font-medium">44&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">30&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">2XL</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">46&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">31&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">2XL</td>
+                        <td className="py-2 px-4 text-center font-medium">46&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">31&quot;</td>
                       </tr>
                       <tr className="hover:bg-[#12131f]/60 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-bold text-white">3XL</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">48&quot;</td>
-                        <td className="py-2 px-3 sm:px-4 font-medium">32&quot;</td>
+                        <td className="py-2 px-4 text-left font-bold text-white">3XL</td>
+                        <td className="py-2 px-4 text-center font-medium">48&quot;</td>
+                        <td className="py-2 px-4 text-center font-medium">32&quot;</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
-                <p className="text-[11px] text-zinc-400 mt-2.5 flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-xs text-[#00d2ff]">check_circle</span>
-                  Standard unisex chest circumference and body length.
-                </p>
+                <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-zinc-400">
+                  <span className="material-symbols-outlined text-sm text-[#00d2ff] shrink-0">check_circle</span>
+                  <span>Standard unisex chest circumference and body length.</span>
+                </div>
               </div>
 
             </div>
