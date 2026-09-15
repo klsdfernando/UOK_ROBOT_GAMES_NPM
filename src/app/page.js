@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
 import HeroSection from "./sections/HeroSection";
+import MerchCountdownSection from "./sections/MerchCountdownSection";
 import AboutSection from "./sections/AboutSection";
 import CategoriesSection from "./sections/CategoriesSection";
 import TimelineSection from "./sections/TimelineSection";
@@ -19,6 +20,10 @@ export default function Home() {
           <HeroSection />
         </FadeIn>
         
+        <FadeIn direction="up" delay={0.15} viewAmount={0.1}>
+          <MerchCountdownSection />
+        </FadeIn>
+
         <FadeIn direction="up" delay={0.2} viewAmount={0.1}>
           <AboutSection />
         </FadeIn>
