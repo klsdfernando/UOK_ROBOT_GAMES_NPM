@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import TshirtCountdownBanner from "@/components/TshirtCountdownBanner";
 
 // Size definitions per user instructions
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
@@ -225,6 +226,9 @@ export default function TshirtPage() {
 
           </div>
 
+          {/* Live Countdown Banner on Top of Form */}
+          <TshirtCountdownBanner />
+
           {/* Success Screen */}
           {orderResult ? (
             <div className="relative bg-[#080808] border border-outline-variant p-8 sm:p-12 text-center rounded-sm">
@@ -246,7 +250,7 @@ export default function TshirtPage() {
               </div>
 
               {/* Order breakdown */}
-              <div className="bg-[#0b0c16] border border-outline-variant p-5 max-w-lg mx-auto text-left mb-8">
+              <div className="bg-[#0b0c16] border border-outline-variant p-5 max-w-lg mx-auto text-left mb-6">
                 <p className="text-xs uppercase tracking-widest font-bold text-zinc-400 mb-3 border-b border-zinc-800 pb-2">
                   Order Summary ({orderResult.order?.shirtCount} {orderResult.order?.shirtCount === 1 ? "Shirt" : "Shirts"})
                 </p>
@@ -263,6 +267,38 @@ export default function TshirtPage() {
                     <span>Total Amount</span>
                     <span className="text-emerald-400">LKR {(orderResult.order?.shirtCount * PRICE_PER_SHIRT).toLocaleString()}</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Official WhatsApp Group Invitation */}
+              <div className="max-w-lg mx-auto bg-gradient-to-r from-[#075E54]/25 via-[#128C7E]/20 to-[#25D366]/10 border border-[#25D366]/30 p-5 rounded-xl text-left mb-8 shadow-[0_0_30px_rgba(37,211,102,0.12)]">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-start sm:items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                      <svg className="w-6 h-6 text-[#25D366] fill-current" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.588-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.146-.527-1.745-.722-2.871-2.493-2.958-2.608-.087-.116-.708-.94-.708-1.793s.448-1.272.607-1.446c.159-.175.346-.219.462-.219.116 0 .232.001.332.006.106.005.249-.04.39.298.144.347.491 1.2.535 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.073.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.12.553 4.109 1.523 5.839l-1.616 5.905 6.059-1.589c1.67.91 3.578 1.439 5.61 1.439 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-white text-sm font-bold flex items-center gap-1.5">
+                        Join Official T-Shirt WhatsApp Group
+                        <span className="inline-block w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+                      </h4>
+                      <p className="text-zinc-300 text-xs mt-0.5 leading-relaxed">
+                        Stay notified on verification status, printing batches, and arena collection on tournament day.
+                      </p>
+                    </div>
+                  </div>
+
+                  <a
+                    href="https://chat.whatsapp.com/FE5230pvNjY6avaOxpfdkL?s=cl&p=i&mlu=4&ilr=4"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto shrink-0 px-5 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-[#075E54] font-black text-xs uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.35)] hover:shadow-[0_0_25px_rgba(37,211,102,0.6)]"
+                  >
+                    <span>Join Group</span>
+                    <span className="material-symbols-outlined text-sm">open_in_new</span>
+                  </a>
                 </div>
               </div>
 

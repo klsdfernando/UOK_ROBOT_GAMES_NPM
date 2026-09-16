@@ -63,12 +63,6 @@ export default function MerchCountdownSection() {
             1. CENTERED EDITORIAL HEADER
            ════════════════════════════════════════════════════════════════ */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#004491]/20 border border-[#004491]/40 text-[#5b9aff] text-xs font-semibold mb-5">
-            <span className="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse" />
-            <span className="tracking-[0.2em] uppercase font-mono">Official Merchandise 2K26</span>
-          </div>
-
           {/* Main Title */}
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.08]">
             The Official Merch 2K26{" "}
@@ -285,22 +279,6 @@ export default function MerchCountdownSection() {
             </span>
             <span className="text-xs sm:text-sm font-mono text-zinc-400 uppercase tracking-widest">
               / Unit · LKR
-            </span>
-          </div>
-
-          {/* Clean Specification Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs text-zinc-300">
-            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
-              Athletic Honeycomb Mesh
-            </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
-              Unisex XS — 3XL
-            </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
-              HD Cyber Sublimation
-            </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
-              Collect at Arena Desk
             </span>
           </div>
 
