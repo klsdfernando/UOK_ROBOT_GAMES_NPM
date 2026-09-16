@@ -502,10 +502,10 @@ function AnnouncementsManager() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <p style={{ margin: 0, fontSize: 24, fontWeight: 900, color: 'white' }}>{announcements.length} <span style={{ fontSize: 14, color: '#52525b', fontWeight: 600 }}>/ 3</span></p>
-          <p style={{ margin: 0, fontSize: 9, color: '#52525b', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>Announcements</p>
+          <p style={{ margin: 0, fontSize: 24, fontWeight: 900, color: 'white' }}>{announcements.length}</p>
+          <p style={{ margin: 0, fontSize: 9, color: '#52525b', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 2 }}>Total Announcements</p>
         </div>
-        <button onClick={openAdd} disabled={announcements.length >= 3} style={{ background: '#004491', border: '1px solid #004491', color: 'white', padding: '10px 18px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: announcements.length >= 3 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', borderRadius: 10, opacity: announcements.length >= 3 ? 0.4 : 1 }}>
+        <button onClick={openAdd} style={{ background: '#004491', border: '1px solid #004491', color: 'white', padding: '10px 18px', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', borderRadius: 10 }}>
           <span className="material-symbols-outlined" style={{ fontSize: 14 }}>add</span>
           Add New
         </button>

@@ -2,13 +2,21 @@ import { NextResponse } from 'next/server';
 import db from '@/lib/firebase';
 
 // Public GET — fetch announcements for frontend
-export async function GET() {
+export async function GET(req) {
   try {
-    const snapshot = await db
-      .collection('announcements')
-      .orderBy('createdAt', 'desc')
-      .limit(3)
-      .get();
+    const { searchParams } = new URL(req.url);
+    const limitParam = searchParams.get('limit');
+
+    let query = db.collection('announcements').orderBy('createdAt', 'desc');
+
+    if (limitParam) {
+      const parsedLimit = parseInt(limitParam, 10);
+      if (!isNaN(parsedLimit) && parsedLimit > 0) {
+        query = query.limit(parsedLimit);
+      }
+    }
+
+    const snapshot = await query.get();
 
     const announcements = snapshot.docs.map((doc) => ({
       id: doc.id,

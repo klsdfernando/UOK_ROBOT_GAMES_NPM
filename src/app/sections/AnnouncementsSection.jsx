@@ -14,7 +14,9 @@ export default function AnnouncementsSection() {
       try {
         const res = await fetch("/api/announcements");
         const data = await res.json();
-        if (data.success) setAnnouncements(data.announcements);
+        if (data.success && Array.isArray(data.announcements)) {
+          setAnnouncements(data.announcements);
+        }
       } catch (err) {
         console.error("Failed to fetch announcements:", err);
       } finally {
@@ -28,45 +30,56 @@ export default function AnnouncementsSection() {
   if (loading) return null;
   if (announcements.length === 0) return null;
 
+  // Display only the latest 3 announcements on the homepage
+  const latestAnnouncements = announcements.slice(0, 3);
+
   return (
     <section className="py-24 px-8 border-t border-outline-variant bg-[#080808]">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         <SectionHeader
           title="LATEST ANNOUNCEMENTS"
-          subtitle="Stay updated with the latest news and updates from UOK Robot Games."
+          subtitle="Stay updated with the latest news, notices, and updates from UOK Robot Games."
         />
 
         <div
           className={`grid grid-cols-1 ${
-            announcements.length >= 2 ? "md:grid-cols-2" : ""
-          } ${announcements.length >= 3 ? "lg:grid-cols-3" : ""} gap-6 w-full`}
+            latestAnnouncements.length >= 2 ? "md:grid-cols-2" : ""
+          } ${latestAnnouncements.length >= 3 ? "lg:grid-cols-3" : ""} gap-6 w-full`}
         >
-          {announcements.map((item) => (
+          {latestAnnouncements.map((item) => (
             <Link
               key={item.id}
               href={`/announcements/${item.id}`}
-              className="group border border-white/[0.08] bg-[#0a0a0a] rounded-2xl overflow-hidden hover:border-white/[0.15] transition-all duration-500 flex flex-col relative no-underline"
+              className="group border border-white/[0.08] bg-[#0a0a0a] rounded-2xl overflow-hidden hover:border-white/[0.15] hover:shadow-[0_0_25px_rgba(0,68,145,0.2)] transition-all duration-500 flex flex-col relative no-underline"
             >
               {/* Top accent line */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500 z-10" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#004491] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
 
               {/* Image */}
-              <div className="relative w-full aspect-[16/9] overflow-hidden">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
+              <div className="relative w-full aspect-[16/9] overflow-hidden bg-zinc-950">
+                {item.imageUrl ? (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-zinc-700">
+                    <span className="material-symbols-outlined text-4xl">campaign</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
 
                 {/* Tag badge */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="px-3 py-1.5 bg-[#004491]/80 backdrop-blur-sm text-[10px] font-bold tracking-[0.15em] text-white uppercase rounded-md">
-                    {item.tag}
-                  </span>
-                </div>
+                {item.tag && (
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className="px-3 py-1.5 bg-[#004491]/80 backdrop-blur-sm text-[10px] font-bold tracking-[0.15em] text-white uppercase rounded-md border border-white/10">
+                      {item.tag}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Content */}
@@ -93,7 +106,7 @@ export default function AnnouncementsSection() {
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-sm text-zinc-500 leading-relaxed flex-grow">
+                <p className="text-sm text-zinc-500 leading-relaxed flex-grow line-clamp-3">
                   {item.excerpt}
                 </p>
 
@@ -109,6 +122,21 @@ export default function AnnouncementsSection() {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* View All / Show More Button */}
+        <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/announcements"
+            className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-[#004491]/15 hover:bg-[#004491]/30 border border-[#004491]/60 hover:border-[#5b9aff] text-[#5b9aff] hover:text-white font-bold text-xs tracking-[0.18em] uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,68,145,0.15)] hover:shadow-[0_0_30px_rgba(0,68,145,0.4)]"
+          >
+            <span>
+              {announcements.length > 3 ? "SHOW MORE ANNOUNCEMENTS" : "VIEW ALL ANNOUNCEMENTS"}
+            </span>
+            <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform duration-300">
+              arrow_forward
+            </span>
+          </Link>
         </div>
       </div>
     </section>
