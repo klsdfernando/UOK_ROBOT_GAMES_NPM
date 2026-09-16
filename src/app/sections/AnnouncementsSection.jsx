@@ -133,9 +133,6 @@ export default function AnnouncementsSection() {
             <span>
               {announcements.length > 3 ? "SHOW MORE ANNOUNCEMENTS" : "VIEW ALL ANNOUNCEMENTS"}
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-[#004491] border border-blue-400/30 text-[10px] text-white">
-              {announcements.length}
-            </span>
             <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform duration-300">
               arrow_forward
             </span>
