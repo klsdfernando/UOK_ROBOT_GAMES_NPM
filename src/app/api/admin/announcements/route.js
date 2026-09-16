@@ -32,7 +32,6 @@ export async function GET(req) {
     const snapshot = await db
       .collection('announcements')
       .orderBy('createdAt', 'desc')
-      .limit(3)
       .get();
 
     const announcements = snapshot.docs.map((doc) => ({
@@ -56,14 +55,6 @@ export async function POST(req) {
   if (authError) return authError;
 
   try {
-    // Check count
-    const snapshot = await db.collection('announcements').get();
-    if (snapshot.size >= 3) {
-      return NextResponse.json(
-        { success: false, message: 'Maximum 3 announcements allowed. Delete one first.' },
-        { status: 400 }
-      );
-    }
 
     const body = await req.json();
     const { title, tag, excerpt, content, imageUrl, date } = body;
