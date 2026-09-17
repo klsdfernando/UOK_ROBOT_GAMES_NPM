@@ -848,7 +848,17 @@ function TeamTshirtOrdersDetail({ teamId }) {
               ))}
             </div>
             <div style={{ fontSize: 11, color: "#71717a", display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #18181b", paddingTop: 6, flexWrap: "wrap", gap: 6 }}>
-              <span>Total: <strong style={{ color: "#10b981" }}>LKR {((o.shirtCount || (o.shirts?.length || 0)) * 1900).toLocaleString()}</strong></span>
+              <div>
+                <span>Paid: <strong style={{ color: "#10b981" }}>LKR {(typeof o.amountPaid === "number" ? o.amountPaid : (o.paymentOption === "preorder" ? (o.shirtCount || (o.shirts?.length || 0)) * 1000 : (o.shirtCount || (o.shirts?.length || 0)) * 1900)).toLocaleString()}</strong></span>
+                {(o.balanceDue > 0 || o.paymentOption === "preorder") && (
+                  <span style={{ marginLeft: 8, color: "#f59e0b", fontWeight: 700, fontSize: 10 }}>
+                    (Bal Due: LKR {(typeof o.balanceDue === "number" ? o.balanceDue : (o.shirtCount || (o.shirts?.length || 0)) * 900).toLocaleString()})
+                  </span>
+                )}
+                <span style={{ marginLeft: 6, fontSize: 9, textTransform: "uppercase", padding: "1px 5px", borderRadius: 3, background: o.paymentOption === "preorder" ? "#f59e0b15" : "#10b98115", color: o.paymentOption === "preorder" ? "#f59e0b" : "#10b981", border: `1px solid ${o.paymentOption === "preorder" ? "#f59e0b30" : "#10b98130"}` }}>
+                  {o.paymentOption === "preorder" ? "Advance" : "Full"}
+                </span>
+              </div>
               {o.referenceNumber && <span>Ref: {o.referenceNumber}</span>}
               {o.driveViewUrl ? (
                 <a
@@ -989,7 +999,18 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
     (sum, o) => sum + (o.shirtCount || (o.shirts?.length || 0)),
     0
   );
-  const totalRevenue = totalShirts * 1900;
+  const totalCollected = orders.reduce((sum, o) => {
+    const count = o.shirtCount || (o.shirts?.length || 0);
+    return sum + (typeof o.amountPaid === "number" ? o.amountPaid : (o.paymentOption === "preorder" ? count * 1000 : count * 1900));
+  }, 0);
+  const totalBalanceDue = orders.reduce((sum, o) => {
+    const count = o.shirtCount || (o.shirts?.length || 0);
+    return sum + (typeof o.balanceDue === "number" ? o.balanceDue : (o.paymentOption === "preorder" ? count * 900 : 0));
+  }, 0);
+  const totalOrderValue = orders.reduce((sum, o) => {
+    const count = o.shirtCount || (o.shirts?.length || 0);
+    return sum + (typeof o.totalAmount === "number" ? o.totalAmount : count * 1900);
+  }, 0);
   const teamOrdersCount = orders.filter((o) => Boolean(o.teamId)).length;
   const publicOrdersCount = orders.filter((o) => !o.teamId).length;
 
@@ -1051,7 +1072,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
   });
 
   const handleCopySizeSummary = () => {
-    let text = `UOK Robot Games 2K26 - T-Shirt Manufacturing Breakdown\nTotal Orders: ${totalOrders} | Total Jerseys: ${totalShirts} | Total Revenue: LKR ${totalRevenue.toLocaleString()}\n\n`;
+    let text = `UOK Robot Games 2K26 - T-Shirt Manufacturing Breakdown\nTotal Orders: ${totalOrders} | Total Jerseys: ${totalShirts} | Collected: LKR ${totalCollected.toLocaleString()} (Total Value: LKR ${totalOrderValue.toLocaleString()})\n\n`;
     text += `ADULT / NORMAL SIZES:\n`;
     Object.entries(sizeCounts.normal).forEach(([sz, qty]) => {
       text += `• ${sz}: ${qty}\n`;
@@ -1097,9 +1118,11 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "#10b981" }} />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <p style={{ margin: 0, fontSize: 9, color: "#71717a", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" }}>Total Revenue</p>
-              <p style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#10b981", marginTop: 4, fontFamily: "monospace" }}>LKR {totalRevenue.toLocaleString()}</p>
-              <p style={{ margin: 0, fontSize: 10, color: "#71717a", marginTop: 2 }}>@ LKR 1,800 / Jersey</p>
+              <p style={{ margin: 0, fontSize: 9, color: "#71717a", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" }}>Collected Upfront</p>
+              <p style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#10b981", marginTop: 4, fontFamily: "monospace" }}>LKR {totalCollected.toLocaleString()}</p>
+              <p style={{ margin: 0, fontSize: 10, color: totalBalanceDue > 0 ? "#f59e0b" : "#71717a", marginTop: 2 }}>
+                {totalBalanceDue > 0 ? `+ LKR ${totalBalanceDue.toLocaleString()} Due at Arena` : `Total Value: LKR ${totalOrderValue.toLocaleString()}`}
+              </p>
             </div>
             <span className="material-symbols-outlined" style={{ fontSize: 28, color: "#10b981" }}>payments</span>
           </div>
@@ -1240,7 +1263,7 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #27272a" }}>
-                  {["#", "Order ID", "Team / Buyer", "Contact", "Qty", "Sizes Breakdown", "Total (LKR)", "Slip / Ref", "Status", "Date", "Action"].map((h) => (
+                  {["#", "Order ID", "Team / Buyer", "Contact", "Qty", "Sizes Breakdown", "Payment / Paid", "Slip / Ref", "Status", "Date", "Action"].map((h) => (
                     <th key={h} style={{ padding: "12px 14px", textAlign: "left", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#52525b", whiteSpace: "nowrap" }}>
                       {h}
                     </th>
@@ -1250,7 +1273,9 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
               <tbody>
                 {filtered.map((ord, i) => {
                   const count = ord.shirtCount || (ord.shirts?.length || 0);
-                  const amount = count * 1900;
+                  const isPreorder = ord.paymentOption === "preorder";
+                  const paid = typeof ord.amountPaid === "number" ? ord.amountPaid : (isPreorder ? count * 1000 : count * 1900);
+                  const balance = typeof ord.balanceDue === "number" ? ord.balanceDue : (isPreorder ? count * 900 : 0);
 
                   // Group sizes for compact badge view
                   const sizeMap = {};
@@ -1323,9 +1348,25 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                         </div>
                       </td>
 
-                      {/* Total (LKR) */}
-                      <td style={{ padding: "10px 14px", whiteSpace: "nowrap", fontFamily: "monospace", fontWeight: 700, color: "#10b981" }}>
-                        LKR {amount.toLocaleString()}
+                      {/* Payment / Paid (LKR) */}
+                      <td style={{ padding: "10px 14px", whiteSpace: "nowrap" }}>
+                        <span style={{ fontFamily: "monospace", fontWeight: 700, color: "#10b981", display: "block" }}>
+                          LKR {paid.toLocaleString()}
+                        </span>
+                        {isPreorder ? (
+                          <div style={{ marginTop: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                            <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 5px", background: "#f59e0b15", border: "1px solid #f59e0b40", color: "#f59e0b", borderRadius: 3, textTransform: "uppercase" }}>
+                              Advance (Rs. 1,000)
+                            </span>
+                            {balance > 0 && (
+                              <span style={{ fontSize: 9, color: "#a1a1aa" }}>
+                                Bal: <strong style={{ color: "#f59e0b" }}>LKR {balance.toLocaleString()}</strong>
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span style={{ fontSize: 9, color: "#71717a", textTransform: "uppercase" }}>Full Payment</span>
+                        )}
                       </td>
 
                       {/* Slip / Ref */}
@@ -1479,12 +1520,55 @@ function TshirtOrdersManager({ ADMIN_SECRET }) {
                   </table>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, paddingTop: 10, borderTop: "1px solid #18181b" }}>
-                  <span style={{ fontSize: 11, color: "#a1a1aa" }}>Total Payable</span>
-                  <span style={{ fontSize: 15, fontWeight: 900, color: "#10b981", fontFamily: "monospace" }}>
-                    LKR {((selectedOrder.shirtCount || selectedOrder.shirts?.length || 0) * 1900).toLocaleString()}
-                  </span>
-                </div>
+                {/* Payment Breakdown */}
+                {(() => {
+                  const shirtCount = selectedOrder.shirtCount || selectedOrder.shirts?.length || 0;
+                  const isPre = selectedOrder.paymentOption === "preorder";
+                  const paidAmt = typeof selectedOrder.amountPaid === "number" ? selectedOrder.amountPaid : (isPre ? shirtCount * 1000 : shirtCount * 1900);
+                  const balAmt = typeof selectedOrder.balanceDue === "number" ? selectedOrder.balanceDue : (isPre ? shirtCount * 900 : 0);
+                  const totVal = typeof selectedOrder.totalAmount === "number" ? selectedOrder.totalAmount : shirtCount * 1900;
+                  return (
+                    <div style={{ marginTop: 12, borderTop: "1px solid #18181b", paddingTop: 10 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                        <span style={{ fontSize: 11, color: "#a1a1aa" }}>Total Order Value:</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: "white", fontFamily: "monospace" }}>
+                          LKR {totVal.toLocaleString()}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                        <span style={{ fontSize: 11, color: "#a1a1aa" }}>Amount Paid Upfront:</span>
+                        <span style={{ fontSize: 15, fontWeight: 900, color: "#10b981", fontFamily: "monospace" }}>
+                          LKR {paidAmt.toLocaleString()}
+                        </span>
+                      </div>
+                      {isPre ? (
+                        <div style={{ background: "#f59e0b12", border: "1px solid #f59e0b35", borderRadius: 8, padding: "10px 12px", marginTop: 8 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <div>
+                              <span style={{ fontSize: 10, fontWeight: 800, color: "#f59e0b", textTransform: "uppercase", display: "block" }}>
+                                ⚠️ Pre-Order Advance Payment
+                              </span>
+                              <span style={{ fontSize: 11, color: "#a1a1aa" }}>
+                                Advance: LKR 1,000 / jersey
+                              </span>
+                            </div>
+                            <div style={{ textAlign: "right" }}>
+                              <span style={{ fontSize: 9, color: "#71717a", textTransform: "uppercase", display: "block" }}>Collect at Arena Desk</span>
+                              <span style={{ fontSize: 15, fontWeight: 900, color: "#f59e0b", fontFamily: "monospace" }}>
+                                LKR {balAmt.toLocaleString()}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{ background: "#10b98110", border: "1px solid #10b98130", borderRadius: 6, padding: "6px 10px", marginTop: 6, fontSize: 10, color: "#10b981", fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
+                          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>check_circle</span>
+                          Full Payment Paid in Full (No balance due at arena)
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </DetailSection>
 
               {/* Payment Slip & Verification Actions */}

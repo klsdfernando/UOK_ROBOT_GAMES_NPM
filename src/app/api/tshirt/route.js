@@ -117,12 +117,31 @@ export async function POST(req) {
       }
     }
 
+    const paymentOption = formData.get('paymentOption') || 'full'; // 'full' | 'preorder'
+    const rawAmountPaid = parseInt(formData.get('amountPaid') || '', 10);
+    const rawBalanceDue = parseInt(formData.get('balanceDue') || '', 10);
+    const rawTotalAmount = parseInt(formData.get('totalAmount') || '', 10);
+
+    const amountPaid = !isNaN(rawAmountPaid)
+      ? rawAmountPaid
+      : (paymentOption === 'preorder' ? shirtCount * 1000 : shirtCount * 1900);
+    const balanceDue = !isNaN(rawBalanceDue)
+      ? rawBalanceDue
+      : (paymentOption === 'preorder' ? shirtCount * 900 : 0);
+    const totalAmount = !isNaN(rawTotalAmount)
+      ? rawTotalAmount
+      : shirtCount * 1900;
+
     const orderData = {
       orderId,
       name: name.trim(),
       whatsappNumber: whatsappNumber.trim(),
       shirtCount,
       shirts,
+      paymentOption,
+      amountPaid,
+      balanceDue,
+      totalAmount,
       referenceNumber: referenceNumber.trim(),
       hasPaymentSlip: Boolean(file),
       slipName: file && typeof file === 'object' && file.name ? file.name : null,
