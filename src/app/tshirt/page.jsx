@@ -179,6 +179,7 @@ export default function TshirtPage() {
 
     setSubmitting(true);
     try {
+      const formData = new FormData();
       formData.append("name", name.trim());
       formData.append("whatsappNumber", whatsappNumber.trim());
       formData.append("shirtCount", shirtCount.toString());
@@ -201,7 +202,8 @@ export default function TshirtPage() {
       } else {
         setError(data.message || "Could not submit your order. Please try again.");
       }
-    } catch {
+    } catch (err) {
+      console.error("Order submission error:", err);
       setError("Something went wrong while placing your order. Please try again.");
     } finally {
       setSubmitting(false);

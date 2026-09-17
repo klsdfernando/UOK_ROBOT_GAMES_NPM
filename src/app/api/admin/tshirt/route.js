@@ -89,3 +89,45 @@ export async function PATCH(req) {
     );
   }
 }
+
+export async function DELETE(req) {
+  try {
+    if (!isAuthorized(req)) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized.' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const orderId = searchParams.get('orderId');
+
+    if (!orderId) {
+      return NextResponse.json(
+        { success: false, message: 'Missing orderId.' },
+        { status: 400 }
+      );
+    }
+
+    if (!db) {
+      return NextResponse.json(
+        { success: true, message: 'No database configured in local dev environment.' },
+        { status: 200 }
+      );
+    }
+
+    await db.collection('tshirt_orders').doc(orderId).delete();
+
+    return NextResponse.json(
+      { success: true, message: 'Order deleted successfully.' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Admin tshirt delete error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Failed to delete order.' },
+      { status: 500 }
+    );
+  }
+}
+
