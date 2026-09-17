@@ -52,6 +52,11 @@ export async function GET(req) {
     // ── Sheet 1: Orders Summary ──
     const ordersRows = orders.map((o, idx) => {
       const count = o.shirtCount || (o.shirts?.length || 0);
+      const isPreorder = o.paymentOption === 'preorder';
+      const amountPaid = o.amountPaid !== undefined ? o.amountPaid : (isPreorder ? count * 1000 : count * PRICE_PER_SHIRT);
+      const balanceDue = o.balanceDue !== undefined ? o.balanceDue : (isPreorder ? count * 900 : 0);
+      const totalValue = o.totalAmount || (count * PRICE_PER_SHIRT);
+
       return {
         '#': idx + 1,
         'Order ID': o.orderId || o.id,
@@ -60,7 +65,10 @@ export async function GET(req) {
         'Contact Name': o.name || '',
         'WhatsApp Number': o.whatsappNumber || '',
         'Total Shirts': count,
-        'Total Paid (LKR)': count * PRICE_PER_SHIRT,
+        'Payment Option': isPreorder ? 'Pre-Order Advance (Rs. 1,000)' : 'Full Payment (Rs. 1,900)',
+        'Amount Paid (LKR)': amountPaid,
+        'Balance Due at Arena (LKR)': balanceDue,
+        'Total Order Value (LKR)': totalValue,
         'Payment Ref / Txn': o.referenceNumber || '—',
         'Slip Uploaded': o.hasPaymentSlip ? 'Yes' : 'No',
         'Slip File Name': o.slipName || '—',
@@ -83,6 +91,7 @@ export async function GET(req) {
     let itemIdx = 1;
     orders.forEach((o) => {
       const list = o.shirts || [];
+      const isPreorder = o.paymentOption === 'preorder';
       list.forEach((s) => {
         itemizedRows.push({
           '#': itemIdx++,
@@ -92,7 +101,10 @@ export async function GET(req) {
           'Role': s.memberRole || '—',
           'Category': s.category || 'Normal Size',
           'Size': s.size || '—',
-          'Unit Price (LKR)': PRICE_PER_SHIRT,
+          'Payment Option': isPreorder ? 'Pre-Order Advance' : 'Full Payment',
+          'Unit Paid (LKR)': isPreorder ? 1000 : PRICE_PER_SHIRT,
+          'Unit Balance Due (LKR)': isPreorder ? 900 : 0,
+          'Total Jersey Price (LKR)': PRICE_PER_SHIRT,
           'Order Status': (o.status || 'pending').toUpperCase(),
           'Contact Person': o.name || '',
           'WhatsApp': o.whatsappNumber || '',

@@ -31,12 +31,26 @@ const SIZE_MEASUREMENTS = {
   "3XL": 'Chest 24" · L 31"',
 };
 
-const PRICE_PER_SHIRT = 1900; // LKR
+const FULL_PRICE_PER_SHIRT = 1900; // LKR
+const PREORDER_ADVANCE_PER_SHIRT = 1000; // LKR
+const PREORDER_BALANCE_PER_SHIRT = 900; // LKR
+const PRICE_PER_SHIRT = FULL_PRICE_PER_SHIRT; // LKR
 
 export default function TshirtPage() {
   const [name, setName] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [shirtCount, setShirtCount] = useState(1);
+  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "preorder"
+
+  const payableAmount =
+    paymentOption === "preorder"
+      ? shirtCount * PREORDER_ADVANCE_PER_SHIRT
+      : shirtCount * FULL_PRICE_PER_SHIRT;
+  const balanceDue =
+    paymentOption === "preorder"
+      ? shirtCount * PREORDER_BALANCE_PER_SHIRT
+      : 0;
+  const totalOrderValue = shirtCount * FULL_PRICE_PER_SHIRT;
 
   // Array of shirt configurations: [{ category: 'Normal Size' | 'Kids Size', size: '' }]
   const [shirts, setShirts] = useState([
@@ -165,11 +179,14 @@ export default function TshirtPage() {
 
     setSubmitting(true);
     try {
-      const formData = new FormData();
       formData.append("name", name.trim());
       formData.append("whatsappNumber", whatsappNumber.trim());
       formData.append("shirtCount", shirtCount.toString());
       formData.append("shirts", JSON.stringify(shirts));
+      formData.append("paymentOption", paymentOption);
+      formData.append("amountPaid", payableAmount.toString());
+      formData.append("balanceDue", balanceDue.toString());
+      formData.append("totalAmount", totalOrderValue.toString());
       formData.append("referenceNumber", referenceNumber.trim());
       formData.append("paymentSlip", paymentSlip);
 
@@ -195,6 +212,7 @@ export default function TshirtPage() {
     setName("");
     setWhatsappNumber("");
     setShirtCount(1);
+    setPaymentOption("full");
     setShirts([{ category: "Normal Size", size: "" }]);
     setActiveMobileTab("0");
     setPaymentSlip(null);
@@ -263,10 +281,26 @@ export default function TshirtPage() {
                       </span>
                     </div>
                   ))}
-                  <div className="border-t border-zinc-800 pt-2 flex justify-between items-center text-sm font-bold text-white mt-2">
-                    <span>Total Amount</span>
-                    <span className="text-emerald-400">LKR {(orderResult.order?.shirtCount * PRICE_PER_SHIRT).toLocaleString()}</span>
+                  <div className="border-t border-zinc-800 pt-2 flex justify-between items-center text-xs">
+                    <span className="text-zinc-400">Payment Option</span>
+                    <span className={`font-bold uppercase tracking-wider ${
+                      orderResult.order?.paymentOption === 'preorder' ? 'text-[#00d2ff]' : 'text-emerald-400'
+                    }`}>
+                      {orderResult.order?.paymentOption === 'preorder' ? 'Pre-Order Advance (Rs. 1,000)' : 'Full Payment'}
+                    </span>
                   </div>
+                  <div className="flex justify-between items-center text-sm font-bold text-white pt-1">
+                    <span>Amount Paid Now</span>
+                    <span className="text-emerald-400">
+                      LKR {(orderResult.order?.amountPaid !== undefined ? orderResult.order?.amountPaid : orderResult.order?.shirtCount * PRICE_PER_SHIRT).toLocaleString()}
+                    </span>
+                  </div>
+                  {orderResult.order?.balanceDue > 0 && (
+                    <div className="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-lg flex justify-between items-center text-xs text-amber-300 mt-2">
+                      <span className="font-semibold">Remaining Balance Due at Arena:</span>
+                      <span className="font-mono font-bold text-sm">LKR {orderResult.order?.balanceDue.toLocaleString()}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -329,12 +363,12 @@ export default function TshirtPage() {
                     <div className="relative group w-full max-w-[320px] sm:max-w-[360px] rounded-2xl overflow-hidden border border-zinc-700/80 bg-[#12131f] shadow-lg">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                        src="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-17%20at%208.05.39%20PM.jpeg"
                         alt="Official UOK Robot Games 2K26 T-Shirt Flyer"
                         className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                       />
                       <a
-                        href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                        href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-17%20at%208.05.39%20PM.jpeg"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1.5px]"
@@ -357,7 +391,7 @@ export default function TshirtPage() {
                       </div>
 
                       <a
-                        href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-13%20at%2010.20.14%20AM.jpeg"
+                        href="https://ik.imagekit.io/wfnazmyxh/Posts/WhatsApp%20Image%202026-09-17%20at%208.05.39%20PM.jpeg"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-medium text-zinc-300 hover:text-white bg-[#12131f] hover:bg-zinc-800 border border-zinc-700/80 hover:border-[#00d2ff]/50 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
@@ -903,8 +937,92 @@ export default function TshirtPage() {
                       4. Payment &amp; Slip Upload
                     </h2>
                     <p className="text-zinc-400 text-xs mt-0.5">
-                      Transfer the total amount to the official club account and upload your deposit slip or receipt.
+                      Choose between full payment or pre-order advance (Rs. 1,000/shirt), then upload your bank deposit slip.
                     </p>
+                  </div>
+                </div>
+
+                {/* Payment Option Selector */}
+                <div className="mb-6">
+                  <label className="block text-zinc-300 text-xs font-semibold mb-3">
+                    Select Payment Option <span className="text-red-400">*</span>
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* Option 1: Full Payment */}
+                    <div
+                      onClick={() => setPaymentOption("full")}
+                      className={`p-4 sm:p-5 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between ${
+                        paymentOption === "full"
+                          ? "bg-[#004491]/20 border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.2)]"
+                          : "bg-[#12131f] border-zinc-800 hover:border-zinc-700 text-zinc-300"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-sm font-bold text-white flex items-center gap-2">
+                            <span className="material-symbols-outlined text-base text-emerald-400">payments</span>
+                            Full Payment
+                          </span>
+                          <span className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                            paymentOption === "full" ? "border-[#00d2ff] bg-[#00d2ff]" : "border-zinc-600"
+                          }`}>
+                            {paymentOption === "full" && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-black" />
+                            )}
+                          </span>
+                        </div>
+                        <p className="text-xs text-zinc-400 leading-relaxed">
+                          Pay in full now (Rs. 1,900 / shirt). Collect directly at the arena desk with zero pending dues.
+                        </p>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-baseline justify-between">
+                        <span className="text-[11px] text-zinc-400">Payable Now</span>
+                        <span className="text-base font-bold text-emerald-400 font-mono">
+                          LKR {(shirtCount * FULL_PRICE_PER_SHIRT).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Option 2: Pre-Order Advance */}
+                    <div
+                      onClick={() => setPaymentOption("preorder")}
+                      className={`p-4 sm:p-5 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between ${
+                        paymentOption === "preorder"
+                          ? "bg-[#004491]/20 border-[#00d2ff] shadow-[0_0_20px_rgba(0,210,255,0.2)]"
+                          : "bg-[#12131f] border-zinc-800 hover:border-zinc-700 text-zinc-300"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-sm font-bold text-white flex items-center gap-2">
+                            <span className="material-symbols-outlined text-base text-[#00d2ff]">savings</span>
+                            Pre-Order Advance
+                          </span>
+                          <span className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                            paymentOption === "preorder" ? "border-[#00d2ff] bg-[#00d2ff]" : "border-zinc-600"
+                          }`}>
+                            {paymentOption === "preorder" && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-black" />
+                            )}
+                          </span>
+                        </div>
+                        <p className="text-xs text-zinc-400 leading-relaxed">
+                          Pay Rs. 1,000 advance per shirt now. Pay remaining Rs. 900 / shirt upon collection at the arena.
+                        </p>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-baseline justify-between">
+                        <div>
+                          <span className="text-[11px] text-zinc-400 block">Payable Now</span>
+                          <span className="text-[10px] text-amber-400 font-medium">Balance at arena: LKR {(shirtCount * PREORDER_BALANCE_PER_SHIRT).toLocaleString()}</span>
+                        </div>
+                        <span className="text-base font-bold text-[#00d2ff] font-mono">
+                          LKR {(shirtCount * PREORDER_ADVANCE_PER_SHIRT).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -918,11 +1036,22 @@ export default function TshirtPage() {
                       <h3 className="text-white text-lg font-bold mt-0.5">People&apos;s Bank</h3>
                     </div>
                     <div className="text-left sm:text-right">
-                      <p className="text-xs text-zinc-400">Total Payable</p>
-                      <p className="text-2xl font-bold text-emerald-400 font-mono">
-                        LKR {(shirtCount * PRICE_PER_SHIRT).toLocaleString()}
+                      <p className="text-xs text-zinc-400">
+                        {paymentOption === "preorder" ? "Advance Amount to Transfer" : "Total Amount to Transfer"}
                       </p>
-                      <p className="text-[11px] text-zinc-400 font-medium">({shirtCount} × LKR {PRICE_PER_SHIRT.toLocaleString()})</p>
+                      <p className={`text-2xl font-bold font-mono ${paymentOption === "preorder" ? "text-[#00d2ff]" : "text-emerald-400"}`}>
+                        LKR {payableAmount.toLocaleString()}
+                      </p>
+                      <p className="text-[11px] text-zinc-400 font-medium">
+                        {paymentOption === "preorder"
+                          ? `(${shirtCount} × LKR 1,000 Pre-Order Advance)`
+                          : `(${shirtCount} × LKR 1,900 Full Payment)`}
+                      </p>
+                      {paymentOption === "preorder" && (
+                        <p className="text-[10px] text-amber-400 font-medium mt-1">
+                          Remaining LKR {balanceDue.toLocaleString()} payable at arena desk
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -1038,10 +1167,15 @@ export default function TshirtPage() {
               <div className="bg-[#0d0e18] border border-white/[0.08] rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                   <p className="text-white text-base font-bold">
-                    Total: {shirtCount} {shirtCount === 1 ? "T-Shirt" : "T-Shirts"} · LKR {(shirtCount * PRICE_PER_SHIRT).toLocaleString()}
+                    Payable Now: LKR {payableAmount.toLocaleString()}
+                    {paymentOption === "preorder" && (
+                      <span className="text-xs text-amber-400 font-normal ml-2">
+                        (Advance Rs. 1,000/ea · Balance LKR {balanceDue.toLocaleString()} at arena)
+                      </span>
+                    )}
                   </p>
                   <p className="text-zinc-400 text-xs mt-0.5">
-                    Please make sure sizes and WhatsApp contact number are correct before submitting.
+                    {shirtCount} {shirtCount === 1 ? "Jersey" : "Jerseys"} · {paymentOption === "preorder" ? "Pre-Order Advance" : "Full Payment"}
                   </p>
                 </div>
 
@@ -1058,7 +1192,7 @@ export default function TshirtPage() {
                   ) : (
                     <>
                       <span className="material-symbols-outlined text-base">shopping_bag</span>
-                      Submit T-Shirt Pre-Order
+                      Submit Pre-Order · Pay LKR {payableAmount.toLocaleString()}
                     </>
                   )}
                 </button>
