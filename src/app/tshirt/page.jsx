@@ -22,13 +22,13 @@ const TABLE_SIZE_ROWS = [
 ];
 
 const SIZE_MEASUREMENTS = {
-  "XS": 'Chest 36" · L 26"',
-  "S": 'Chest 38" · L 27"',
-  "M": 'Chest 40" · L 28"',
-  "L": 'Chest 42" · L 29"',
-  "XL": 'Chest 44" · L 30"',
-  "2XL": 'Chest 46" · L 31"',
-  "3XL": 'Chest 48" · L 32"',
+  "XS": 'Chest 18" · L 25"',
+  "S": 'Chest 19" · L 26"',
+  "M": 'Chest 20" · L 27"',
+  "L": 'Chest 21" · L 28"',
+  "XL": 'Chest 22" · L 29"',
+  "2XL": 'Chest 23" · L 30"',
+  "3XL": 'Chest 24" · L 31"',
 };
 
 const PRICE_PER_SHIRT = 1900; // LKR
@@ -400,38 +400,38 @@ export default function TshirtPage() {
                         <tbody className="divide-y divide-zinc-800/70 bg-[#07080f]/80 text-zinc-300">
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">XS</td>
-                            <td className="py-2 px-4 text-center font-medium">36&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">26&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">18&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">25&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">S</td>
-                            <td className="py-2 px-4 text-center font-medium">38&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">27&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">19&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">26&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">M</td>
-                            <td className="py-2 px-4 text-center font-medium">40&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">28&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">20&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">27&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">L</td>
-                            <td className="py-2 px-4 text-center font-medium">42&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">29&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">21&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">28&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">XL</td>
-                            <td className="py-2 px-4 text-center font-medium">44&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">30&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">22&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">29&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">2XL</td>
-                            <td className="py-2 px-4 text-center font-medium">46&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">31&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">23&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">30&quot;</td>
                           </tr>
                           <tr className="hover:bg-[#12131f]/60 transition-colors">
                             <td className="py-2 px-4 text-left font-bold text-white">3XL</td>
-                            <td className="py-2 px-4 text-center font-medium">48&quot;</td>
-                            <td className="py-2 px-4 text-center font-medium">32&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">24&quot;</td>
+                            <td className="py-2 px-4 text-center font-medium">31&quot;</td>
                           </tr>
                         </tbody>
                       </table>
@@ -439,7 +439,7 @@ export default function TshirtPage() {
 
                     <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-zinc-400">
                       <span className="material-symbols-outlined text-sm text-[#00d2ff] shrink-0">check_circle</span>
-                      <span>Standard unisex chest circumference and body length.</span>
+                      <span>Half-chest width &amp; length (in). ±0.5&quot; variation may occur.</span>
                     </div>
                   </div>
 
